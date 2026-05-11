@@ -8,6 +8,8 @@ import { IUser } from "./features/auth/types/user";
 
 
 export const authOptions: NextAuthOptions = {
+        secret: process.env.NEXTAUTH_SECRET,  // ← أضف السطر ده
+        
     providers: [
         Credentials({
             name: "Credentials",
@@ -16,9 +18,15 @@ export const authOptions: NextAuthOptions = {
                 password: {},
             },
             authorize: async (credentials) => {
+
+                if (!credentials?.email || !credentials?.password) {
+                    return null
+                }
                 const res = await fetch(`${process.env.API_URL}/auth/login`, {
                     method: "POST",
-                    ...HEADERS.JsonBody,
+                    headers: {
+                        ...HEADERS.JsonBody,
+                    },
                     body: JSON.stringify({
                         email: credentials.email,
                         password: credentials.password
@@ -26,28 +34,43 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 const data: IApiResponse<IAuthResponse> = await res.json()
-
+                
                 if (data.status === "error") {
+                    console.log("REEDRWQRQ")
                     throw new Error(data.message || "Login failed")
                 }
-                const loginData = data.payload
+                console.log("Data", data)
+                // const loginData = data.payload
 
-                const profileRes = await fetch(`${process.env.API_URL}//profile`, {
+                console.log("TOKEN =>", data.access_token)
+                console.log("PROFILE URL =>", `${process.env.API_URL}/profile`)
+
+
+                const profileRes = await fetch(`${process.env.API_URL}/profile`, {
                     method: "GET",
                     headers: {
-                        ...HEADERS.authorize(loginData.access_token)
+                        ...HEADERS.authorize(data.access_token)
                     }
                 })
+
+
                 const profileData: IApiResponse<IUser> = await profileRes.json()
+                console.log("ProfileData : => ", profileData)
 
                 if (profileData.status === "error") {
                     throw new Error(profileData.message || "Login failed")
                 }
 
+                console.log({
+                       id: String(profileData.data.id),
+                    user: profileData.data,
+                    access_token: data.access_token
+                })
+
                 return {
-                    id: profileData.payload.id,
-                    user: profileData.payload,
-                    access_token: loginData.access_token
+                    id: String(profileData.data.id),
+                    user: profileData.data,
+                    access_token: data.access_token
                 }
             }
         }),
@@ -62,8 +85,8 @@ export const authOptions: NextAuthOptions = {
             return token
         },
         session: async ({ session, token }) => {
+
             session.user = token.user
-            session.access_token = token.access_token
 
             return session
         }

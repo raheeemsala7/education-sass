@@ -9,11 +9,16 @@ import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { startTransition, useTransition } from "react";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 
 
 
 const LoginForm = () => {
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition();
     const form = useForm<LoginFormType>({
         resolver: zodResolver(LoginFormSchema),
         defaultValues: {
@@ -22,14 +27,34 @@ const LoginForm = () => {
         },
     });
 
-    const router = useRouter()
 
 
-    const isPending = false
 
 
-    async function onSubmit(values: LoginFormType) {
+    function onSubmit(values: LoginFormType) {
+        console.log(values)
+startTransition(async () => {
+        try {
+            const res = await signIn("credentials", {
+                email: values.email,
+                password: values.password,
+                redirect: false,
+            })
 
+            if (!res || !res.ok) {
+                toast.error(res?.error || "Login failed")
+                return
+            }
+
+            console.log(res.error)
+
+            toast.success("Login successful")
+            router.push("/")
+        } catch (error) {
+            toast.error("Something went wrong")
+            console.log(error)
+        }
+    })
     }
 
 
@@ -39,13 +64,8 @@ const LoginForm = () => {
 
             <div className="space-y-8">
                 <h4 className="text-2xl font-bold">تسجيل <span className="text-yellow-400">الدخول : </span></h4>
-
                 <p className="text-muted-foreground">ادخل علي حسابك بإدخال رقم الهاتف و كلمة المرور المسجل بهم من قبل</p>
             </div>
-
-
-
-
             <div className="mt-12 space-y-8">
                 <Controller
                     name="email"
@@ -117,9 +137,6 @@ const LoginForm = () => {
                     )}
                 />
             </div>
-
-
-
 
 
 
