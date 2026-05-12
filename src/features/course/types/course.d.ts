@@ -32,6 +32,11 @@ export interface ICourse {
     updated_at: string;
 }
 
+export interface IAdminCourse extends ICourse {
+    is_active: boolean;
+    enrollments_count: number;
+}
+
 export interface ICourseResponse {
     status: "success" | "error";
     data: ICourse;

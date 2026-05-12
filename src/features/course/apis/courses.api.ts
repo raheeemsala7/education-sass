@@ -35,9 +35,29 @@ export const getCoursesListApi = async () => {
     return payload
 }
 
+export const getAdminCoursesListApi = async () => {
+    
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
 
+    const res = await fetch(`${process.env.API_URL}/courses/admin`, {
+        headers: {
+            ...HEADERS.authorize(token.access_token)
+        }
+    })
+    const payload: IApiResponse<ICourse[]> = await res.json()
 
-export const getCourseDetailApi = async (id: string) => {
+    if (payload.status === "error") {
+        return payload
+    }
+
+    console.log(payload)
+
+    return payload
+
+}
+
+export const getSingleCourseDetailApi = async (id: string) => {
     const token = await getNextAuthToken()
 
     // if (!token?.access_token) return RESPONSES.unauthorized

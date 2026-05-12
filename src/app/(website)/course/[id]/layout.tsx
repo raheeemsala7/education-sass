@@ -2,7 +2,7 @@
 
 import { authOptions } from '@/auth'
 import LessonsAccordion from '@/features/course/_components/lessonsAccordion'
-import { getCourseDetailApi } from '@/features/course/apis/courses.api'
+import { getSingleCourseDetailApi } from '@/features/course/apis/courses.api'
 import { RenderDescription } from '@/shared/components/rich-text-editor/RenderDescription'
 import { Card } from '@/shared/components/ui/card'
 import { getServerSession } from 'next-auth'
@@ -13,7 +13,7 @@ const layout = async ({ children, params }: { children: React.ReactNode, params:
 
     const session = await getServerSession(authOptions)
 
-    const course = await getCourseDetailApi(id)
+    const course = await getSingleCourseDetailApi(id)
     if (!course || course.status !== "success" || !course.data) {
         return <p>غير موجود</p>
     }

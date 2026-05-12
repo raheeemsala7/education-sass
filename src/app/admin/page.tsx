@@ -1,6 +1,6 @@
 import { SectionCards } from '@/features/statistics/_components/section-cards'
 import { StatisticsSkeleton } from '@/features/statistics/_components/statistics-skeleton'
-import React, { Suspense } from 'react'
+import  { Suspense } from 'react'
 
 const page = () => {
   return (

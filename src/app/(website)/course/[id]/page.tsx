@@ -1,7 +1,7 @@
 
 
 
-import { getCourseDetailApi } from '@/features/course/apis/courses.api'
+import { getSingleCourseDetailApi } from '@/features/course/apis/courses.api'
 import { RenderDescription } from '@/shared/components/rich-text-editor/RenderDescription'
 import { Button, buttonVariants } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
@@ -15,7 +15,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
 
     
-        const course = await getCourseDetailApi(id)
+        const course = await getSingleCourseDetailApi(id)
         if (!course || course.status !== "success" || !course.data) {
             return <p>غير موجود</p>
         }
