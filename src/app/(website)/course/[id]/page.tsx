@@ -16,7 +16,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
     
         const course = await getCourseDetailApi(id)
-        if (!course || course.status === "error") {
+        if (!course || course.status !== "success" || !course.data) {
             return <p>غير موجود</p>
         }
 
@@ -52,7 +52,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                 <div className="md:basis-2/3">
                     <div className='space-y-5 md:mt-6'>
                         <div className="rounded-2xl shadow-2xl overflow-hidden !bg-transparent">
-                            <Image src={course.data.thumbnail} alt={course.data.title} height={300} width={950} />
+                            {/* <Image src={course.data.thumbnail} alt={course.data.title} height={300} width={950} /> */}
                         </div>
 
                         <Card className='px-8 py-12 border-none'>

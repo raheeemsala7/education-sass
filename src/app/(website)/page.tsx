@@ -10,7 +10,6 @@ import CarouselCourses from "@/features/course/_components/carousel/CarouselCour
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
-  console.log(session)
   return (
       <main className='relative overflow-hidden min-h-screen'>
             <div

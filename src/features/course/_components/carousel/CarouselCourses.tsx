@@ -12,7 +12,7 @@ const CarouselCourses = async () => {
     const courses = await getCoursesListApi()
 
 
-    if (!courses || courses.status === "error") {
+    if (!courses || courses.status !== "success" || !courses.data) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <Card className="w-full max-w-md">
@@ -74,6 +74,8 @@ const CarouselCourses = async () => {
                         price={course.price}
                         title={course.title}
                         key={course.id}
+                        created_at={course.created_at}
+                        updated_at={course.updated_at}
 
                     />
                 ))}

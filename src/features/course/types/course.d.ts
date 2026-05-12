@@ -22,11 +22,12 @@ export interface ICourse {
     id: number;
     title: string;
     description: string;
+    category: string;
     price: number;
     is_free: boolean;
     thumbnail: string;
     is_enrolled: boolean;
-    sections: ISection[];
+    sections?: ISection[];
     created_at: string;
     updated_at: string;
 }

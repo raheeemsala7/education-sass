@@ -9,12 +9,12 @@ export const getCoursesListApi = async () => {
 
     const token = await getNextAuthToken()
 
-    if (!token?.access_token) return RESPONSES.unauthorized
+    // if (!token?.access_token) return RESPONSES.unauthorized
 
 
     const res = await fetch(`${process.env.API_URL}/courses`, {
         headers: {
-            ...HEADERS.authorize(token.access_token)
+            ...HEADERS.authorize(token?.access_token || "")
         }
     })
 
@@ -32,11 +32,11 @@ export const getCoursesListApi = async () => {
 export const getCourseDetailApi = async (id: string) => {
     const token = await getNextAuthToken()
 
-    if (!token?.access_token) return RESPONSES.unauthorized
+    // if (!token?.access_token) return RESPONSES.unauthorized
 
     const res = await fetch(`${process.env.API_URL}/courses/${id}`, {
         headers: {
-            ...HEADERS.authorize(token.access_token)
+            ...HEADERS.authorize(token?.access_token || "")
         }
     })
 

@@ -50,6 +50,9 @@ importers:
       html-react-parser:
         specifier: ^6.1.0
         version: 6.1.0(@types/react@19.2.14)(react@19.2.4)
+      jose:
+        specifier: ^6.2.3
+        version: 6.2.3
       lucide-react:
         specifier: ^1.14.0
         version: 1.14.0(react@19.2.4)

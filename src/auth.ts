@@ -36,13 +36,11 @@ export const authOptions: NextAuthOptions = {
                 const data: IApiResponse<IAuthResponse> = await res.json()
                 
                 if (data.status === "error") {
-                    console.log("REEDRWQRQ")
                     throw new Error(data.message || "Login failed")
                 }
-                console.log("Data", data)
                 // const loginData = data.payload
 
-                console.log("TOKEN =>", data.access_token)
+                console.log("TOKEN =>", data)
                 console.log("PROFILE URL =>", `${process.env.API_URL}/profile`)
 
 
@@ -64,13 +62,15 @@ export const authOptions: NextAuthOptions = {
                 console.log({
                        id: String(profileData.data.id),
                     user: profileData.data,
-                    access_token: data.access_token
+                    access_token: data.access_token,
+                    role: data.role
                 })
-
+                
                 return {
                     id: String(profileData.data.id),
                     user: profileData.data,
-                    access_token: data.access_token
+                    access_token: data.access_token,
+                    role: data.role
                 }
             }
         }),
@@ -81,12 +81,14 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.access_token = user.access_token
                 token.user = user.user
+                token.role = user.role
             }
             return token
         },
         session: async ({ session, token }) => {
 
             session.user = token.user
+            session.role = token.role
 
             return session
         }

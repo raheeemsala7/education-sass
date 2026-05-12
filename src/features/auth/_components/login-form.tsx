@@ -49,7 +49,7 @@ startTransition(async () => {
             console.log(res.error)
 
             toast.success("Login successful")
-            router.push("/")
+            window.location.href = "/"
         } catch (error) {
             toast.error("Something went wrong")
             console.log(error)

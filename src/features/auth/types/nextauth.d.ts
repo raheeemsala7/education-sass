@@ -10,14 +10,15 @@ declare module "next-auth" {
 
   interface User {
     access_token: string;
-    user: IUser
+    user: IUser;
+    role: string;
   }
 
 
   interface Session {
     user: IUser
     access_token: string;
-
+    role: string;
   }
 }
 
@@ -28,5 +29,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     user: IUser;
     access_token: string;
+    role: string;
   }
 }
