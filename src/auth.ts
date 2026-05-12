@@ -8,8 +8,13 @@ import { IUser } from "./features/auth/types/user";
 
 
 export const authOptions: NextAuthOptions = {
-        secret: process.env.NEXTAUTH_SECRET,  // ← أضف السطر ده
-        
+    secret: process.env.NEXTAUTH_SECRET,
+
+    session: {
+        strategy: "jwt",
+        maxAge: 60 * 60,
+    },
+
     providers: [
         Credentials({
             name: "Credentials",
@@ -34,7 +39,7 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 const data: IApiResponse<IAuthResponse> = await res.json()
-                
+
                 if (data.status === "error") {
                     throw new Error(data.message || "Login failed")
                 }
@@ -60,12 +65,12 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 console.log({
-                       id: String(profileData.data.id),
+                    id: String(profileData.data.id),
                     user: profileData.data,
                     access_token: data.access_token,
                     role: data.role
                 })
-                
+
                 return {
                     id: String(profileData.data.id),
                     user: profileData.data,

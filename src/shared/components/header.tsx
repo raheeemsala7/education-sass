@@ -1,76 +1,38 @@
-"use client"
+// "use client"
 import { ModeToggle } from "@/shared/components/toggleMode";
 import { buttonVariants } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { BellIcon, BookOpen, HomeIcon, LogIn, LogInIcon, User2Icon, UserPlus } from "lucide-react";
+import { BellIcon, BookOpen, HomeIcon, LayoutDashboardIcon, LogIn, LogInIcon, User2Icon, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from "@/shared/components/ui/menubar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
-import { useRouter } from "next/navigation";
-import {  signOut, useSession } from "next-auth/react";
+// import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import MenubarHeader from "./menubarHeader";
 
-export  function Header() {
-    const [scrolled, setScrolled] = useState(false);
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const router = useRouter();
+export async function Header() {
 
-    const { data: session, status } = useSession()
+    // const menuRef = useRef<HTMLDivElement>(null);
+    // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    console.log(session ,)
+    const session = await getServerSession(authOptions);
 
 
 
-    const handelLogout = () => {
-       
-    };
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            setScrolled(scrollTop > 20);
-            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-            setScrollProgress(Math.min(progress, 100));
-        };
 
-        window.addEventListener("scroll", handleScroll);
-        handleScroll();
 
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setIsMenuOpen(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
-
-    useEffect(() => {
-        const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                setIsMenuOpen(false);
-            }
-        };
-
-        document.addEventListener("keydown", handleEscape);
-        return () => document.removeEventListener("keydown", handleEscape);
-    }, []);
+    // ${
+    //                 scrolled ? "bg-inherit shadow-lg" : "bg-transparent"
+    //             }
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-99 transition-all duration-500 ${
-                scrolled ? "bg-inherit shadow-lg" : "bg-transparent"
-            }`}
+            className={`sticky top-0 left-0 right-0 z-55 transition-all duration-500 bg-inherit shadow-lg`}
         >
             <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -80,60 +42,13 @@ export  function Header() {
                     <ModeToggle />
                 </div>
                 <nav className="hidden sm:flex items-center gap-6">
-                    { status === "authenticated" ? (
+                    {session ? (
                         <>
-                            <Menubar className="border-none bg-transparent focus:bg-transparent">
-                                <MenubarMenu>
-                                    <MenubarTrigger className="p-0 border-none focus:outline-none bg-transparent">
-                                        <BellIcon className="w-6 h-6 bg-transparent" />
-                                    </MenubarTrigger>
-                                    <MenubarContent className="bg-card relative z-[155] text-start border-none rounded-xl min-h-32 flex justify-center items-center" style={{ direction: "rtl" }}>
-                                        <span>لا توجد اشعارات</span>
-                                    </MenubarContent>
-                                </MenubarMenu>
-                            </Menubar>
-                            <Menubar className="border-none">
-                                <MenubarMenu>
-                                    <MenubarTrigger className="p-0 border-none focus:outline-none focus:bg-transparent">
-                                        <Avatar>
-                                            <AvatarImage src={session?.user.avatar || ""} />
-                                            <AvatarFallback>CN</AvatarFallback>
-                                        </Avatar>
-                                    </MenubarTrigger>
-                                    <MenubarContent className="bg-card relative z-[155] text-start border-none rounded-xl" style={{ direction: "rtl" }}>
-                                        <MenubarItem>
-                                            <Link href={"/me/user"} className="flex items-center gap-2">
-                                                <HomeIcon className="w-4 h-4 text-primary" />
-                                                الصفحه الرئيسيه
-                                            </Link>
-                                        </MenubarItem>
-                                        <MenubarItem className="ps-2">
-                                            <Link href={"/"}>اهلا {session?.user.first_name }</Link>
-                                        </MenubarItem>
-                                        <MenubarSeparator className="h-0.5 px-2 mx-2 my-2" />
-                                        <MenubarItem>
-                                            <Link href={"/me/user/courses"} className="flex items-center gap-2">
-                                                <BookOpen className="w-4 h-4 text-primary" />
-                                                كورساتي
-                                            </Link>
-                                        </MenubarItem>
-                                        <MenubarItem >
-                                            <Link href={"/me/user"} className="flex items-center gap-2">
-                                                <User2Icon className="w-4 h-4 text-primary" />
-                                                حسابي
-                                            </Link>
-                                        </MenubarItem>
-                                        <MenubarItem onClick={() => signOut({ callbackUrl: "/auth/login" })}>
-                                            <LogInIcon className="w-4 h-4 text-primary" />
-                                            تسجيل خروج
-                                        </MenubarItem>
-                                    </MenubarContent>
-                                </MenubarMenu>
-                            </Menubar>
+                            <MenubarHeader first_name={session?.user.first_name} role={session?.role} avatar={session?.user.avatar || ""} />
                         </>
                     ) : (
                         <>
-                           <Link href={"/auth/register"} className={cn(buttonVariants(), "hover:bg-transparent hover:border-3 px-4 py-5 rounded-xl border-primary text-white hover:text-primary")}>
+                            <Link href={"/auth/register"} className={cn(buttonVariants(), "hover:bg-transparent hover:border-3 px-4 py-5 rounded-xl border-primary text-white hover:text-primary")}>
                                 <span className="flex-center-both smooth text-inherit stroke-current w-6 h-6">
                                     <svg height="512" viewBox="0 0 32 32" width="512" xmlns="http://www.w3.org/2000/svg" className="size-full smooth fill-airForceBlue-100 group-hover:fill-airForceBlue-500">
                                         <g id="brainstorm_x2C__idea_x2C__Brain_x2C__mind_x2C__bulb">
@@ -156,7 +71,7 @@ export  function Header() {
                     )}
                 </nav>
 
-                <div className="flex sm:hidden" ref={menuRef}>
+                {/* <div className="flex sm:hidden" ref={menuRef}>
                     <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={cn("relative w-12 h-12 flex sm:hidden items-center justify-center rounded-xl bg-muted/50 hover:bg-muted transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-accent")} aria-label={isMenuOpen ? "إغلاق القائمة" : "فتح القائمة"} aria-expanded={isMenuOpen}>
                         <div className="w-6 h-5 flex flex-col justify-between items-center">
                             <span className={cn("block h-0.5 w-6 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center", isMenuOpen && "translate-y-[9px] rotate-45")} />
@@ -181,12 +96,10 @@ export  function Header() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
-            <div className="h-1 w-full bg-accent">
-                <div className="h-full bg-primary transition-all duration-150 ease-out" style={{ width: `${scrollProgress}%` }} />
-            </div>
+
         </header>
     );
 }

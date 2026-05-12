@@ -9,20 +9,28 @@ export const getCoursesListApi = async () => {
 
     const token = await getNextAuthToken()
 
-    // if (!token?.access_token) return RESPONSES.unauthorized
 
 
-    const res = await fetch(`${process.env.API_URL}/courses`, {
-        headers: {
-            ...HEADERS.authorize(token?.access_token || "")
-        }
+    let res = await fetch(`${process.env.API_URL}/courses`, {
+        headers: token?.access_token
+            ? {
+                ...HEADERS.authorize(token.access_token)
+            }
+            : {}
     })
 
+
+    // لو التوكين expired
+    if (res.status === 401) {
+        res = await fetch(`${process.env.API_URL}/courses`)
+    }
     const payload: IApiResponse<ICourse[]> = await res.json()
 
     if (payload.status === "error") {
         throw new Error(payload.message || "Failed to fetch courses list")
     }
+
+    console.log(payload)
 
     return payload
 }
