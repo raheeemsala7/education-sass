@@ -2,6 +2,7 @@ import { Toaster } from "sonner"
 import ReactQueryProvider from "./components/react-query-provider"
 import NextAuthProvider from "./components/next-auth-provider"
 import { ThemeProvider } from "@/shared/components/theme-provider"
+import { TooltipProvider } from "@/shared/components/ui/tooltip"
 
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
@@ -14,9 +15,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                     enableSystem
                     disableTransitionOnChange
                 >
-                        <Toaster position="top-right" richColors />
+                    <Toaster position="top-right" richColors />
+                    <TooltipProvider>{children}</TooltipProvider>
 
-                        {children}
                 </ThemeProvider>
             </NextAuthProvider>
         </ReactQueryProvider>

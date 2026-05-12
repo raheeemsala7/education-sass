@@ -2,9 +2,8 @@
 
 declare type SuccessResponse<T> = {
     status: "success"
-    code: number;
     message?: string
-    payload: T
+    data: T
 }
 declare type IErrorResponse = {
     status: "error"
