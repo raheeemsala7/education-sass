@@ -1,8 +1,12 @@
-import React from 'react'
+import { SectionCards } from '@/features/statistics/_components/section-cards'
+import { StatisticsSkeleton } from '@/features/statistics/_components/statistics-skeleton'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+        <Suspense fallback={<StatisticsSkeleton />}>
+            <SectionCards />
+        </Suspense>
   )
 }
 
