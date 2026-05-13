@@ -1,23 +1,37 @@
 "use client"
-import React, { useMemo } from 'react'
-import { getAdminCoursesListApi } from '../apis/courses.api'
+import{ useMemo } from 'react'
 import EmptyState from '../EmptyState'
 import AdminCourseCard from './AdminCourseCard'
 import { useGetAdminCoursesInfinite } from '../hooks/use-course'
 import AdminCourseCardSkeletonLayout from './skeleton/list-admin-card'
 import InfiniteScroll from "react-infinite-scroll-component"
 
-const ListAdminCards =   () => {
+const ListAdminCards = () => {
 
+
+    const { data, fetchNextPage, hasNextPage, isLoading, isError } = useGetAdminCoursesInfinite()
+
+    const allCourses = useMemo(
+        () =>
+            data?.pages.flatMap((page) =>
+                page.data
+            ) ?? [],
+        [data]
+    )
     
-    const { data ,fetchNextPage , hasNextPage , isLoading , isError} =  useGetAdminCoursesInfinite()
+    if (isLoading) {
+        return <AdminCourseCardSkeletonLayout />
+    }
+    if (isError) {
+        return <EmptyState title='Admin Courses' description='Something went wrong' buttonText='Retry' href='/admin/courses' />
+    }
 
-   
-    const allCourses = useMemo(() => data?.pages.flatMap((page) => page.data ?? []) ?? [], [data])
 
 
+    console.log(data?.pages)
+    console.log(allCourses)
 
-  
+
 
     return (
         <InfiniteScroll
@@ -31,9 +45,10 @@ const ListAdminCards =   () => {
                 </p>
             }
         >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 items-start"
+            >
                 {allCourses.map((course) => (
-                    <AdminCourseCard key={course.id} data={course}  />
+                    <AdminCourseCard key={course.id} data={course} />
                 ))}
             </div>
         </InfiniteScroll>

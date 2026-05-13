@@ -62,12 +62,14 @@ const AdminCourseCard = ({ data }: IProps) => {
                     {data.is_active ? "مفعل" : "غير مفعل"}
                 </Badge>
             </div>
-            <Image src={`${data.thumbnail}`}
+            <div className='h-80 relative'>
+                <Image src={`${data.thumbnail}`}
                 alt={data.title}
-                width={400}
                 height={320}
-                className='w-full rounded-t-lg aspect-video h-full object-coverj'
+                width={400}
+                className='w-full rounded-t-lg  h-full object-fill'
             />
+            </div>
 
             <CardContent className='flex flex-col gap-3 py-4'>
                 <Link href={`/admin/courses/${data.id}`}
@@ -75,8 +77,8 @@ const AdminCourseCard = ({ data }: IProps) => {
                     group-hover:text-primary transition-colors'>
                     {data.title}
                 </Link>
-                <div className="line-clamp-4 text-sm text-muted-foreground leading-tight ">
-                    <RenderDescription description={data.description} />
+                <div className="line-clamp-2 text-sm text-muted-foreground leading-tight ">
+                    <RenderDescription  description={data.description} />
                 </div>
                 <div className='mt-4 flex items-center gap-x-4'>
                     <div className='flex items-center gap-2'>

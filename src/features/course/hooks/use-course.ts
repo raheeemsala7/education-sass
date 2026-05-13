@@ -5,7 +5,17 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { IAdminCourse } from "../types/course"
 import { useSearchParams } from "next/navigation"
 
-
+export type AdminCoursesResponse = 
+    | {
+        status: "success"
+        data: IAdminCourse[]
+        meta: IPagination
+      }
+    | {
+        status: "error"
+        message?: string
+        code?: number
+      }
 export const useGetAdminCoursesInfinite = () => {
     // Search params
     const searchParams = useSearchParams()
@@ -19,7 +29,7 @@ export const useGetAdminCoursesInfinite = () => {
         queryFn: async ({ pageParam }) => {
             const res = await fetch(`/api/courses?page=${pageParam}&limit=${limit}`)
 
-            const payload: IApiResponse<IPaginatedResponse<IAdminCourse[]>> = await res.json()
+            const payload: AdminCoursesResponse = await res.json()
             if (payload.status === "error") {
                 throw new Error(payload.message || "Error")
             }
@@ -29,9 +39,10 @@ export const useGetAdminCoursesInfinite = () => {
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
-            const meta = lastPage.data?.meta
-            if (!meta || meta.current_page === meta.last_page) return undefined
-            return meta.current_page + 1
+            if (lastPage.meta.current_page === lastPage.meta.last_page) {
+                return undefined
+            }
+            return lastPage.meta.current_page + 1
         }
     })
 }

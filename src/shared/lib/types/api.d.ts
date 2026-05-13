@@ -17,28 +17,16 @@ declare type IErrorResponse = {
 
 declare type IApiResponse<T> = SuccessResponse<T> | IErrorResponse
 
-declare interface IPagination<T> {
-
-    data: T[];
-    metadata: {
-        current_page: number;
-        per_page: number;
-        limit: number;
-        total: number;
-        last_page: number;
-
-    };
+export interface IPagination {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
 }
 
 export interface IPaginatedResponse<T> {
- 
-    data: T[];
-    meta: {
-        current_page: number;
-        per_page: number;
-        total: number;
-        last_page: number;
-    };
+    data: T;
+    meta: IPagination;
 }
 
 export interface ITimeStamp {
