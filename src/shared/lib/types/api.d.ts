@@ -18,12 +18,26 @@ declare type IErrorResponse = {
 declare type IApiResponse<T> = SuccessResponse<T> | IErrorResponse
 
 declare interface IPagination<T> {
+
     data: T[];
     metadata: {
-        page: number;
+        current_page: number;
+        per_page: number;
         limit: number;
         total: number;
-        totalPages: number;
+        last_page: number;
+
+    };
+}
+
+export interface IPaginatedResponse<T> {
+ 
+    data: T[];
+    meta: {
+        current_page: number;
+        per_page: number;
+        total: number;
+        last_page: number;
     };
 }
 

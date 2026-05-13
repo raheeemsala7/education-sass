@@ -19,9 +19,10 @@ const page = () => {
                 </Link>
             </div>
 
-            <Suspense fallback={<AdminCourseCardSkeletonLayout />}>
+            <ListAdminCards />
+            {/* <Suspense fallback={<AdminCourseCardSkeletonLayout />}>
                 <ListAdminCards />
-            </Suspense>
+            </Suspense> */}
         </div>
     )
 }
