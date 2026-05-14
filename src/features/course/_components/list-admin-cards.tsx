@@ -28,11 +28,6 @@ const ListAdminCards = () => {
 
 
 
-    console.log(data?.pages)
-    console.log(allCourses)
-
-
-
     return (
         <InfiniteScroll
             dataLength={allCourses.length} //This is important field to render the next data
@@ -41,7 +36,7 @@ const ListAdminCards = () => {
             loader={<AdminCourseCardSkeletonLayout />}
             endMessage={
                 <p style={{ textAlign: 'center' }}>
-                    <b>Yay! You have seen it all</b>
+                    <b>لا يوجد المزيد</b>
                 </p>
             }
         >
