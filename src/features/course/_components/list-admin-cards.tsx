@@ -1,6 +1,6 @@
 "use client"
 import{ useMemo } from 'react'
-import EmptyState from '../EmptyState'
+import EmptyState from './EmptyState'
 import AdminCourseCard from './AdminCourseCard'
 import { useGetAdminCoursesInfinite } from '../hooks/use-course'
 import AdminCourseCardSkeletonLayout from './skeleton/list-admin-card'

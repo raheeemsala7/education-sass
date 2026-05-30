@@ -19,7 +19,7 @@ const layout = async ({ children, params }: { children: React.ReactNode, params:
     }
     return (
         <section className='bg-[#F3F4F6] dark:bg-inherit'>
-            <div className="w-full max-w-8xl mx-auto px-4 mt-36">
+            <div className="w-full max-w-8xl mx-auto px-4">
 
                 {/* ####################### */}
 
