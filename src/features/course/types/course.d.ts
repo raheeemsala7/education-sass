@@ -41,3 +41,6 @@ export interface ICourseResponse {
     status: "success" | "error";
     data: ICourse;
 }
+
+
+export type CourseSchemaType = z.infer<typeof courseSchema>

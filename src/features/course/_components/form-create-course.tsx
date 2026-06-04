@@ -1,34 +1,22 @@
 "use client";
-import { courseSchema, CourseSchemaType, SchoolGrades } from "@/lib/schema";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Loader2, PlusIcon } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-// import { useConfetti } from "@/lib/use-confetti"
 import { toast } from "sonner";
 import { useConstructUrl } from "@/shared/hooks/use-construct-url";
-// import { useConstructUrl } from "@/hooks/use-construct-url"
-// import { useCreateCourseMutation } from "@/hooks/use-course"
-// import UploadCreateMedia from "./file-uploader/upload-create-image"
+import { useConfetti } from "@/shared/hooks/use-confetti";
+import { courseSchema, SchoolGrades } from "../schema/course.schema";
+import { CourseSchemaType } from "../types/course";
+import { Button } from "@/shared/components/ui/button";
+import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
+import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-image";
+import Editor from "@/shared/components/rich-text-editor/Editor";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Input } from "@/shared/components/ui/input";
 
 const FormCreateCourse = () => {
   const { triggerConfetti } = useConfetti();
@@ -66,7 +54,7 @@ const FormCreateCourse = () => {
     form.setValue("thumbnail", "");
   };
 
-//   const { mutateAsync: createCourse } = useCreateCourseMutation();
+  //   const { mutateAsync: createCourse } = useCreateCourseMutation();
 
   const uploadedNationalIdRef = useRef<string | null>(null);
 
@@ -145,13 +133,13 @@ const FormCreateCourse = () => {
           uploadedNationalIdRef.current = thumbnailIdKey;
         }
 
-        const { data } = await createCourse({
-          ...values,
-          thumbnail: thumbnailIdKey,
-        });
+        // const { data } = await createCourse({
+        //   ...values,
+        //   thumbnail: thumbnailIdKey,
+        // });
 
         form.reset();
-        router.push(`/admin/courses/${data.id}/edit`);
+        // router.push(`/admin/courses/${data.id}/edit`);
         toast.success("تم الانشاء بنجاح");
         triggerConfetti();
       });
@@ -162,182 +150,178 @@ const FormCreateCourse = () => {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      
       <Controller
         name="title"
         control={form.control}
         render={({ field, fieldState }) => (
-          <FormItem>
-            <FormLabel className="mb-1">العنوان</FormLabel>
-            <FormControl>
-              <Input placeholder="عنوان الكورس" {...field} />
-            </FormControl>
-            <FormMessage>{fieldState.error?.message}</FormMessage>
-          </FormItem>
+          <Field>
+            
+            <FieldLabel>العنوان</FieldLabel>
+            <Input placeholder="عنوان الكورس" {...field} />
+            {fieldState.invalid && (
+              <FieldError errors={[fieldState.error]} />
+            )}
+          </Field>
         )}
       />
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
         <Controller
           name="category"
           control={form.control}
           render={({ field, fieldState }) => (
-            <FormItem>
-              <FormLabel className="mb-1">الصف الدراسي</FormLabel>
-
+            <Field>
+              
+              <FieldLabel> الصف الدراسي </FieldLabel>
               <Select
-                dir="rtl"
+                
                 value={field.value}
                 onValueChange={field.onChange}
               >
+                
                 <SelectTrigger className="w-full">
+                  
                   <SelectValue placeholder="الصف الدراسي" />
                 </SelectTrigger>
-
                 <SelectContent>
+                  
                   {SchoolGrades.options.map((category) => (
                     <SelectItem key={category} value={category}>
+                      
                       {category}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-
-              <FormMessage>{fieldState.error?.message}</FormMessage>
-            </FormItem>
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
           )}
         />
-
         <Controller
           name="is_free"
           control={form.control}
           render={({ field, fieldState }) => (
-            <FormItem>
-              <FormLabel className="mb-1">هل الكورس مجاني؟</FormLabel>
-
+            <Field>
+              
+              <FieldLabel> هل الكورس مجاني؟ </FieldLabel>
               <Select
-                dir="rtl"
+                
                 value={field.value ? "true" : "false"}
                 onValueChange={(value) => field.onChange(value === "true")}
               >
+                
                 <SelectTrigger className="w-full">
+                  
                   <SelectValue placeholder="اختر القيمة" />
                 </SelectTrigger>
-
                 <SelectContent>
-                  <SelectItem value="true">نعم</SelectItem>
-                  <SelectItem value="false">لا</SelectItem>
+                  
+                  <SelectItem value="true"> نعم </SelectItem>
+                  <SelectItem value="false"> لا </SelectItem>
                 </SelectContent>
               </Select>
-
-              <FormMessage>{fieldState.error?.message}</FormMessage>
-            </FormItem>
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
           )}
         />
-
         <Controller
           name="price"
           control={form.control}
           render={({ field, fieldState }) => (
-            <FormItem>
-              <FormLabel className="mb-1">السعر</FormLabel>
-
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="السعر"
-                  value={field.value ?? ""}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-              </FormControl>
-
-              <FormMessage>{fieldState.error?.message}</FormMessage>
-            </FormItem>
+            <Field>
+              
+              <FieldLabel>السعر</FieldLabel>
+              <Input
+                type="number"
+                placeholder="السعر"
+                value={field.value ?? ""}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              />
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
           )}
         />
-
         <Controller
           name="is_active"
           control={form.control}
           render={({ field, fieldState }) => (
-            <FormItem>
-              <FormLabel className="mb-1">الحالة</FormLabel>
-
+            <Field>
+              
+              <FieldLabel>الحالة</FieldLabel>
               <Select
-                dir="rtl"
+                
                 value={field.value ? "true" : "false"}
                 onValueChange={(value) => field.onChange(value === "true")}
               >
+                
                 <SelectTrigger className="w-full">
+                  
                   <SelectValue placeholder="اختر القيمة" />
                 </SelectTrigger>
-
                 <SelectContent>
-                  <SelectItem value="true">نعم</SelectItem>
-                  <SelectItem value="false">لا</SelectItem>
+                  
+                  <SelectItem value="true"> نعم </SelectItem>
+                  <SelectItem value="false"> لا </SelectItem>
                 </SelectContent>
               </Select>
-
-              <FormMessage>{fieldState.error?.message}</FormMessage>
-            </FormItem>
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
           )}
         />
       </div>
-
       <Controller
         name="description"
         control={form.control}
         render={({ field, fieldState }) => (
-          <FormItem>
-            <FormLabel className="mb-1">وصف الكورس كامل</FormLabel>
-
-            <FormControl>
-              <Editor field={field} />
-            </FormControl>
-
-            <FormMessage>{fieldState.error?.message}</FormMessage>
-          </FormItem>
+          <Field>
+            
+            <FieldLabel> وصف الكورس كامل </FieldLabel>
+            <Editor field={field} />
+            {fieldState.invalid && (
+              <FieldError errors={[fieldState.error]} />
+            )}
+          </Field>
         )}
       />
-
       <Controller
         name="thumbnail"
         control={form.control}
-        render={({ field, fieldState }) => (
-          <FormItem>
-            <FormLabel className="mb-1">صورة غلاف الكورس</FormLabel>
-
-            <FormControl>
-              <div className="space-y-4">
-                <Uploader
-                  fileTypeAccpeted="image"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-
-                <UploadCreateMedia
-                  mediaType="image"
-                  previewUrl={preview}
-                  onSelect={handleSelect}
-                  onRemove={handleRemove}
-                />
-              </div>
-            </FormControl>
-
-            <FormMessage>{fieldState.error?.message}</FormMessage>
-          </FormItem>
+        render={({ fieldState }) => (
+          <Field>
+            
+            <FieldLabel> صورة غلاف الكورس </FieldLabel>
+            <UploadCreateMedia
+              mediaType="image"
+              previewUrl={preview}
+              onSelect={handleSelect}
+              onRemove={handleRemove}
+            />
+            {fieldState.invalid && (
+              <FieldError errors={[fieldState.error]} />
+            )}
+          </Field>
         )}
       />
-
       <Button type="submit" disabled={isPending}>
+        
         {isPending ? (
           <>
-            <Loader2 className="animate-spin" />
-            جاري الانشاء...
+            
+            <Loader2 className="animate-spin" /> جاري الانشاء...
           </>
         ) : (
           <>
-            <PlusIcon />
-            انشاء الكورس
+            
+            <PlusIcon /> انشاء الكورس
           </>
         )}
       </Button>
