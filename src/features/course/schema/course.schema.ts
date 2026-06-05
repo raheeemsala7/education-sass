@@ -52,3 +52,6 @@ export const SchoolGrades = z.enum([
     "الصف الثاني الثانوي",
     "الصف الثالث الثانوي"
 ]);
+
+
+
