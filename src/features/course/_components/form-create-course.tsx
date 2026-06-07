@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Loader2, PlusIcon } from "lucide-react";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConstructUrl } from "@/shared/hooks/use-construct-url";
@@ -18,7 +18,20 @@ import Editor from "@/shared/components/rich-text-editor/Editor";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Input } from "@/shared/components/ui/input";
 
-const FormCreateCourse = () => {
+interface IProps {
+  title?: string;
+  description?: string;
+  thumbnail?: string;
+  price?: number;
+  is_free?: boolean;
+  is_active?: boolean;
+  category?: "الصف الأول" | "الصف الثاني" | "الصف الثالث";
+  id?: string;
+  isEdit: boolean;
+}
+
+
+const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_active, category, id, isEdit }: IProps) => {
   const { triggerConfetti } = useConfetti();
 
   const [isPending, startTransition] = useTransition();
@@ -26,13 +39,13 @@ const FormCreateCourse = () => {
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      thumbnail: "",
-      price: 100,
-      is_free: false,
-      category: "الصف الثالث الثانوي",
-      is_active: true,
+      title: isEdit ? title : "",
+      description: isEdit ? description : "",
+      thumbnail: isEdit ? thumbnail : "",
+      price: isEdit ? price : 100,
+      is_free: isEdit ? is_free : false,
+      category: isEdit ? category : "الصف الثالث الثانوي",
+      is_active: isEdit ? is_active : true,
     },
   });
 
@@ -148,15 +161,31 @@ const FormCreateCourse = () => {
     }
   }
 
+
+  useEffect(() => {
+    if (isEdit) {
+      form.reset({
+        title,
+        description,
+        thumbnail,
+        price,
+        is_free,
+      })
+
+      setPreview(thumbnail)
+      setFile(null)
+    }
+  }, [title, description, thumbnail, price, is_free, isEdit])
+
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      
+
       <Controller
         name="title"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field>
-            
+
             <FieldLabel>العنوان</FieldLabel>
             <Input placeholder="عنوان الكورس" {...field} />
             {fieldState.invalid && (
@@ -166,29 +195,29 @@ const FormCreateCourse = () => {
         )}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
+
         <Controller
           name="category"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field>
-              
+
               <FieldLabel> الصف الدراسي </FieldLabel>
               <Select
-                
+
                 value={field.value}
                 onValueChange={field.onChange}
               >
-                
+
                 <SelectTrigger className="w-full">
-                  
+
                   <SelectValue placeholder="الصف الدراسي" />
                 </SelectTrigger>
                 <SelectContent>
-                  
+
                   {SchoolGrades.options.map((category) => (
                     <SelectItem key={category} value={category}>
-                      
+
                       {category}
                     </SelectItem>
                   ))}
@@ -205,20 +234,20 @@ const FormCreateCourse = () => {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field>
-              
+
               <FieldLabel> هل الكورس مجاني؟ </FieldLabel>
               <Select
-                
+
                 value={field.value ? "true" : "false"}
                 onValueChange={(value) => field.onChange(value === "true")}
               >
-                
+
                 <SelectTrigger className="w-full">
-                  
+
                   <SelectValue placeholder="اختر القيمة" />
                 </SelectTrigger>
                 <SelectContent>
-                  
+
                   <SelectItem value="true"> نعم </SelectItem>
                   <SelectItem value="false"> لا </SelectItem>
                 </SelectContent>
@@ -234,7 +263,7 @@ const FormCreateCourse = () => {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field>
-              
+
               <FieldLabel>السعر</FieldLabel>
               <Input
                 type="number"
@@ -253,20 +282,20 @@ const FormCreateCourse = () => {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field>
-              
+
               <FieldLabel>الحالة</FieldLabel>
               <Select
-                
+
                 value={field.value ? "true" : "false"}
                 onValueChange={(value) => field.onChange(value === "true")}
               >
-                
+
                 <SelectTrigger className="w-full">
-                  
+
                   <SelectValue placeholder="اختر القيمة" />
                 </SelectTrigger>
                 <SelectContent>
-                  
+
                   <SelectItem value="true"> نعم </SelectItem>
                   <SelectItem value="false"> لا </SelectItem>
                 </SelectContent>
@@ -283,7 +312,7 @@ const FormCreateCourse = () => {
         control={form.control}
         render={({ field, fieldState }) => (
           <Field>
-            
+
             <FieldLabel> وصف الكورس كامل </FieldLabel>
             <Editor field={field} />
             {fieldState.invalid && (
@@ -297,7 +326,7 @@ const FormCreateCourse = () => {
         control={form.control}
         render={({ fieldState }) => (
           <Field>
-            
+
             <FieldLabel> صورة غلاف الكورس </FieldLabel>
             <UploadCreateMedia
               mediaType="image"
@@ -312,15 +341,15 @@ const FormCreateCourse = () => {
         )}
       />
       <Button type="submit" disabled={isPending}>
-        
+
         {isPending ? (
           <>
-            
+
             <Loader2 className="animate-spin" /> جاري الانشاء...
           </>
         ) : (
           <>
-            
+
             <PlusIcon /> انشاء الكورس
           </>
         )}

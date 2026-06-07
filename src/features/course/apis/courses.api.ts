@@ -73,6 +73,7 @@ export const getSingleCourseDetailApi = async (id: string) => {
         }
     })
 
+
     const payload: IApiResponse<ICourse> = await res.json()
 
     if (payload.status === "error") {
