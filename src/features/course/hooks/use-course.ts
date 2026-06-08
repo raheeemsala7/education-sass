@@ -1,9 +1,10 @@
 "use client"
 
 import { IApiResponse, IPagination } from "@/shared/lib/types/api"
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { IAdminCourse, ICourse } from "../types/course"
 import { useSearchParams } from "next/navigation"
+import { createCourseAction } from "../apis/courses.action"
 
 export type AdminCoursesResponse = 
     | {
@@ -61,6 +62,19 @@ export const useGetSingleCourse = (courseId: string) => {
             }
 
             return payload
+        }
+    })
+}
+
+
+export const useCreateCourseMutation = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: createCourseAction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey : ["adminCoursesList", 1]
+            })
         }
     })
 }

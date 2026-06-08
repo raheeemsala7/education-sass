@@ -17,6 +17,7 @@ import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-i
 import Editor from "@/shared/components/rich-text-editor/Editor";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Input } from "@/shared/components/ui/input";
+import { useCreateCourseMutation } from "../hooks/use-course";
 
 interface IProps {
   title?: string;
@@ -67,7 +68,7 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
     form.setValue("thumbnail", "");
   };
 
-  //   const { mutateAsync: createCourse } = useCreateCourseMutation();
+  const { mutateAsync: createCourse } = useCreateCourseMutation();
 
   const uploadedNationalIdRef = useRef<string | null>(null);
 
@@ -136,25 +137,37 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
   async function onSubmit(values: CourseSchemaType) {
     try {
       startTransition(async () => {
-        let thumbnailIdKey = uploadedNationalIdRef.current;
-        if (!thumbnailIdKey) {
-          if (!values.thumbnail && !file) {
-            toast.error("ارفع صورة الغلاف");
-            return;
+
+        if (isEdit) {
+          let thumbnailUrl = values.thumbnail;
+          if (file) {
+            thumbnailUrl = await uploadImageToS3(file);
           }
-          thumbnailIdKey = await uploadImageToS3(file);
-          uploadedNationalIdRef.current = thumbnailIdKey;
+
+          // await updateCourse({ id: id, ...values, thumbnail: thumbnailUrl })
+        } else {
+          let thumbnailIdKey = uploadedNationalIdRef.current;
+          if (!thumbnailIdKey) {
+            if (!values.thumbnail && !file) {
+              toast.error("ارفع صورة الغلاف");
+              return;
+            }
+            thumbnailIdKey = await uploadImageToS3(file);
+            uploadedNationalIdRef.current = thumbnailIdKey;
+          }
+
+          await createCourse({
+            ...values,
+            thumbnail: thumbnailIdKey,
+          });
+
+          form.reset();
+          // router.push(`/admin/courses/${data.id}/edit`);
+          toast.success("تم الانشاء بنجاح");
+          triggerConfetti();
         }
 
-        // const { data } = await createCourse({
-        //   ...values,
-        //   thumbnail: thumbnailIdKey,
-        // });
 
-        form.reset();
-        // router.push(`/admin/courses/${data.id}/edit`);
-        toast.success("تم الانشاء بنجاح");
-        triggerConfetti();
       });
     } catch (error) {
       console.log(error);
