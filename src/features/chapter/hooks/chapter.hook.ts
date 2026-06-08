@@ -1,8 +1,8 @@
 "use client"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteChapter, putChapter } from "../apis/chapter.action"
-import { createChapter } from "../apis/chapter.action"
+import { toast } from "sonner"
+import { createChapter, deleteChapter, putChapter } from "../apis/chapter.action"
 
 
 
@@ -25,6 +25,10 @@ export const useDeleteChapterMutation = (courseId: string) => {
             queryClient.invalidateQueries({
                 queryKey: ["courseAdmin" ,courseId]
             })
+            },
+            onError: (error) => {
+                toast.error("Chapter not deleted"),
+                console.log(error)
             }
     })
 }

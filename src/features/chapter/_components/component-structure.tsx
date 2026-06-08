@@ -26,7 +26,6 @@ const ComponentStructure = ({ courseId }: { courseId: string }) => {
       <p>لا يوجد بيانات لعرضها</p>
     )
   }
-  console.log(payload?.data.thumbnail)
 
   const { title, category, description, is_free, price, thumbnail, sections = [] ,  } = payload?.data
 

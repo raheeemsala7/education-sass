@@ -18,11 +18,13 @@ const DeleteChapterModal = ({ courseId, chapterId }: { courseId: string; chapter
 
     const [open, setOpen] = useState(false)
     const [pending, startTransition] = useTransition()
-    const { mutate: deleteChapter } = useDeleteChapterMutation(courseId)
+    const { mutateAsync: deleteChapter } = useDeleteChapterMutation(courseId)
 
 
     async function onSubmit() {
-        startTransition(async () => {
+        console.log("onSubmit called")  // بيظهر؟
+    startTransition(async () => {
+        console.log("transition started") 
             try {
                 await deleteChapter({
                     chapterId: chapterId.toString(),
@@ -37,9 +39,7 @@ const DeleteChapterModal = ({ courseId, chapterId }: { courseId: string; chapter
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger>
-                <Button size={"icon"} variant="destructive" className="size-7 sm:size-9">
                     <Trash2 className="size-4" />
-                </Button>
             </AlertDialogTrigger>
             <AlertDialogContent >
                 <AlertDialogHeader className="!text-right">

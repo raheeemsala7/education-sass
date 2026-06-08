@@ -10,7 +10,7 @@ export const createChapter = async ({ values, courseId }: { values: ChapterSchem
 
     if (!token?.access_token) return RESPONSES.unauthorized
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sections/course/${courseId}`, {
+    const res = await fetch(`${process.env.API_URL}/sections/course/${courseId}`, {
         method: "POST",
         headers: {
             ...HEADERS.authorize(token.access_token),
@@ -27,7 +27,7 @@ export const putChapter = async ({ values, chapterId }: { values: ChapterSchemaT
 
     if (!token?.access_token) return RESPONSES.unauthorized
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sections/${chapterId}`, {
+    const res = await fetch(`${process.env.API_URL}/sections/${chapterId}`, {
         method: "PUT",
         headers: {
             ...HEADERS.authorize(token.access_token),
@@ -40,11 +40,17 @@ export const putChapter = async ({ values, chapterId }: { values: ChapterSchemaT
     return data
 }
 export const deleteChapter = async ({ chapterId }: { chapterId: string }) => {
+    console.log("1. deleteChapter called", chapterId)
+    
     const token = await getNextAuthToken()
+    console.log("2. token", token)
 
     if (!token?.access_token) return RESPONSES.unauthorized
+    console.log("3. about to fetch")
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sections/${chapterId}`, {
+    console.log(process.env.API_URL)
+
+    const res = await fetch(`${process.env.API_URL}/sections/${chapterId}`, {
         method: "DELETE",
         headers: {
             ...HEADERS.authorize(token.access_token),
@@ -52,6 +58,8 @@ export const deleteChapter = async ({ chapterId }: { chapterId: string }) => {
         },
     })
 
+
     const data = await res.json()
+    console.log(data)
     return data
 }

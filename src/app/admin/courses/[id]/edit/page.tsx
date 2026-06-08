@@ -16,9 +16,6 @@ const page = async ({ params }: PageProps) => {
 
   const { id: courseId } = await  params
 
-  console.log("courseId")
-  console.log(courseId)
-  console.log("courseId")
 
   // const payload = await getSingleCourseDetailApi(courseId)
 

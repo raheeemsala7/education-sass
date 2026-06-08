@@ -282,7 +282,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                 </div>
 
                                                 <div className="flex gap-2">
-                                                    <DeleteChapterModal courseId={id} sectionId={chapter.id} />
+                                                    <DeleteChapterModal courseId={id} chapterId={chapter.id} />
                                                     <ChapterModal courseId={id} chapterId={chapter.id} title={chapter.title} description={chapter.description} />
 
                                                 </div>
