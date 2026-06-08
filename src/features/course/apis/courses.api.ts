@@ -82,3 +82,26 @@ export const getSingleCourseDetailApi = async (id: string) => {
 
     return payload
 }
+
+export const getSingleAdminCourseDetailApi = async ({req, id} : {req:NextRequest, id:string}) => {
+    const token = await getToken({req})
+
+    if (!token?.access_token) return RESPONSES.unauthorized
+
+    const res = await fetch(`${process.env.API_URL}/courses/${id}`, {
+        headers: {
+            ...HEADERS.authorize(token?.access_token || "")
+        }
+    })
+
+
+    const payload: IApiResponse<ICourse> = await res.json()
+
+    console.log(payload)
+
+    if (payload.status === "error") {
+        throw new Error(payload.message || "Failed to fetch course detail")
+    }
+
+    return payload
+}

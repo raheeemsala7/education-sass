@@ -1,8 +1,8 @@
 "use client"
 
-import { IApiResponse, IPaginatedResponse, IPagination } from "@/shared/lib/types/api"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { IAdminCourse } from "../types/course"
+import { IApiResponse, IPagination } from "@/shared/lib/types/api"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { IAdminCourse, ICourse } from "../types/course"
 import { useSearchParams } from "next/navigation"
 
 export type AdminCoursesResponse = 
@@ -43,6 +43,24 @@ export const useGetAdminCoursesInfinite = () => {
                 return undefined
             }
             return lastPage.meta.current_page + 1
+        }
+    })
+}
+
+
+
+export const useGetSingleCourse = (courseId: string) => {
+    return useQuery({
+        queryKey: ["courseAdmin", courseId],
+        queryFn: async () => {
+            const res = await fetch(`/api/courses/${courseId}`)
+
+            const payload: IApiResponse<ICourse> = await res.json()
+            if (payload.status === "error") {
+                throw new Error(payload.message || "Error")
+            }
+
+            return payload
         }
     })
 }
