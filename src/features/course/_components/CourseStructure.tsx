@@ -237,7 +237,7 @@ export default function CourseStructure({ id, data }: IProps) {
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between border-b border-border">
                     <CardTitle>الاقسام</CardTitle>
-                    {/* <NewChapterModal courseId={id} /> */}
+                    <ChapterModal courseId={id} isEdit={false} />
                 </CardHeader>
 
                 <CardContent className="space-y-6 px-2 sm:px-6">

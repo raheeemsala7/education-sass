@@ -12,20 +12,22 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { chapterSchema } from '../schema/chapter.schema'
 import { ChapterSchemaType } from '../types/chapter'
-import { useUpdateChapterMutation } from '../hooks/chapter.hook'
+import { useCreateChapterMutation, useUpdateChapterMutation } from '../hooks/chapter.hook'
+import { createChapter } from '../apis/chapter.action'
 
-const ChapterModal = ({ courseId, chapterId, title, description }: { courseId: string, chapterId: number, title: string, description?: string }) => {
+const ChapterModal = ({ courseId, isEdit, chapterId, title, description }: { courseId: string, isEdit: boolean, chapterId?: number, title?: string, description?: string  }) => {
     const [isPending, startTransition] = useTransition()
 
     const [isOpen, setIsOpen] = useState(false)
-    const { mutate: updateChapter } = useUpdateChapterMutation(courseId)
+    const { mutateAsync: updateChapter } = useUpdateChapterMutation(courseId)
+    const { mutateAsync: createChapter } = useCreateChapterMutation(courseId)
 
 
     const form = useForm<ChapterSchemaType>({
         resolver: zodResolver(chapterSchema),
         defaultValues: {
-            title: title,
-            description: description || '',
+            title: title ? title : '',
+            description: description ? description : '',
         },
     })
 
@@ -40,12 +42,23 @@ const ChapterModal = ({ courseId, chapterId, title, description }: { courseId: s
         startTransition(async () => {
 
             try {
-                await updateChapter({
-                    chapterId,
-                    ...values
-                })
-                toast.success("Chapter updated successfully")
-                // form.reset()
+
+                if (isEdit) {
+                    await updateChapter({
+                        chapterId,
+                        ...values
+                    })
+                    toast.success("Chapter updated successfully")
+                    
+                } else {
+                    await createChapter({
+                        courseId,
+                        ...values
+                    })
+                    toast.success("Chapter created successfully")
+                    form.reset()
+                }
+               
                 setIsOpen(false)
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.")

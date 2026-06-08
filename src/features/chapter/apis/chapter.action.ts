@@ -19,6 +19,10 @@ export const createChapter = async ({ values, courseId }: { values: ChapterSchem
         body: JSON.stringify(values)
     })
 
+ if (!res.ok) {
+    console.log(res)
+ }
+
     const data = await res.json()
     return data
 }
