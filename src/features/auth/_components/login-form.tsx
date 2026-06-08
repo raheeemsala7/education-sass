@@ -26,35 +26,42 @@ const LoginForm = () => {
             password: "",
         },
     });
+    const getDeviceId = () => {
+        let id = localStorage.getItem("device_id");
 
-
-
-
-
-    function onSubmit(values: LoginFormType) {
-        console.log(values)
-startTransition(async () => {
-        try {
-            const res = await signIn("credentials", {
-                email: values.email,
-                password: values.password,
-                redirect: false,
-            })
-
-            if (!res || !res.ok) {
-                toast.error(res?.error || "Login failed")
-                return
-            }
-
-            console.log(res.error)
-
-            toast.success("Login successful")
-            window.location.href = "/"
-        } catch (error) {
-            toast.error("Something went wrong")
-            console.log(error)
+        if (!id) {
+            id = crypto.randomUUID();
+            localStorage.setItem("device_id", id);
         }
-    })
+
+        return id;
+    };
+    function onSubmit(values: LoginFormType) {
+        startTransition(async () => {
+            try {
+                const device_id = getDeviceId();
+
+                const res = await signIn("credentials", {
+                    email: values.email,
+                    password: values.password,
+                    device_id,
+                    redirect: false,
+                })
+
+                if (!res || !res.ok) {
+                    toast.error(res?.error || "Login failed")
+                    return
+                }
+
+                console.log(res.error)
+
+                toast.success("Login successful")
+                window.location.href = "/"
+            } catch (error) {
+                toast.error("Something went wrong")
+                console.log(error)
+            }
+        })
     }
 
 

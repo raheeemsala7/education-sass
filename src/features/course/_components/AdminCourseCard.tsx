@@ -63,12 +63,12 @@ const AdminCourseCard = ({ data }: IProps) => {
                 </Badge>
             </div>
             <div className='h-80 relative'>
-                <Image src={`${data.thumbnail}`}
+                {/* <Image src={`${data.thumbnail}`}
                 alt={data.title}
                 height={320}
                 width={400}
                 className='w-full rounded-t-lg  h-full object-fill'
-            />
+            /> */}
             </div>
 
             <CardContent className='flex flex-col gap-3 py-4'>
@@ -78,7 +78,7 @@ const AdminCourseCard = ({ data }: IProps) => {
                     {data.title}
                 </Link>
                 <div className="line-clamp-2 text-sm text-muted-foreground leading-tight ">
-                    <RenderDescription  description={data.description} />
+                    {/* <RenderDescription  description={data.description} /> */}
                 </div>
                 <div className='mt-4 flex items-center gap-x-4'>
                     <div className='flex items-center gap-2'>

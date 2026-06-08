@@ -44,7 +44,7 @@ export async function Header() {
                 <nav className="hidden sm:flex items-center gap-6">
                     {session ? (
                         <>
-                            <MenubarHeader first_name={session?.user.first_name} role={session?.role} avatar={session?.user.avatar || ""} />
+                            <MenubarHeader first_name={session?.user.first_name} last_name={session?.user.last_name} role={session?.role} avatar={""} />
                         </>
                     ) : (
                         <>

@@ -6,29 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import Link from "next/link"
 import { signOut } from "next-auth/react"
 
-const MenubarHeader = ({ first_name, role, avatar }: { first_name: string, role: string, avatar: string }) => {
+const MenubarHeader = ({ first_name, last_name, role, avatar }: { first_name: string, last_name : string, role: string, avatar: string }) => {
 
-      // useEffect(() => {
-    //     const handleClickOutside = (event: MouseEvent) => {
-    //         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-    //             setIsMenuOpen(false);
-    //         }
-    //     };
-
-    //     document.addEventListener("mousedown", handleClickOutside);
-    //     return () => document.removeEventListener("mousedown", handleClickOutside);
-    // }, []);
-
-    // useEffect(() => {
-    //     const handleEscape = (event: KeyboardEvent) => {
-    //         if (event.key === "Escape") {
-    //             setIsMenuOpen(false);
-    //         }
-    //     };
-
-    //     document.addEventListener("keydown", handleEscape);
-    //     return () => document.removeEventListener("keydown", handleEscape);
-    // }, []);
     return (
         <>
             <Menubar className="border-none bg-transparent focus:bg-transparent">
@@ -46,7 +25,7 @@ const MenubarHeader = ({ first_name, role, avatar }: { first_name: string, role:
                     <MenubarTrigger className="p-0 border-none focus:outline-none focus:bg-transparent">
                         <Avatar>
                             <AvatarImage src={avatar || ""} />
-                            <AvatarFallback>{first_name.split(" ")[0].slice(0, 1)}{first_name.split(" ")[1].slice(0, 1)}</AvatarFallback>
+                            <AvatarFallback>{first_name.slice(0, 1)}{last_name.slice(0, 1)}</AvatarFallback>
                         </Avatar>
                     </MenubarTrigger>
                     <MenubarContent className="bg-card relative z-99 text-start border-none rounded-xl" style={{ direction: "rtl" }}>

@@ -3,7 +3,6 @@ import Credentials from "next-auth/providers/credentials";
 import { HEADERS } from "./shared/constant/api.constant";
 import { IApiResponse } from "./shared/lib/types/api";
 import { IAuthResponse } from "./features/auth/types/auth";
-import { IUser } from "./features/auth/types/user";
 
 
 
@@ -21,6 +20,7 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 email: {},
                 password: {},
+                device_id: {},
             },
             authorize: async (credentials) => {
 
@@ -34,48 +34,25 @@ export const authOptions: NextAuthOptions = {
                     },
                     body: JSON.stringify({
                         email: credentials.email,
-                        password: credentials.password
+                        password: credentials.password,
+                        device_id: credentials.device_id,
                     })
                 });
 
-                const data: IApiResponse<IAuthResponse> = await res.json()
+                const payload: IApiResponse<IAuthResponse> = await res.json()
 
-                if (data.status === "error") {
-                    throw new Error(data.message || "Login failed")
+                console.log("PAYLOAD")
+                console.log(payload)
+
+                if (payload.status === "error") {
+                    throw new Error(payload.message || "Login failed")
                 }
-                // const loginData = data.payload
-
-                console.log("TOKEN =>", data)
-                console.log("PROFILE URL =>", `${process.env.API_URL}/profile`)
-
-
-                const profileRes = await fetch(`${process.env.API_URL}/profile`, {
-                    method: "GET",
-                    headers: {
-                        ...HEADERS.authorize(data.access_token)
-                    }
-                })
-
-
-                const profileData: IApiResponse<IUser> = await profileRes.json()
-                console.log("ProfileData : => ", profileData)
-
-                if (profileData.status === "error") {
-                    throw new Error(profileData.message || "Login failed")
-                }
-
-                console.log({
-                    id: String(profileData.data.id),
-                    user: profileData.data,
-                    access_token: data.access_token,
-                    role: data.role
-                })
-
+                const loginData = payload.data
                 return {
-                    id: String(profileData.data.id),
-                    user: profileData.data,
-                    access_token: data.access_token,
-                    role: data.role
+                    id: String(loginData.user.id),
+                    user: loginData.user,
+                    access_token: loginData.access_token,
+                    role: loginData.user.role
                 }
             }
         }),
