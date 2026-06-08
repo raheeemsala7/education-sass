@@ -1,5 +1,4 @@
 'use client';
-
 import {
     DndContext,
     DragEndEvent,
@@ -35,17 +34,17 @@ import {
     Trash2,
     VideoIcon,
 } from 'lucide-react';
-import NewLessonModal from './NewLessonModal';
-import { Chapter } from '@/interface/Course';
-import NewChapterModal from './NewChapterModal';
+// import NewChapterModal from './NewChapterModal';
 import Link from 'next/link';
-import { useLessonUploadStore } from '@/store/useLessonUploadStore';
-import DeleteLessonModal from './DeleteLessonModal';
-import DeleteChapterModal from './DeleteChapterModal';
-import EditChapterModal from './EditChapterModal';
-import EditLessonLink from './formEdit/editLessonLink';
-import EditLessonModal from './EditLessonModal';
+// import { useLessonUploadStore } from '@/store/useLessonUploadStore';
+// import ChapterModal from './ChapterModal';
 import { cn } from '@/shared/lib/utils';
+import ChapterModal from '@/features/chapter/_components/chapterModal';
+import { Chapter } from '@/features/chapter/types/chapter';
+import DeleteChapterModal from '@/features/chapter/_components/DeleteChapterModal';
+import EditLessonModal from '@/features/lesson/_components/EditLessonModal';
+import DeleteLessonModal from '@/features/lesson/_components/DeleteLessonModal';
+import { useLessonUploadStore } from '@/store/useLessonUploadStore';
 
 
 interface SortableItemProps {
@@ -238,7 +237,7 @@ export default function CourseStructure({ id, data }: IProps) {
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between border-b border-border">
                     <CardTitle>الاقسام</CardTitle>
-                    <NewChapterModal courseId={id} />
+                    {/* <NewChapterModal courseId={id} /> */}
                 </CardHeader>
 
                 <CardContent className="space-y-6 px-2 sm:px-6">
@@ -269,7 +268,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                         <GripVertical className="size-4" />
                                                     </Button>
 
-                                                    <CollapsibleTrigger asChild>
+                                                    <CollapsibleTrigger>
                                                         <Button size="icon" variant="ghost">
                                                             {chapter.isOpen ? (
                                                                 <ChevronDown className="size-4" />
@@ -284,7 +283,7 @@ export default function CourseStructure({ id, data }: IProps) {
 
                                                 <div className="flex gap-2">
                                                     <DeleteChapterModal courseId={id} sectionId={chapter.id} />
-                                                    <EditChapterModal courseId={id} chapterId={chapter.id} title={chapter.title} description={chapter.description} />
+                                                    <ChapterModal courseId={id} chapterId={chapter.id} title={chapter.title} description={chapter.description} />
 
                                                 </div>
 
@@ -367,7 +366,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                         ))}
                                                     </SortableContext>
                                                     <div className="p-2">
-                                                        <NewLessonModal chapterId={chapter.id} courseId={id} />
+                                                        {/* <EditLessonModal chapterId={chapter.id} courseId={id} /> */}
                                                     </div>
                                                 </div>
                                             </CollapsibleContent>
