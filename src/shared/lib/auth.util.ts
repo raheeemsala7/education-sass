@@ -13,7 +13,7 @@ export async function getNextAuthToken() {
   try {
     const jwt = decode({
       token,
-      secret: "5a0129a7a241deb0a4361f08857b244fb3c0decd65d58850071c7c0678de28fb",
+      secret: process.env.NEXTAUTH_SECRET!,
     })
     return jwt
   } catch (error) {

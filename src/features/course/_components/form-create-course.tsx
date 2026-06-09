@@ -135,6 +135,8 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
 
   // 2. Define a submit handler.
   async function onSubmit(values: CourseSchemaType) {
+
+    console.log(values)
     try {
       startTransition(async () => {
 
@@ -155,7 +157,10 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
             thumbnailIdKey = await uploadImageToS3(file);
             uploadedNationalIdRef.current = thumbnailIdKey;
           }
-
+          console.log({
+             ...values,
+            thumbnail: thumbnailIdKey,
+          })
           await createCourse({
             ...values,
             thumbnail: thumbnailIdKey,

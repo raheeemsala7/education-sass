@@ -90,7 +90,7 @@ export const getSingleAdminCourseDetailApi = async ({req, id} : {req:NextRequest
 
     const res = await fetch(`${process.env.API_URL}/courses/${id}`, {
         headers: {
-            ...HEADERS.authorize(token?.access_token || "")
+            ...HEADERS.authorize(token.access_token)
         }
     })
 

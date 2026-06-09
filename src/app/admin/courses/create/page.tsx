@@ -23,7 +23,7 @@ const CreateCoursePage = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <FormCreateCourse />
+                    <FormCreateCourse isEdit={false} />
                 </CardContent>
             </Card>
         </>

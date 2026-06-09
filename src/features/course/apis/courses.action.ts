@@ -13,15 +13,22 @@ export const createCourseAction = async (values: CourseSchemaType) => {
 
     if (!token?.access_token) return RESPONSES.unauthorized
 
+console.log("TOKEN VALUE:", token?.access_token)
+
+
+    console.log("values")
+    console.log(values)
+
     const res = await fetch(`${process.env.API_URL}/courses`, {
-        method: "POST",
-        headers: {
+        method:"POST",
+        headers : {
+            ...HEADERS.JsonBody,
             ...HEADERS.authorize(token.access_token),
-            ...HEADERS.JsonBody
         },
         body: JSON.stringify(values)
     })
+    console.log(res)
 
-    const data : IApiResponse<ICourse> = await res.json()
-    return data
+    const payload: IApiResponse<ICourse> = await res.json()
+    return payload
 }
