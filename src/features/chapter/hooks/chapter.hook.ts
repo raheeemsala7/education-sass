@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { createChapterAction, deleteChapter, putChapter } from "../apis/chapter.action"
+import { createChapterAction, deleteChapterAction, putChapterAction, reorderChaptersAction } from "../apis/chapter.action"
 
 
 
@@ -20,7 +20,7 @@ export const useCreateChapterMutation = (courseId: string) => {
 export const useDeleteChapterMutation = (courseId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: deleteChapter,
+        mutationFn: deleteChapterAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["courseAdmin" ,courseId]
@@ -35,7 +35,7 @@ export const useDeleteChapterMutation = (courseId: string) => {
 export const useUpdateChapterMutation = (courseId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: putChapter,
+        mutationFn: putChapterAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["courseAdmin", courseId]
@@ -44,3 +44,15 @@ export const useUpdateChapterMutation = (courseId: string) => {
     })
 }
 
+
+export const useReorderChaptersMutation = (courseId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: reorderChaptersAction,
+        onSuccess: (data) => {
+            console.log(data)
+            toast.success(data.message)
+            queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
+        }
+    })
+}

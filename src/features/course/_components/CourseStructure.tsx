@@ -45,6 +45,8 @@ import DeleteChapterModal from '@/features/chapter/_components/DeleteChapterModa
 import EditLessonModal from '@/features/lesson/_components/EditLessonModal';
 import DeleteLessonModal from '@/features/lesson/_components/DeleteLessonModal';
 import { useLessonUploadStore } from '@/store/useLessonUploadStore';
+import { useReorderChaptersMutation } from '@/features/chapter/hooks/chapter.hook';
+import { useReorderLessonsMutation } from '@/features/lessons/hooks/lesson.hook';
 
 
 interface SortableItemProps {
@@ -99,6 +101,10 @@ interface IProps {
 }
 
 export default function CourseStructure({ id, data }: IProps) {
+
+    const { mutateAsync: reorderChapters } = useReorderChaptersMutation(id)
+    const { mutateAsync: reorderLessons } = useReorderLessonsMutation(id)
+
     const initalItmes = data.map((chapter) => ({
         id: chapter.id,
         title: chapter.title,
@@ -160,7 +166,7 @@ export default function CourseStructure({ id, data }: IProps) {
         );
     }
 
-    function handleDragEnd(event: DragEndEvent) {
+    async function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
 
@@ -182,6 +188,13 @@ export default function CourseStructure({ id, data }: IProps) {
             );
 
             setItems(reordered);
+
+            await reorderChapters(
+                reordered.map((chapter) => ({
+                    id: chapter.id,
+                    order_index: chapter.order,
+                }))
+            );
             return;
         }
 
@@ -224,6 +237,13 @@ export default function CourseStructure({ id, data }: IProps) {
             };
 
             setItems(newItems);
+
+            await reorderLessons(
+                reorderedLessons.map((lesson) => ({
+                    id: lesson.id,
+                    order_index: lesson.order,
+                }))
+            );
         }
     }
 
@@ -283,7 +303,7 @@ export default function CourseStructure({ id, data }: IProps) {
 
                                                 <div className="flex gap-2">
                                                     <DeleteChapterModal courseId={id} chapterId={chapter.id} />
-                                                    <ChapterModal courseId={id} chapterId={chapter.id} title={chapter.title} description={chapter.description} />
+                                                    <ChapterModal isEdit={true} courseId={id} chapterId={chapter.id} title={chapter.title} description={chapter.description} />
 
                                                 </div>
 

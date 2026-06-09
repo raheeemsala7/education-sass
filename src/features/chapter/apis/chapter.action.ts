@@ -26,7 +26,7 @@ export const createChapterAction = async ({ title, description, courseId }: Chap
     console.log(data)
     return data
 }
-export const putChapter = async ({ values, chapterId }: { values: ChapterSchemaType, chapterId: string }) => {
+export const putChapterAction = async ({ title, description, chapterId }: ChapterSchemaType & { chapterId: string }) => {
     const token = await getNextAuthToken()
 
     if (!token?.access_token) return RESPONSES.unauthorized
@@ -37,13 +37,13 @@ export const putChapter = async ({ values, chapterId }: { values: ChapterSchemaT
             ...HEADERS.authorize(token.access_token),
             ...HEADERS.JsonBody,
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify({ title, description })
     })
 
     const data = await res.json()
     return data
 }
-export const deleteChapter = async ({ chapterId }: { chapterId: string }) => {
+export const deleteChapterAction     = async ({ chapterId }: { chapterId: string }) => {
     console.log("1. deleteChapter called", chapterId)
 
     const token = await getNextAuthToken()
@@ -65,5 +65,25 @@ export const deleteChapter = async ({ chapterId }: { chapterId: string }) => {
 
     const data = await res.json()
     console.log(data)
+    return data
+}
+
+
+
+export const reorderChaptersAction = async (sections: { id: number, order_index: number }[]) => {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
+
+    const res = await fetch(`${process.env.API_URL}/sections/reorder`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+        body: JSON.stringify({ sections })
+    })
+
+    const data = await res.json()
     return data
 }

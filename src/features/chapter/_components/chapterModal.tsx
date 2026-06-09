@@ -45,7 +45,8 @@ const ChapterModal = ({ courseId, isEdit, chapterId, title, description }: { cou
                 if (isEdit) {
                     await updateChapter({
                         chapterId,
-                        ...values
+                        title: values.title,
+                        description: values.description
                     })
                     toast.success("Chapter updated successfully")
                     
