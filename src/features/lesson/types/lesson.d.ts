@@ -1,2 +1,4 @@
-export type CreateLessonVideoType = z.infer<typeof CreateLessonVideoSchema>;
-export type CreateLessonExamType = z.infer<typeof CreateLessonExamSchema>
+
+
+
+export type LessonType = "course_link" | "course_video" | "course_pdf" | "course_exam"

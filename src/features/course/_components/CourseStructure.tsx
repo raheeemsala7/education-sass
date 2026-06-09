@@ -34,10 +34,8 @@ import {
     Trash2,
     VideoIcon,
 } from 'lucide-react';
-// import NewChapterModal from './NewChapterModal';
 import Link from 'next/link';
 // import { useLessonUploadStore } from '@/store/useLessonUploadStore';
-// import ChapterModal from './ChapterModal';
 import { cn } from '@/shared/lib/utils';
 import ChapterModal from '@/features/chapter/_components/chapterModal';
 import { Chapter } from '@/features/chapter/types/chapter';
@@ -46,7 +44,7 @@ import EditLessonModal from '@/features/lesson/_components/EditLessonModal';
 import DeleteLessonModal from '@/features/lesson/_components/DeleteLessonModal';
 import { useLessonUploadStore } from '@/store/useLessonUploadStore';
 import { useReorderChaptersMutation } from '@/features/chapter/hooks/chapter.hook';
-import { useReorderLessonsMutation } from '@/features/lessons/hooks/lesson.hook';
+import { useReorderLessonsMutation } from '@/features/lesson/hooks/lesson.hook';
 
 
 interface SortableItemProps {
@@ -101,11 +99,10 @@ interface IProps {
 }
 
 export default function CourseStructure({ id, data }: IProps) {
-
     const { mutateAsync: reorderChapters } = useReorderChaptersMutation(id)
     const { mutateAsync: reorderLessons } = useReorderLessonsMutation(id)
 
-    const initalItmes = data.map((chapter) => ({
+    const initalItems = data.map((chapter) => ({
         id: chapter.id,
         title: chapter.title,
         description: chapter.description,
@@ -121,10 +118,8 @@ export default function CourseStructure({ id, data }: IProps) {
 
         }))
     })) || []
-    const [items, setItems] = useState(initalItmes)
+    const [items, setItems] = useState(initalItems)
     const uploads = useLessonUploadStore((s) => s.uploads);
-
-
 
     useEffect(() => {
         setItems((prev) => {
@@ -146,7 +141,6 @@ export default function CourseStructure({ id, data }: IProps) {
             return updateItems
         })
     }, [data])
-
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: { distance: 8 },
@@ -155,7 +149,6 @@ export default function CourseStructure({ id, data }: IProps) {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-
     function toggleChapter(chapterId: number) {
         setItems((prev) =>
             prev.map((chapter) =>
@@ -165,7 +158,6 @@ export default function CourseStructure({ id, data }: IProps) {
             )
         );
     }
-
     async function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
@@ -246,7 +238,6 @@ export default function CourseStructure({ id, data }: IProps) {
             );
         }
     }
-
 
     return (
         <DndContext

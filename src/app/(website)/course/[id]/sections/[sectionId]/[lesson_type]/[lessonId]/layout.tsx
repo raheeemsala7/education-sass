@@ -1,4 +1,4 @@
-import { LessonType } from "@/features/lessons/types/lesson";
+import { LessonType } from "@/features/lesson/types/lesson";
 
 
 interface IProps {

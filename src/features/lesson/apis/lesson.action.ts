@@ -1,55 +1,22 @@
 "use server"
 
-import { getNextAuthToken } from "@/shared/lib/auth.util"
-import { RESPONSES } from "@/shared/constant/api.responses"
 import { HEADERS } from "@/shared/constant/api.constant"
-import { CreateLessonVideoType } from "../types/lesson"
+import { RESPONSES } from "@/shared/constant/api.responses"
+import { getNextAuthToken } from "@/shared/lib/auth.util"
 
-export const createChapter = async ({ values, chapterId }: { values: CreateLessonVideoType, chapterId: string }) => {
+
+export const reorderLessonsAction = async (lessons: { id: number, order_index: number }[]) => {
     const token = await getNextAuthToken()
-
     if (!token?.access_token) return RESPONSES.unauthorized
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lessons/sections/${chapterId}`, {
-        method: "POST",
-        headers: {
-            ...HEADERS.authorize(token.access_token),
-            ...HEADERS.JsonBody,
-        },
-        body: JSON.stringify(values)
-    })
-
-    const data = await res.json()
-    return data
-}
-export const putChapter = async ({ values, lessonId }: { values: CreateLessonVideoType, lessonId: string }) => {
-    const token = await getNextAuthToken()
-
-    if (!token?.access_token) return RESPONSES.unauthorized
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lessons/${lessonId}`, {
+    const res = await fetch(`${process.env.API_URL}/lessons/reorder`, {
         method: "PUT",
         headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
             ...HEADERS.authorize(token.access_token),
-            ...HEADERS.JsonBody,
         },
-        body: JSON.stringify(values)
-    })
-
-    const data = await res.json()
-    return data
-}
-export const deleteChapter = async ({ lessonId }: { lessonId: string }) => {
-    const token = await getNextAuthToken()
-
-    if (!token?.access_token) return RESPONSES.unauthorized
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lessons/${lessonId}`, {
-        method: "DELETE",
-        headers: {
-            ...HEADERS.authorize(token.access_token),
-            ...HEADERS.JsonBody,
-        },
+        body: JSON.stringify({ lessons })
     })
 
     const data = await res.json()
