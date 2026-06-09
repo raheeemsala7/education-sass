@@ -2,14 +2,14 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { createChapter, deleteChapter, putChapter } from "../apis/chapter.action"
+import { createChapterAction, deleteChapter, putChapter } from "../apis/chapter.action"
 
 
 
 export const useCreateChapterMutation = (courseId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: createChapter,
+        mutationFn: createChapterAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["courseAdmin" ,courseId]

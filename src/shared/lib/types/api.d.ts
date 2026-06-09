@@ -1,12 +1,12 @@
 
 
 declare type SuccessResponse<T> = {
-    status: "success"
+    status: true
     message?: string
     data: T
 }
 declare type IErrorResponse = {
-    status: "error"
+    status: false
     code: number;
     message?: string;
     errors?: Array<{

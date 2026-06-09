@@ -13,21 +13,28 @@ export const createCourseAction = async (values: CourseSchemaType) => {
 
     if (!token?.access_token) return RESPONSES.unauthorized
 
-console.log("TOKEN VALUE:", token?.access_token)
+    const formData = new FormData()
 
-
-    console.log("values")
-    console.log(values)
+    formData.append("title", values.title)
+    formData.append("description", values.description)
+    formData.append("price", values.price)
+    formData.append("is_free", values.is_free)
+    formData.append("is_active", values.is_active)
+    formData.append("category", values.category)
+    if (values.thumbnail instanceof File) {
+        formData.append("thumbnail", values.thumbnail)
+    } else {
+        formData.append("thumbnail", values.thumbnail)
+    }
 
     const res = await fetch(`${process.env.API_URL}/courses`, {
         method:"POST",
         headers : {
-            ...HEADERS.JsonBody,
+            "Accept": "application/json",
             ...HEADERS.authorize(token.access_token),
         },
-        body: JSON.stringify(values)
+        body: formData
     })
-    console.log(res)
 
     const payload: IApiResponse<ICourse> = await res.json()
     return payload

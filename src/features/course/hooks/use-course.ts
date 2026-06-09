@@ -8,12 +8,12 @@ import { createCourseAction } from "../apis/courses.action"
 
 export type AdminCoursesResponse = 
     | {
-        status: "success"
+        status: true
         data: IAdminCourse[]
         meta: IPagination
       }
     | {
-        status: "error"
+        status: false
         message?: string
         code?: number
       }
@@ -31,7 +31,7 @@ export const useGetAdminCoursesInfinite = () => {
             const res = await fetch(`/api/courses?page=${pageParam}&limit=${limit}`)
 
             const payload: AdminCoursesResponse = await res.json()
-            if (payload.status === "error") {
+            if (!payload.status) {
                 throw new Error(payload.message || "Error")
             }
 
@@ -57,7 +57,7 @@ export const useGetSingleCourse = (courseId: string) => {
             const res = await fetch(`/api/courses/${courseId}`)
 
             const payload: IApiResponse<ICourse> = await res.json()
-            if (payload.status === "error") {
+            if (!payload.status) {
                 throw new Error(payload.message || "Error")
             }
 

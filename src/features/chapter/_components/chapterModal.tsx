@@ -13,7 +13,6 @@ import { toast } from 'sonner'
 import { chapterSchema } from '../schema/chapter.schema'
 import { ChapterSchemaType } from '../types/chapter'
 import { useCreateChapterMutation, useUpdateChapterMutation } from '../hooks/chapter.hook'
-import { createChapter } from '../apis/chapter.action'
 
 const ChapterModal = ({ courseId, isEdit, chapterId, title, description }: { courseId: string, isEdit: boolean, chapterId?: number, title?: string, description?: string  }) => {
     const [isPending, startTransition] = useTransition()
@@ -51,6 +50,7 @@ const ChapterModal = ({ courseId, isEdit, chapterId, title, description }: { cou
                     toast.success("Chapter updated successfully")
                     
                 } else {
+                    console.log(values)
                     await createChapter({
                         courseId,
                         ...values

@@ -5,7 +5,7 @@ import { ChapterSchemaType } from "../types/chapter"
 import { RESPONSES } from "@/shared/constant/api.responses"
 import { HEADERS } from "@/shared/constant/api.constant"
 
-export const createChapter = async ({ values, courseId }: { values: ChapterSchemaType, courseId: string }) => {
+export const createChapterAction = async ({ title, description, courseId }: ChapterSchemaType & { courseId: string }) => {
     const token = await getNextAuthToken()
 
     if (!token?.access_token) return RESPONSES.unauthorized
@@ -13,16 +13,13 @@ export const createChapter = async ({ values, courseId }: { values: ChapterSchem
     const res = await fetch(`${process.env.API_URL}/sections/course/${courseId}`, {
         method: "POST",
         headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
             ...HEADERS.authorize(token.access_token),
-            ...HEADERS.JsonBody,
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify({ title, description })
     })
 
-    if (!res.ok) {
-        console.log(res.status)
-        
-    }
 
     const data = await res.json()
 
@@ -48,7 +45,7 @@ export const putChapter = async ({ values, chapterId }: { values: ChapterSchemaT
 }
 export const deleteChapter = async ({ chapterId }: { chapterId: string }) => {
     console.log("1. deleteChapter called", chapterId)
-    
+
     const token = await getNextAuthToken()
     console.log("2. token", token)
 

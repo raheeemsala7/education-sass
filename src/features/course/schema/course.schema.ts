@@ -11,7 +11,7 @@ export const CourseStatus = [
     false
 ] as const;
 
- const SchoolGrade = [
+const SchoolGrade = [
     "الصف الأول الثانوي",
     "الصف الثاني الثانوي",
     "الصف الثالث الثانوي"
@@ -26,9 +26,10 @@ export const courseSchema = z.object({
     description: z.string().min(3, {
         message: "Description must be at least 3 characters long"
     }),
-    thumbnail: z
-        .string()
-        .min(1, { message: "مطلوب صورة الغلاف" }),
+    thumbnail: z.union([
+        z.instanceof(File, { message: "مطلوب صورة الغلاف" }),
+        z.string().min(1, { message: "مطلوب صورة الغلاف" }),
+    ]),
     price: z.number().min(0, {
         message: "Price must be at least 0"
     }),
@@ -41,10 +42,6 @@ export const courseSchema = z.object({
     is_active: z.boolean({
         message: "Status is required"
     }),
-
-    
-
-
 });
 
 export const SchoolGrades = z.enum([

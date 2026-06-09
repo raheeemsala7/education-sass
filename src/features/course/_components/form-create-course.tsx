@@ -54,12 +54,9 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
   const [preview, setPreview] = useState<string | undefined>();
 
   const handleSelect = (file: File) => {
-    const localPreview = URL.createObjectURL(file);
     setFile(file);
-    setPreview(localPreview);
-    form.setValue("thumbnail", localPreview, {
-      shouldValidate: true,
-    });
+    setPreview(URL.createObjectURL(file));
+    form.setValue("thumbnail", file, { shouldValidate: true });
   };
 
   const handleRemove = () => {
@@ -70,68 +67,7 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
 
   const { mutateAsync: createCourse } = useCreateCourseMutation();
 
-  const uploadedNationalIdRef = useRef<string | null>(null);
 
-  const uploadImageToS3 = async (file: File | null): Promise<string> => {
-    try {
-      if (!file) {
-        return "";
-      }
-      // 1. احصل على presigned URL
-      const presignedResponse = await fetch("/api/s3/upload", {
-        method: "POST",
-        body: JSON.stringify({
-          fileName: file.name,
-          contentType: file.type,
-          size: file.size,
-          isImage: true,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!presignedResponse.ok) {
-        throw new Error("Failed to get presigned URL");
-      }
-
-      const { key, presignedUrl } = await presignedResponse.json();
-
-      // 2. ارفع الملف على S3 باستخدام XMLHttpRequest
-      await new Promise<void>((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-
-        xhr.upload.onprogress = (event) => {
-          if (event.lengthComputable) {
-            const percentageCompleted = (event.loaded / event.total) * 100;
-            console.log(`Upload progress: ${Math.round(percentageCompleted)}%`);
-          }
-        };
-
-        xhr.onload = () => {
-          if (xhr.status === 200 || xhr.status === 204) {
-            resolve();
-          } else {
-            reject(new Error(`Upload failed with status: ${xhr.status}`));
-          }
-        };
-
-        xhr.onerror = () => {
-          reject(new Error("Upload failed"));
-        };
-
-        xhr.open("PUT", presignedUrl);
-        xhr.setRequestHeader("Content-Type", file.type);
-        // مهم: لا تضيف headers إضافية غير Content-Type
-        xhr.send(file);
-      });
-
-      return useConstructUrl(key);
-    } catch (error) {
-      console.error("Upload error:", error);
-      throw new Error("فشل رفع الصورة");
-    }
-  };
 
   // 2. Define a submit handler.
   async function onSubmit(values: CourseSchemaType) {
@@ -139,37 +75,21 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
     console.log(values)
     try {
       startTransition(async () => {
-
         if (isEdit) {
-          let thumbnailUrl = values.thumbnail;
-          if (file) {
-            thumbnailUrl = await uploadImageToS3(file);
-          }
-
           // await updateCourse({ id: id, ...values, thumbnail: thumbnailUrl })
         } else {
-          let thumbnailIdKey = uploadedNationalIdRef.current;
-          if (!thumbnailIdKey) {
-            if (!values.thumbnail && !file) {
-              toast.error("ارفع صورة الغلاف");
-              return;
-            }
-            thumbnailIdKey = await uploadImageToS3(file);
-            uploadedNationalIdRef.current = thumbnailIdKey;
-          }
-          console.log({
-             ...values,
-            thumbnail: thumbnailIdKey,
-          })
-          await createCourse({
-            ...values,
-            thumbnail: thumbnailIdKey,
-          });
-
+          const data = await createCourse(values)
+     
           form.reset();
           // router.push(`/admin/courses/${data.id}/edit`);
-          toast.success("تم الانشاء بنجاح");
-          triggerConfetti();
+
+          console.log(data)
+
+          if (data.status) {
+            router.push(`/admin/courses/${data.data.id}/edit`);
+            toast.success("تم الانشاء بنجاح");
+            triggerConfetti();
+          }
         }
 
 
