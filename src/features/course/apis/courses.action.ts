@@ -39,3 +39,20 @@ export const createCourseAction = async (values: CourseSchemaType) => {
     const payload: IApiResponse<ICourse> = await res.json()
     return payload
 }
+
+export const deleteCourseAction = async (id: string) => {
+    const token = await getNextAuthToken()
+
+    if (!token?.access_token) return RESPONSES.unauthorized
+
+    const res = await fetch(`${process.env.API_URL}/courses/${id}`, {
+        method:"DELETE",
+        headers : {
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+    })
+
+    const payload: IApiResponse<ICourse> = await res.json()
+    return payload
+}

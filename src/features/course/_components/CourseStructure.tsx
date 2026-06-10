@@ -40,7 +40,7 @@ import { cn } from '@/shared/lib/utils';
 import ChapterModal from '@/features/chapter/_components/chapterModal';
 import { Chapter } from '@/features/chapter/types/chapter';
 import DeleteChapterModal from '@/features/chapter/_components/DeleteChapterModal';
-import EditLessonModal from '@/features/lesson/_components/EditLessonModal';
+import LessonModalComponent from '@/features/lesson/_components/EditLessonModal';
 import DeleteLessonModal from '@/features/lesson/_components/DeleteLessonModal';
 import { useLessonUploadStore } from '@/store/useLessonUploadStore';
 import { useReorderChaptersMutation } from '@/features/chapter/hooks/chapter.hook';
@@ -59,7 +59,6 @@ interface SortableItemProps {
 
 
 /* ================= SORTABLE ITEM ================= */
-
 function SortableItem({ id, data, children, className }: SortableItemProps) {
     const {
         attributes,
@@ -92,12 +91,10 @@ function SortableItem({ id, data, children, className }: SortableItemProps) {
 }
 
 /* ================= MAIN COMPONENT ================= */
-
 interface IProps {
     id: string;
     data: Chapter[];
 }
-
 export default function CourseStructure({ id, data }: IProps) {
     const { mutateAsync: reorderChapters } = useReorderChaptersMutation(id)
     const { mutateAsync: reorderLessons } = useReorderLessonsMutation(id)
@@ -357,7 +354,8 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                 }
                                                                             </div>
                                                                             <div className="flex items-center gap-2">
-                                                                                <EditLessonModal
+                                                                                <LessonModalComponent
+                                                                                    isEdit={true}
                                                                                     chapterId={chapter.id}
                                                                                     courseId={id}
                                                                                     lessonId={lesson.id}
@@ -377,7 +375,10 @@ export default function CourseStructure({ id, data }: IProps) {
                                                         ))}
                                                     </SortableContext>
                                                     <div className="p-2">
-                                                        {/* <EditLessonModal chapterId={chapter.id} courseId={id} /> */}
+                                                        <LessonModalComponent isEdit={false} chapterId={chapter.id} courseId={id} />
+                                                        {/* <div className="p-2">
+                                                            <NewLessonModal chapterId={chapter.id} courseId={id} />
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </CollapsibleContent>
