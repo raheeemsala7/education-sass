@@ -113,6 +113,7 @@ export default function CourseStructure({ id, data }: IProps) {
             content_type: lesson.content_type,
             content: lesson.content,
             video_url: lesson.video_url,
+            type: lesson.type,
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
@@ -135,6 +136,8 @@ export default function CourseStructure({ id, data }: IProps) {
                     content_type: lesson.content_type,
                     content: lesson.content,
                     description: lesson.description,
+                    video_url: lesson.video_url,
+                    type: lesson.type
                 }))
             })) || []
             return updateItems

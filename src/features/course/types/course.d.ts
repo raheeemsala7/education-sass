@@ -1,3 +1,5 @@
+import { Chapter } from "@/features/chapter/types/chapter";
+
 export interface ILesson {
     id: number;
     title: string;
@@ -27,7 +29,7 @@ export interface ICourse {
     is_free: boolean;
     thumbnail: string;
     is_enrolled: boolean;
-    sections?: ISection[];
+    sections?: Chapter[];
     created_at: string;
     updated_at: string;
 }

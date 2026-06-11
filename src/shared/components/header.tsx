@@ -1,34 +1,15 @@
-// "use client"
 import { ModeToggle } from "@/shared/components/toggleMode";
 import { buttonVariants } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { BellIcon, BookOpen, HomeIcon, LayoutDashboardIcon, LogIn, LogInIcon, User2Icon, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-// import { useEffect, useRef, useState } from "react";
-import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from "@/shared/components/ui/menubar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
-// import { useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import MenubarHeader from "./menubarHeader";
 
 export async function Header() {
-
-    // const menuRef = useRef<HTMLDivElement>(null);
-    // const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     const session = await getServerSession(authOptions);
-
-
-
-
-
-
-    // ${
-    //                 scrolled ? "bg-inherit shadow-lg" : "bg-transparent"
-    //             }
 
     return (
         <header

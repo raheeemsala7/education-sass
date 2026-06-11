@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
                 console.log("PAYLOAD")
                 console.log(payload)
 
-                if (payload.status === "error") {
+                if (!payload.status) {
                     throw new Error(payload.message || "Login failed")
                 }
                 const loginData = payload.data

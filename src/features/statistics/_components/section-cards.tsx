@@ -20,7 +20,7 @@ const theme = "dark"
 
 
 
-  if (statistics.status === "error") {
+  if (!statistics.status) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-4">

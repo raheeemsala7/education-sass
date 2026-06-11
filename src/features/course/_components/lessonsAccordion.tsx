@@ -7,11 +7,11 @@ import {
 import { BookA, BookOpen, LinkIcon, QrCode, VideoIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/shared/lib/utils";
-import { ISection } from "../types/course";
 import { buttonVariants } from "@/shared/components/ui/button";
+import { Chapter } from "@/features/chapter/types/chapter";
 
 interface LessonsAccordionProps {
-    items: ISection[];
+    items: Chapter[];
     coursesId: string
     isEnrolled : boolean
 }

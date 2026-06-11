@@ -1,9 +1,8 @@
 import ListAdminCards from '@/features/course/_components/list-admin-cards'
-import AdminCourseCardSkeletonLayout from '@/features/course/_components/skeleton/list-admin-card'
 import { buttonVariants } from '@/shared/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import Link from 'next/link'
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 
 const page = () => {
 
@@ -19,10 +18,9 @@ const page = () => {
                 </Link>
             </div>
 
-            <ListAdminCards />
-            {/* <Suspense fallback={<AdminCourseCardSkeletonLayout />}>
+             <Suspense fallback={<div>Loading...</div>}>
                 <ListAdminCards />
-            </Suspense> */}
+            </Suspense>
         </div>
     )
 }

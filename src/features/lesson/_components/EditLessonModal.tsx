@@ -79,7 +79,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
                             </div>
 
                             {contentType === "فيديو" ?
-                                <VideoLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} title={title} description={description} content={content} />
+                                <VideoLesson isEdit={false} courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} type={type || "video"} video_url={video_url || ""} title={title ||""} description={description || ""} content={content || ""} />
                                 // : type === "امتحان" ?
                                 //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
                                 //     : type === "لينك" ?

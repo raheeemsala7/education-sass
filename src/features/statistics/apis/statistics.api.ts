@@ -21,7 +21,7 @@ export const getStatisticsApi = async () => {
 
     const payload : IApiResponse<IDashboard> = await res.json()
 
-    if (payload.status === "error") {
+    if (!payload.status) {
         return payload
     }
 

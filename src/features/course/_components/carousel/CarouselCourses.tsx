@@ -12,7 +12,7 @@ const CarouselCourses = async () => {
     const courses = await getCoursesListApi()
 
 
-    if (!courses || courses.status !== "success" || !courses.data) {
+    if (!courses || !courses.status || !courses.data) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <Card className="w-full max-w-md">
