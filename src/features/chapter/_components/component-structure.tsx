@@ -45,10 +45,6 @@ const ComponentStructure = ({ courseId }: { courseId: string }) => {
 
   const { data: payload, isLoading, isError } = useGetSingleCourse(courseId)
 
-
-
-
-
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-[400px]">
       <Loader2 className="size-8 animate-spin text-primary" />
@@ -60,8 +56,6 @@ const ComponentStructure = ({ courseId }: { courseId: string }) => {
       <p>لا يوجد بيانات لعرضها</p>
     )
   }
-
-  console.log(payload.data)
 
   const { title, category, description, is_free, price, thumbnail, sections = [], } = payload?.data
 

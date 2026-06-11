@@ -20,5 +20,6 @@ export interface Lesson {
     content_type: string,
     quiz_id: string,
     order_index: number,
-    is_active: string
+    is_active: string,
+    video_url?: string,
 }

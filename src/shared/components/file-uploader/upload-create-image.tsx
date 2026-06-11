@@ -23,6 +23,8 @@ export default function UploadCreateMedia({
 
     console.log(mediaType)
 
+    console.log(`previewUrl= ${previewUrl}`)
+
     // تحديد نوع الملف من الـ preview URL
     useEffect(() => {
         if (previewUrl) {

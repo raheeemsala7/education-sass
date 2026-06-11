@@ -112,11 +112,13 @@ export default function CourseStructure({ id, data }: IProps) {
             order: lesson.order_index,
             content_type: lesson.content_type,
             content: lesson.content,
-
+            video_url: lesson.video_url,
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
     const uploads = useLessonUploadStore((s) => s.uploads);
+
+    console.log(items)
 
     useEffect(() => {
         setItems((prev) => {
@@ -364,6 +366,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     description={lesson.description}
                                                                                     type={lesson.content_type}
                                                                                     key={lesson.id}
+                                                                                    video_url={lesson.video_url}
                                                                                 />
                                                                                 <DeleteLessonModal courseId={id} lessonId={lesson.id} disabled={uploads[lesson.id]?.status === "uploading"} />
 
@@ -376,9 +379,6 @@ export default function CourseStructure({ id, data }: IProps) {
                                                     </SortableContext>
                                                     <div className="p-2">
                                                         <LessonModalComponent isEdit={false} chapterId={chapter.id} courseId={id} />
-                                                        {/* <div className="p-2">
-                                                            <NewLessonModal chapterId={chapter.id} courseId={id} />
-                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </CollapsibleContent>

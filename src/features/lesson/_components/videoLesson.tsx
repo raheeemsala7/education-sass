@@ -24,6 +24,8 @@ interface IProps {
     chapterId: number;
     setIsOpen: (open: boolean) => void;
     title: string;
+    type: string;
+    video_url: string;
     content: string;
     description: string;
     isEdit: boolean;
@@ -37,12 +39,16 @@ export const VideoLesson = ({
     title,
     content,
     description,
+    type,
+    video_url,
     isEdit,
 }: IProps) => {
 
     const isUploading = useLessonUploadStore(
         (state) => Object.keys(state.uploads).length > 0,
     );
+
+    console.log("video_url : " + video_url)
 
     usePreventLeave(isUploading);
     useBlockNavigation(isUploading);
@@ -52,9 +58,7 @@ export const VideoLesson = ({
 
     const [isPending, startTransition] = useTransition();
     const [file, setFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | undefined>(content);
-
-    console.log(lessonIdFake)
+    const [preview, setPreview] = useState<string | undefined>(video_url);
 
     const handleSelect = (selectedFile: File) => {
         if (!selectedFile) return;
@@ -87,15 +91,15 @@ export const VideoLesson = ({
     const formStep1 = useForm<VideoLessonType>({
         resolver: zodResolver(videoLessonSchema),
         defaultValues: {
-            title: "",
-            type: "video",
-            description: "",
+            title: title || "",
+            type: type || "video",
+            description: description || "",
         },
     });
     const formStep2 = useForm<UpdateVideoLessonType>({
         resolver: zodResolver(uploadVideoLessonSchema),
         defaultValues: {
-            video_url: ""
+            video_url: video_url || "",
         },
     });
 
@@ -103,7 +107,10 @@ export const VideoLesson = ({
         startTransition(async () => {
             try {
                 if (isEdit) {
-
+                    if (title === values.title && description === values.description) {
+                        setCurrentStep(2)
+                        return
+                    }
                 } else {
                     const payload = await createLesson({
                         values,
@@ -138,8 +145,11 @@ export const VideoLesson = ({
                 setIsOpen(false);
 
                 if (isEdit) {
+                    if (file === null) {
+                        setIsOpen(false);
+                        return
+                    }
                 } else {
-                    setIsOpen(false);
                     startUpload(lessonIdFake);
 
                     // 1. تحميل الفيديو إلى S3

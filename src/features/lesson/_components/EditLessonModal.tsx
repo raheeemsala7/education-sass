@@ -11,7 +11,7 @@ import { VideoLesson } from './videoLesson'
 // import { EditVideoLesson } from './formEdit/editVideo'
 
 
-const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, content, description, type }: { isEdit: boolean, chapterId: number, courseId: string, lessonId?: number, title?: string, content?: string, description?: string, type?: string }) => {
+const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, content, description, type , video_url }: { isEdit: boolean, chapterId: number, courseId: string, lessonId?: number, title?: string, content?: string, description?: string, type?: string, video_url?: string }) => {
 
 
     const [isOpen, setIsOpen] = useState(false)
@@ -43,7 +43,16 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
             <DialogContent className="sm:max-w-[425px]" >
                 {
                     isEdit ? (
-                        <p>ff</p>
+                        <>
+                            {contentType === "فيديو" ?
+                                <VideoLesson isEdit={true} content={content || ""} courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} title={title || ""} description={description || ""} type={type || "video"} video_url={video_url || ""}/>
+                                // : type === "امتحان" ?
+                                //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                                //     : type === "لينك" ?
+                                //         <EditLessonLink courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
+                                : null
+                            }
+                        </>
                     ) : (
                         <>
                             <DialogHeader  >
@@ -75,7 +84,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
                                 //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
                                 //     : type === "لينك" ?
                                 //         <EditLessonLink courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
-                                        : null
+                                : null
                             }
                         </>
                     )

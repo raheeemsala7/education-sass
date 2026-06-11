@@ -16,7 +16,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
     
         const course = await getSingleCourseDetailApi(id)
-        if (!course || course.status !== "success" || !course.data) {
+        if (!course || !course.status|| !course.data) {
             return <p>غير موجود</p>
         }
 

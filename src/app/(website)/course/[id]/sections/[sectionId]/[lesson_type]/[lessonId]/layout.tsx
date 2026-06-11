@@ -1,4 +1,3 @@
-import { LessonType } from "@/features/lesson/types/lesson";
 
 
 interface IProps {
@@ -10,7 +9,7 @@ interface IProps {
 const lessonTypeLayout = async ({params, video, pdf, exam} : IProps) => {
 
     const {lesson_type} = await params;
-    const lessonType = lesson_type as LessonType;
+    const lessonType = lesson_type ;
 
   return (
     <>

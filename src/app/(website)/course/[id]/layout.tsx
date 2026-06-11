@@ -14,7 +14,7 @@ const layout = async ({ children, params }: { children: React.ReactNode, params:
     const session = await getServerSession(authOptions)
 
     const course = await getSingleCourseDetailApi(id)
-    if (!course || course.status !== "success" || !course.data) {
+    if (!course || !course.status || !course.data) {
         return <p>غير موجود</p>
     }
     return (
