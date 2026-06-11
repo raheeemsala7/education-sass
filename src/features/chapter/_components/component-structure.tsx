@@ -61,6 +61,8 @@ const ComponentStructure = ({ courseId }: { courseId: string }) => {
     )
   }
 
+  console.log(payload.data)
+
   const { title, category, description, is_free, price, thumbnail, sections = [], } = payload?.data
 
   return (

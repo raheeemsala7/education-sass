@@ -1,4 +1,17 @@
+import { uploadVideoLessonSchema, videoLessonSchema } from "../schema/lesson.schema";
 
 
 
-export type LessonType = "course_link" | "course_video" | "course_pdf" | "course_exam"
+
+
+export type VideoLessonType = z.infer<typeof videoLessonSchema>;
+export type UpdateVideoLessonType = z.infer<typeof uploadVideoLessonSchema>;
+
+
+export interface LessonVideoRequest {
+    title: string;
+    description: string;
+    video_url: string;
+    type: "video",
+
+}

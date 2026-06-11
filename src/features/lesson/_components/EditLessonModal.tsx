@@ -5,6 +5,7 @@ import { Label } from '@/shared/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
 import { PenIcon, Plus } from 'lucide-react'
 import { useState } from 'react'
+import { VideoLesson } from './videoLesson'
 // import CreateLessonExam from './form/createExamLesson'
 // import EditLessonLink from './formEdit/editLessonLink'
 // import { EditVideoLesson } from './formEdit/editVideo'
@@ -67,6 +68,15 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
                                     </SelectContent>
                                 </Select>
                             </div>
+
+                            {contentType === "فيديو" ?
+                                <VideoLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} title={title} description={description} content={content} />
+                                // : type === "امتحان" ?
+                                //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                                //     : type === "لينك" ?
+                                //         <EditLessonLink courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
+                                        : null
+                            }
                         </>
                     )
                 }
