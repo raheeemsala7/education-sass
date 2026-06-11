@@ -35,7 +35,6 @@ export const useGetAdminCoursesInfinite = () => {
                 throw new Error(payload.message || "Error")
             }
 
-            console.log(payload)
             return payload
         },
         initialPageParam: 1,

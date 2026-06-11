@@ -20,7 +20,6 @@ const page = async ({ params }: { params: { id: string } }) => {
             return <p>غير موجود</p>
         }
 
-        console.log(course)
     return (
         <div className="px-2 lg:px-4 sm:px-10 relative py-0 space-y-10 md:mx-6 ">
             <div className="flex flex-col md:flex-row-reverse gap-10 mb-8">

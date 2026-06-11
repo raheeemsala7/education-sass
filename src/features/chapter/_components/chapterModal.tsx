@@ -51,7 +51,6 @@ const ChapterModal = ({ courseId, isEdit, chapterId, title, description }: { cou
                     toast.success("Chapter updated successfully")
                     
                 } else {
-                    console.log(values)
                     await createChapter({
                         courseId,
                         ...values

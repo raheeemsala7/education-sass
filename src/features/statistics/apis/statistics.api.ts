@@ -19,10 +19,14 @@ export const getStatisticsApi = async () => {
         }
     })
 
+    console.log(res)
+
     const payload : IApiResponse<IDashboard> = await res.json()
 
+    console.log(payload)
+
     if (!payload.status) {
-        return payload
+        throw new Error(payload.message || "Failed to get statistics")
     }
 
     return payload

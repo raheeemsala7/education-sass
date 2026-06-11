@@ -22,9 +22,7 @@ const DeleteChapterModal = ({ courseId, chapterId }: { courseId: string; chapter
 
 
     async function onSubmit() {
-        console.log("onSubmit called")  // بيظهر؟
     startTransition(async () => {
-        console.log("transition started") 
             try {
                 await deleteChapter({
                     chapterId: chapterId.toString(),

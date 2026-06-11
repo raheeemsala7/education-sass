@@ -38,7 +38,6 @@ type TeacherUser = {
   last_name: string;
   email: string;
   phone: string;
-  role: "teacher";
   profile: TeacherProfile;
 };
 
@@ -48,7 +47,6 @@ type StudentUser = {
   last_name: string;
   email: string;
   phone: string;
-  role: "student";
   profile: StudentProfile;
 };
 
@@ -58,6 +56,7 @@ export interface IAuthResponse {
     access_token: string;
     token_type: string
     user: IUser;
+    role: UserRole;
 }
 
 

@@ -41,18 +41,16 @@ export const authOptions: NextAuthOptions = {
 
                 const payload: IApiResponse<IAuthResponse> = await res.json()
 
-                console.log("PAYLOAD")
-                console.log(payload)
-
                 if (!payload.status) {
                     throw new Error(payload.message || "Login failed")
                 }
                 const loginData = payload.data
+
                 return {
                     id: String(loginData.user.id),
                     user: loginData.user,
                     access_token: loginData.access_token,
-                    role: loginData.user.role
+                    role: loginData.role
                 }
             }
         }),

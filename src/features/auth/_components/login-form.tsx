@@ -53,13 +53,11 @@ const LoginForm = () => {
                     return
                 }
 
-                console.log(res.error)
 
                 toast.success("Login successful")
                 window.location.href = "/"
             } catch (error) {
                 toast.error("Something went wrong")
-                console.log(error)
             }
         })
     }

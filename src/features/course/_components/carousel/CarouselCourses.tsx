@@ -25,13 +25,18 @@ const CarouselCourses = async () => {
     }
 
 
+    if ( courses.data.data.length === 0) {
+        return <p>لا يوجد كورسات حاليا</p>
+    }
+
+
     return (
         <>
 
             <CarouselAutoplay>
 
                 <CarouselContent >
-                    {courses?.data.map((course) => (
+                    {courses.data.map((course) => (
                         <CarouselItem className='basis-1/1 md:basis-1/2  lg:basis-1/3 ps-1 lg:ps-4' key={course.id}
                         >
                             <CourseCard
@@ -63,7 +68,7 @@ const CarouselCourses = async () => {
 
 
             <div className='flex md:hidden flex-col items-center gap-8 mt-16'>
-                {courses?.data.map((course) => (
+                {courses.data.map((course) => (
                     <CourseCard
                         id={course.id}
                         category={"الصف الثاني الثانوي"}

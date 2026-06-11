@@ -72,7 +72,6 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
   // 2. Define a submit handler.
   async function onSubmit(values: CourseSchemaType) {
 
-    console.log(values)
     try {
       startTransition(async () => {
         if (isEdit) {
@@ -83,7 +82,6 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
           form.reset();
           // router.push(`/admin/courses/${data.id}/edit`);
 
-          console.log(data)
 
           if (data.status) {
             router.push(`/admin/courses/${data.data.id}/edit`);
@@ -95,7 +93,7 @@ const FormCreateCourse = ({ title, description, thumbnail, price, is_free, is_ac
 
       });
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to create course");
     }
   }
 

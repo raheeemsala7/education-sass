@@ -27,8 +27,7 @@ export const useDeleteChapterMutation = (courseId: string) => {
             })
             },
             onError: (error) => {
-                toast.error("Chapter not deleted"),
-                console.log(error)
+                toast.error("Chapter not deleted")
             }
     })
 }
@@ -50,7 +49,6 @@ export const useReorderChaptersMutation = (courseId: string) => {
     return useMutation({
         mutationFn: reorderChaptersAction,
         onSuccess: (data) => {
-            console.log(data)
             toast.success(data.message)
             queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
         }

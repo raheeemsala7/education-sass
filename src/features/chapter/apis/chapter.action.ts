@@ -23,7 +23,6 @@ export const createChapterAction = async ({ title, description, courseId }: Chap
 
     const data = await res.json()
 
-    console.log(data)
     return data
 }
 export const putChapterAction = async ({ title, description, chapterId }: ChapterSchemaType & { chapterId: string }) => {
@@ -43,16 +42,12 @@ export const putChapterAction = async ({ title, description, chapterId }: Chapte
     const data = await res.json()
     return data
 }
-export const deleteChapterAction     = async ({ chapterId }: { chapterId: string }) => {
-    console.log("1. deleteChapter called", chapterId)
+export const deleteChapterAction = async ({ chapterId }: { chapterId: string }) => {
 
     const token = await getNextAuthToken()
-    console.log("2. token", token)
 
     if (!token?.access_token) return RESPONSES.unauthorized
-    console.log("3. about to fetch")
 
-    console.log(process.env.API_URL)
 
     const res = await fetch(`${process.env.API_URL}/sections/${chapterId}`, {
         method: "DELETE",
@@ -61,10 +56,7 @@ export const deleteChapterAction     = async ({ chapterId }: { chapterId: string
             ...HEADERS.JsonBody,
         },
     })
-
-
     const data = await res.json()
-    console.log(data)
     return data
 }
 

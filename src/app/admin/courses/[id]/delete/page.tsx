@@ -16,14 +16,9 @@ const DeleteCourseRoute = () => {
 
     const { mutateAsync } = useDeleteCourseMutation()
 
-
-    console.log(id)
-
-
     function onSubmit() {
         startTransition(async () => {
             const payload = await mutateAsync(id)
-            console.log(payload)
             toast.success(payload.message || "حذف المقرر بنجاح")
             router.push("/admin/courses")
         })

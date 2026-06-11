@@ -23,7 +23,6 @@ interface IProps {
 }
 
 const AdminCourseCard = ({ data }: IProps) => {
-    console.log(data.is_active)
     return (
         <Card className='group relative py-0 gap-0'>
             <div className='absolute top-2 left-2 z-10'>

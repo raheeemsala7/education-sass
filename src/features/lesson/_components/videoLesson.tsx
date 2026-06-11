@@ -48,8 +48,6 @@ export const VideoLesson = ({
         (state) => Object.keys(state.uploads).length > 0,
     );
 
-    console.log("video_url : " + video_url)
-
     usePreventLeave(isUploading);
     useBlockNavigation(isUploading);
 

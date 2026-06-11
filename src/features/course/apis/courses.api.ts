@@ -32,8 +32,6 @@ export const getCoursesListApi = async () => {
         throw new Error(payload.message || "Failed to fetch courses list")
     }
 
-    console.log(payload)
-
     return payload
 }
 
@@ -55,9 +53,6 @@ export const getAdminCoursesListApi = async (req : NextRequest) => {
     if (!payload.status) {
                 throw new Error(payload.message || "Failed to fetch admin courses list")
     }
-
-    console.log(payload)
-
     return payload
 
 }
@@ -96,8 +91,6 @@ export const getSingleAdminCourseDetailApi = async ({req, id} : {req:NextRequest
 
 
     const payload: IApiResponse<ICourse> = await res.json()
-
-    console.log(payload)
 
     if (!payload.status) {
         throw new Error(payload.message || "Failed to fetch course detail")
