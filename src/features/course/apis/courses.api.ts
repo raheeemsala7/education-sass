@@ -28,7 +28,7 @@ export const getCoursesListApi = async () => {
     }
     const payload: IApiResponse<ICourse[]> = await res.json()
 
-    if (payload.status === "error") {
+    if (!payload.status) {
         throw new Error(payload.message || "Failed to fetch courses list")
     }
 
@@ -52,8 +52,8 @@ export const getAdminCoursesListApi = async (req : NextRequest) => {
     })
     const payload: IApiResponse<IPaginatedResponse<IAdminCourse[]>>  = await res.json()
 
-    if (payload.status === "error") {
-        return payload
+    if (!payload.status) {
+                throw new Error(payload.message || "Failed to fetch admin courses list")
     }
 
     console.log(payload)
@@ -76,7 +76,7 @@ export const getSingleCourseDetailApi = async (id: string) => {
 
     const payload: IApiResponse<ICourse> = await res.json()
 
-    if (payload.status === "error") {
+    if (!payload.status) {
         throw new Error(payload.message || "Failed to fetch course detail")
     }
 
@@ -99,7 +99,7 @@ export const getSingleAdminCourseDetailApi = async ({req, id} : {req:NextRequest
 
     console.log(payload)
 
-    if (payload.status === "error") {
+    if (!payload.status) {
         throw new Error(payload.message || "Failed to fetch course detail")
     }
 

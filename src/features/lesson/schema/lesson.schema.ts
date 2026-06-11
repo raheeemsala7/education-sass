@@ -11,7 +11,7 @@ export const videoLessonSchema = z.object({
     description: z.string().min(3, { message: "Description be at least 3 chapters long" }).optional(),
 })
 export const uploadVideoLessonSchema = z.object({
-    content: z
+    video_url: z
         .string()
         .min(1, { message: "مطلوب رفع الفيديو" }),
 })

@@ -12,6 +12,10 @@ export interface LessonVideoRequest {
     title: string;
     description: string;
     video_url: string;
-    type: "video",
-
+    type: "video"
+    
+}
+export interface UpdateLessonVideoRequest {
+    type: "video";
+    video_url: string;
 }

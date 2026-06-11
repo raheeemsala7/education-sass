@@ -66,6 +66,8 @@ const ComponentStructure = ({ courseId }: { courseId: string }) => {
   const { title, category, description, is_free, price, thumbnail, sections = [], } = payload?.data
 
   return (
+    <div>
+
     <Tabs defaultValue='basic-info' className='w-full'>
       <TabsList className='grid grid-cols-2 w-full'>
         <TabsTrigger value='basic-info'>معلومات أساسية</TabsTrigger>
@@ -82,11 +84,17 @@ const ComponentStructure = ({ courseId }: { courseId: string }) => {
           </CardHeader>
           <CardContent className='px-0 sm:px-6'>
             <CourseStructure id={courseId} data={sections || []} />
-            <p>ddd</p>
           </CardContent>
         </Card>
       </TabsContent>
     </Tabs>
+
+    {isUploading && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-yellow-500 text-black text-center py-2">
+          ⏳ يتم رفع الفيديو… لا تغلق الصفحة
+        </div>
+      )}
+    </div>
   )
 }
 export default ComponentStructure

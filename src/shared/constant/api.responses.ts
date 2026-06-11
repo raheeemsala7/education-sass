@@ -3,7 +3,7 @@
 
 export const RESPONSES = {
     unauthorized: {
-        "status": "error" as const ,
+        "status": false as const ,
         "code": 401,
         "message": "No token provided."
     }

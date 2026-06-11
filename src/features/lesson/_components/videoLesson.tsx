@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { uploadVideoLessonSchema, videoLessonSchema } from "../schema/lesson.schema";
 import { UpdateVideoLessonType, VideoLessonType } from "../types/lesson";
-import { useCreateLessonVideoMutation } from "../hooks/lesson.hook";
+import { useCreateLessonVideoMutation, useUpdateLessonVideoMutation } from "../hooks/lesson.hook";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
 
 interface IProps {
@@ -62,7 +62,7 @@ export const VideoLesson = ({
         setFile(selectedFile);
         setPreview(localPreview);
 
-        formStep2.setValue("content", localPreview, {
+        formStep2.setValue("video_url", localPreview, {
             shouldValidate: true,
         });
     };
@@ -82,23 +82,20 @@ export const VideoLesson = ({
     const { mutateAsync: createLesson } = useCreateLessonVideoMutation(
         courseId,
     );
-    // const { mutate: updateLesson } = useUpdateLessonVideoMutation(
-    //     courseId,
-    //     String(lessonId),
-    // );
+    const { mutateAsync: updateLesson } = useUpdateLessonVideoMutation(courseId);
 
     const formStep1 = useForm<VideoLessonType>({
         resolver: zodResolver(videoLessonSchema),
         defaultValues: {
-            title : "",
+            title: "",
             type: "video",
-            description : "",
+            description: "",
         },
     });
     const formStep2 = useForm<UpdateVideoLessonType>({
         resolver: zodResolver(uploadVideoLessonSchema),
         defaultValues: {
-            content,
+            video_url: ""
         },
     });
 
@@ -113,7 +110,7 @@ export const VideoLesson = ({
                         chapterId
                     })
 
-                    if (payload.status ) {
+                    if (payload.status) {
                         setLessonIdFake(payload.data.id.toString())
                         setCurrentStep(2)
                         toast.success("Lesson created successfully")
@@ -139,31 +136,12 @@ export const VideoLesson = ({
         startTransition(async () => {
             try {
                 setIsOpen(false);
-                if (file === null) {
-                    setIsOpen(false);
-                    return;
-                }
 
                 if (isEdit) {
-                     startUpload(String(lessonId));
-                    // formStep2.reset();
-                    // // 1. تحميل الفيديو إلى S3
-                    const videoUrl = await uploadFileToS3(file, (p) => {
-                        setProgress(String(lessonId), p);
-                    });
-                    if (!videoUrl) {
-                        toast.error("Failed to upload video. Please try again.");
-                        return;
-                    }
-                    // // 2. تحديث الدرس
-                    await updateLesson({ content: videoUrl });
-                    toast.success("Lesson updated successfully");
-                    setReady(String(lessonId));
                 } else {
                     setIsOpen(false);
                     startUpload(lessonIdFake);
 
-                    formStep2.reset();
                     // 1. تحميل الفيديو إلى S3
                     const videoUrl = await uploadFileToS3(file, (p) => {
                         setProgress(lessonIdFake, p);
@@ -172,11 +150,20 @@ export const VideoLesson = ({
                         toast.error("Failed to upload video. Please try again.");
                         return;
                     }
+
                     // 2. تحديث الدرس
-                    // await createLesson();
+                    await updateLesson({
+                        lessonId: parseInt(lessonIdFake),
+                        values: {
+                            video_url: videoUrl,
+                            type: "video"
+                        }
+                    });
+
+                    formStep2.reset();
+
                     toast.success("Lesson updated successfully");
                     setReady(lessonIdFake);
-                    // setIsOpen(false)
                 }
                 // setIsOpen(false)
             } catch (error) {
@@ -272,7 +259,7 @@ export const VideoLesson = ({
                     >
 
                         <Controller
-                            name="content"
+                            name="video_url"
                             control={formStep2.control}
                             render={({ fieldState }) => (
                                 <Field>
