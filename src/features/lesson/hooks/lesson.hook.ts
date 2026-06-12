@@ -9,7 +9,6 @@ export const useCreateLessonVideoMutation = (courseId: string) => {
     return useMutation({
         mutationFn: createLessonAction,
         onSuccess: (data) => {
-            console.log(data)
             toast.success(data.message)
             queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
         }
@@ -20,7 +19,6 @@ export const useUpdateLessonVideoMutation = (courseId: string) => {
     return useMutation({
         mutationFn: updateLessonAction,
         onSuccess: (data) => {
-            console.log(data)
             toast.success(data.message)
             queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
         }

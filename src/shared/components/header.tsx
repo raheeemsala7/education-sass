@@ -10,9 +10,6 @@ import MenubarHeader from "./menubarHeader";
 
 export async function Header() {
     const session = await getServerSession(authOptions);
-
-    console.log(session)
-
     return (
         <header
             className={`sticky top-0 left-0 right-0 z-55 transition-all duration-500 bg-inherit shadow-lg`}

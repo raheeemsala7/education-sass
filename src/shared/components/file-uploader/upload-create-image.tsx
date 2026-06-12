@@ -21,10 +21,6 @@ export default function UploadCreateMedia({
     const [fileType, setFileType] = useState<"image" | "video" | null>();
     const inputRef = useRef<HTMLInputElement>(null);
 
-    console.log(mediaType)
-
-    console.log(`previewUrl= ${previewUrl}`)
-
     // تحديد نوع الملف من الـ preview URL
     useEffect(() => {
         if (previewUrl) {

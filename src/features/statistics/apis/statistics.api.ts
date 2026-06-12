@@ -18,13 +18,7 @@ export const getStatisticsApi = async () => {
             tags : ["statistics"]
         }
     })
-
-    console.log(res)
-
     const payload : IApiResponse<IDashboard> = await res.json()
-
-    console.log(payload)
-
     if (!payload.status) {
         throw new Error(payload.message || "Failed to get statistics")
     }
