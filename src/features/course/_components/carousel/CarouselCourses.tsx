@@ -25,9 +25,11 @@ const CarouselCourses = async () => {
     }
 
 
-    if ( courses.data.data.length === 0) {
+    console.log(courses.data)
+    if ( courses.data.length === 0) {
         return <p>لا يوجد كورسات حاليا</p>
     }
+
 
 
     return (

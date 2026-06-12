@@ -45,30 +45,27 @@ export const authOptions: NextAuthOptions = {
                     throw new Error(payload.message || "Login failed")
                 }
                 const loginData = payload.data
-
                 return {
                     id: String(loginData.user.id),
                     user: loginData.user,
                     access_token: loginData.access_token,
-                    role: loginData.role
+                    // role: loginData.role
                 }
             }
         }),
     ],
     callbacks: {
         jwt: async ({ token, user }) => {
-
             if (user) {
                 token.access_token = user.access_token
                 token.user = user.user
-                token.role = user.role
+                // token.role = user.role
             }
             return token
         },
         session: async ({ session, token }) => {
-
             session.user = token.user
-            session.role = token.role
+            // session.role = token.role
 
             return session
         }

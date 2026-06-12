@@ -10,6 +10,8 @@ import MenubarHeader from "./menubarHeader";
 
 export async function Header() {
     const session = await getServerSession(authOptions);
+
+    console.log(session?.user.role)
     return (
         <header
             className={`sticky top-0 left-0 right-0 z-55 transition-all duration-500 bg-inherit shadow-lg`}
@@ -24,7 +26,7 @@ export async function Header() {
                 <nav className="hidden sm:flex items-center gap-6">
                     {session ? (
                         <>
-                            <MenubarHeader first_name={session?.user.first_name} last_name={session?.user.last_name} role={session?.role} avatar={""} />
+                            <MenubarHeader first_name={session?.user.first_name} last_name={session?.user.last_name} role={session?.user.role} avatar={""} />
                         </>
                     ) : (
                         <>
@@ -50,33 +52,6 @@ export async function Header() {
                         </>
                     )}
                 </nav>
-
-                {/* <div className="flex sm:hidden" ref={menuRef}>
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={cn("relative w-12 h-12 flex sm:hidden items-center justify-center rounded-xl bg-muted/50 hover:bg-muted transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-accent")} aria-label={isMenuOpen ? "إغلاق القائمة" : "فتح القائمة"} aria-expanded={isMenuOpen}>
-                        <div className="w-6 h-5 flex flex-col justify-between items-center">
-                            <span className={cn("block h-0.5 w-6 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center", isMenuOpen && "translate-y-[9px] rotate-45")} />
-                            <span className={cn("block h-0.5 w-6 bg-foreground rounded-full transition-all duration-300 ease-in-out", isMenuOpen && "opacity-0 scale-0")} />
-                            <span className={cn("block h-0.5 w-6 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center", isMenuOpen && "-translate-y-[9px] -rotate-45")} />
-                        </div>
-                    </button>
-
-                    <div className={cn("absolute top-full right-0 mt-4 w-full rounded-2xl border border-border shadow-2xl bg-[#E11D48] shadow-background/50 overflow-hidden transition-all duration-300 origin-top-right z-50", isMenuOpen ? "animate-menu-slide-down opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none scale-95")}>
-                        <div className="p-3 space-y-2">
-                            <button className="w-full flex items-center gap-3 px-4 py-4 rounded-xl bg-[#9F1239] hover:bg-[#9F1239]/90 text-primary-foreground font-semibold text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-                                <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                                    <UserPlus className="w-5 h-5" />
-                                </div>
-                                <span>انشئ حسابك الآن!</span>
-                            </button>
-                            <button className="w-full flex items-center gap-3 px-4 py-4 rounded-xl bg-[#9F1239] hover:bg-[#9F1239]/90 text-secondary-foreground font-semibold text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-                                <div className="w-8 h-8 rounded-full bg-secondary-foreground/20 flex items-center justify-center">
-                                    <LogIn className="w-5 h-5" />
-                                </div>
-                                <span>الدخول إلى حسابك</span>
-                            </button>
-                        </div>
-                    </div>
-                </div> */}
             </div>
 
 

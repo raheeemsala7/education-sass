@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { PenIcon, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { VideoLesson } from './videoLesson'
+import LinkLesson from './linkLesson'
 // import CreateLessonExam from './form/createExamLesson'
 // import EditLessonLink from './formEdit/editLessonLink'
 // import { EditVideoLesson } from './formEdit/editVideo'
@@ -15,7 +16,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
 
 
     const [isOpen, setIsOpen] = useState(false)
-    const [contentType, setContentType] = useState<'فيديو' | 'امتحان' | 'لينك'>("فيديو")
+    const [contentType, setContentType] = useState<'video' | 'live | pdf'>("video")
 
 
     function handleOpenChange(open: boolean) {
@@ -71,19 +72,19 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
                                         <SelectGroup>
                                             <SelectLabel>نوع الدرس</SelectLabel>
                                             <SelectItem value="امتحان">امتحان</SelectItem>
-                                            <SelectItem value="فيديو">فيديو</SelectItem>
-                                            <SelectItem value="لينك">لينك</SelectItem>
+                                            <SelectItem value="video">فيديو</SelectItem>
+                                            <SelectItem value="live">لينك</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>
 
-                            {contentType === "فيديو" ?
+                            {contentType === "video" ?
                                 <VideoLesson isEdit={false} courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} type={type || "video"} video_url={video_url || ""} title={title ||""} description={description || ""} content={content || ""} />
+                                : type === "live" ?
+                                    <LinkLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
                                 // : type === "امتحان" ?
                                 //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
-                                //     : type === "لينك" ?
-                                //         <EditLessonLink courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
                                 : null
                             }
                         </>

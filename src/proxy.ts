@@ -31,13 +31,13 @@ export async function proxy(req: NextRequest) {
 
     // 3️⃣ لو طالب بيحاول يدخل صفحات الأدمن → ارجع للهوم
     const isAdminRoute = adminRoutes.some(path => pathname.startsWith(path));
-    if (isAdminRoute && token?.role === "student") {
+    if (isAdminRoute && token?.user.role === "student") {
         url.pathname = "/";
         return NextResponse.redirect(url);
     }
 
     // 4️⃣ لو مش teacher أو admin ومحاولة دخول الأدمن
-    if (isAdminRoute && token?.role !== "teacher" && token?.role !== "admin") {
+    if (isAdminRoute && token?.user.role !== "teacher") {
         url.pathname = "/";
         return NextResponse.redirect(url);
     }

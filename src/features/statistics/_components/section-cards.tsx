@@ -14,12 +14,12 @@ import ChartsComponent from "./charts-component"
 
 
 export async function SectionCards() {
-
+  
 const theme = "dark"
   const statistics = await getStatisticsApi()
-
-
-
+  
+  
+  
   if (!statistics.status) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -29,7 +29,8 @@ const theme = "dark"
       </div>
     );
   }
-
+  console.log(statistics.data)
+  
   const { charts, courses, students, quizzes, last_students,last_enrollments } = statistics?.data
 
 
