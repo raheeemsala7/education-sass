@@ -22,7 +22,7 @@ interface IProps {
     title: string;
     content: string;
     description: string;
-    live: string;
+    article_content: string;
     type: string;
 }
 
@@ -36,7 +36,7 @@ const LinkLesson = ({
     content,
     description,
     type,
-    live
+    article_content
 }: IProps) => {
     const [isPending, startTransition] = useTransition();
     const { mutateAsync: createLesson } = useCreateLessonVideoMutation(
@@ -53,7 +53,8 @@ const LinkLesson = ({
             title: title || "",
             content: content || "",
             description: description || "",
-            content_type: type || "live",
+            type: type || "live",
+            article_content: article_content || "",
         },
     });
 
@@ -121,7 +122,7 @@ const LinkLesson = ({
                 )}
             />
             <Controller
-                name="content"
+                name="article_content"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>

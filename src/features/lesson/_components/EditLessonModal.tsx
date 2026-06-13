@@ -12,7 +12,8 @@ import LinkLesson from './linkLesson'
 // import { EditVideoLesson } from './formEdit/editVideo'
 
 
-const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, content, description, type , video_url }: { isEdit: boolean, chapterId: number, courseId: string, lessonId?: number, title?: string, content?: string, description?: string, type?: string, video_url?: string }) => {
+const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, content, description, type , video_url ,article_content}: { isEdit: boolean, chapterId: number, courseId: string, lessonId?: number, title?: string, content?: string, description?: string, type?: string, video_url?: string, article_url?: string, article_content?: string }) => {
+
 
 
     const [isOpen, setIsOpen] = useState(false)
@@ -45,7 +46,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
                 {
                     isEdit ? (
                         <>
-                            {contentType === "فيديو" ?
+                            {contentType === "video" ?
                                 <VideoLesson isEdit={true} content={content || ""} courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} title={title || ""} description={description || ""} type={type || "video"} video_url={video_url || ""}/>
                                 // : type === "امتحان" ?
                                 //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
@@ -64,7 +65,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
 
                             <div className='space-y-4'>
                                 <Label htmlFor="lesson-type">نوع الدرس</Label>
-                                <Select onValueChange={(value) => setContentType(value as 'فيديو' | 'امتحان' | 'لينك')} defaultValue={contentType}>
+                                <Select onValueChange={(value) => setContentType(value)} defaultValue={contentType}>
                                     <SelectTrigger id="lesson-type" className='w-full'>
                                         <SelectValue placeholder="Select a lesson type" />
                                     </SelectTrigger>
@@ -82,7 +83,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
                             {contentType === "video" ?
                                 <VideoLesson isEdit={false} courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} type={type || "video"} video_url={video_url || ""} title={title ||""} description={description || ""} content={content || ""} />
                                 : type === "live" ?
-                                    <LinkLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
+                                    <LinkLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId || 1} setIsOpen={setIsOpen} title={title || ""} article_content={article_content || ""} description={description || ""} />
                                 // : type === "امتحان" ?
                                 //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
                                 : null
