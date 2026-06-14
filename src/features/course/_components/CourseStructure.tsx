@@ -96,6 +96,7 @@ export default function CourseStructure({ id, data }: IProps) {
     const { mutateAsync: reorderChapters } = useReorderChaptersMutation(id)
     const { mutateAsync: reorderLessons } = useReorderLessonsMutation(id)
 
+
     const initalItems = data.map((chapter) => ({
         id: chapter.id,
         title: chapter.title,
@@ -108,12 +109,14 @@ export default function CourseStructure({ id, data }: IProps) {
             description: lesson.description,
             order: lesson.order_index,
             type: lesson.type,
-            content: lesson.content,
             video_url: lesson.video_url,
             live_url: lesson.live_url,
+            content: lesson.content,
+            
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
+    console.log(items[0].lessons)
     const uploads = useLessonUploadStore((s) => s.uploads);
 
     useEffect(() => {
@@ -132,7 +135,7 @@ export default function CourseStructure({ id, data }: IProps) {
                     content: lesson.content,
                     description: lesson.description,
                     video_url: lesson.video_url,
-                    type: lesson.type
+                    live_url: lesson.live_url,
                 }))
             })) || []
             return updateItems

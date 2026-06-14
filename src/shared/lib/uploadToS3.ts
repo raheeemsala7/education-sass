@@ -32,11 +32,7 @@ export const uploadFileToS3 = async (file: File | null, onProgress?: (percent: n
 
             xhr.upload.onprogress = (event) => {
                 if (event.lengthComputable) {
-                    const percentageCompleted = (event.loaded / event.total) * 100;
-
-                    console.log(`Upload progress: ${Math.round(percentageCompleted)}%`);
-                }
-
+                    const percentageCompleted = (event.loaded / event.total) * 100;                }
                 if (event.lengthComputable && onProgress) {
                     const percent = Math.round((event.loaded / event.total) * 100);
                     onProgress(percent);

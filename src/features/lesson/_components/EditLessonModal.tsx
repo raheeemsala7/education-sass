@@ -22,6 +22,7 @@ import { PenIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { VideoLesson } from "./videoLesson";
 import LinkLesson from "./linkLesson";
+import QuizLesson from "@/features/quiz/_components/quiz-lesson";
 
 interface IProps {
     isEdit: boolean;
@@ -53,9 +54,6 @@ const LessonModalComponent = ({
     const [contentType, setContentType] = useState<
         "video" | "live" | "pdf" | "quiz"
     >(type || "video");
-
-    console.log("LESSON COMPONENT : " , live_url)
-
     function handleOpenChange(open: boolean) {
         // if (!open) {
         //     form.reset()
@@ -135,7 +133,7 @@ const LessonModalComponent = ({
                                 <SelectContent>
                                     <SelectGroup>
                                         <SelectLabel>نوع الدرس</SelectLabel>
-                                        <SelectItem value="امتحان">امتحان</SelectItem>
+                                        <SelectItem value="quiz">امتحان</SelectItem>
                                         <SelectItem value="video">فيديو</SelectItem>
                                         <SelectItem value="live">لينك</SelectItem>
                                     </SelectGroup>
@@ -168,9 +166,9 @@ const LessonModalComponent = ({
                                 live_url={live_url || ""}
                                 description={description || ""}
                             />
-                        ) : // : type === "امتحان" ?
-                            //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
-                            null}
+                        ) : contentType === "quiz" ?
+                            <QuizLesson isEdit={false} title={title || ""} description={description || ""} lessonId={lessonId || 1} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                            : null}
                     </>
                 )}
 

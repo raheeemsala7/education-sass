@@ -114,7 +114,6 @@ const Uploader = ({ onChange, value, fileTypeAccpeted }: IProps) => {
                     xhr.open("PUT", presignedUrl)
                     xhr.setRequestHeader('Content-Type', file.type)
                     xhr.send(file)
-                    console.log(fileState)
                 })
             } catch  {
                 toast.error("something error")

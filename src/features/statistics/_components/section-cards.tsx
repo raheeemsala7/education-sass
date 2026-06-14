@@ -28,13 +28,8 @@ const theme = "dark"
         </div>
       </div>
     );
-  }
-  console.log(statistics.data)
-  
+  }  
   const { charts, courses, students, quizzes, last_students,last_enrollments } = statistics?.data
-
-
-
 
   return (
     <>

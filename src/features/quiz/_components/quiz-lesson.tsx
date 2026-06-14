@@ -9,9 +9,10 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
-import { LinkLessonType } from "../types/lesson";
-import { linkLessonSchema } from "../schema/lesson.schema";
-import { useCreateLinkLessonMutation } from "../hooks/lesson.hook";
+import { QuizInfoType } from "../types/quiz";
+import { QuizInfoSchema } from "../schema/quiz.schema";
+import { useCreateLinkLessonMutation } from "@/features/lesson/hooks/lesson.hook";
+
 
 interface IProps {
     isEdit: Boolean;
@@ -21,11 +22,9 @@ interface IProps {
     setIsOpen: (open: boolean) => void;
     title: string;
     description: string;
-    live_url: string;
-    type: string;
 }
 
-const LinkLesson = ({
+const QuizLesson = ({
     isEdit = false,
     courseId,
     chapterId,
@@ -33,8 +32,6 @@ const LinkLesson = ({
     setIsOpen,
     title,
     description,
-    type,
-    live_url
 }: IProps) => {
     const [isPending, startTransition] = useTransition();
     const { mutateAsync: createLesson } = useCreateLinkLessonMutation(courseId);
@@ -44,18 +41,17 @@ const LinkLesson = ({
     // );
 
 
-    const form = useForm<LinkLessonType>({
-        resolver: zodResolver(linkLessonSchema),
+    const form = useForm<QuizInfoType>({
+        resolver: zodResolver(QuizInfoSchema),
         defaultValues: {
             title: title || "",
             description: description || "",
-            live_url: live_url || "",
-            type: "live",
+            type: "quiz",
         },
     });
 
 
-    function onSubmit(values: LinkLessonType) {
+    function onSubmit(values: QuizInfoType) {
         startTransition(async () => {
             try {
                 if (isEdit) {
@@ -79,6 +75,7 @@ const LinkLesson = ({
                         chapterId
                     })
                     setIsOpen(false);
+
                     // toast.success("Lesson created successfully");
                 }
             } catch (error) {
@@ -133,7 +130,7 @@ const LinkLesson = ({
                     </Field>
                 )}
             />
-            <Button type="submit" className="mr-auto mt-2">
+            <Button type="submit" className="mr-auto mt-2" disabled={isPending}>
 
                 {isPending ? (
                     <>
@@ -148,4 +145,4 @@ const LinkLesson = ({
     );
 };
 
-export default LinkLesson;
+export default QuizLesson;
