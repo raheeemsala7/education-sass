@@ -110,7 +110,7 @@ export default function CourseStructure({ id, data }: IProps) {
             title: lesson.title,
             description: lesson.description,
             order: lesson.order_index,
-            content_type: lesson.content_type,
+            type: lesson.type,
             content: lesson.content,
             video_url: lesson.video_url,
             type: lesson.type,
@@ -132,7 +132,7 @@ export default function CourseStructure({ id, data }: IProps) {
                     id: lesson.id,
                     title: lesson.title,
                     order: lesson.order_index,
-                    content_type: lesson.content_type,
+                    type: lesson.type,
                     content: lesson.content,
                     description: lesson.description,
                     video_url: lesson.video_url,
@@ -336,7 +336,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     <Loader2 className="size-4 animate-spin text-muted-foreground" />
                                                                                 )}
 
-                                                                                {lesson.content_type === "امتحان" ?
+                                                                                {lesson.type === "quiz" ?
                                                                                     <Link className="flex items-center gap-2  group-hover:underline group-hover:text-primary" href={`/admin/courses/create/exam/${lesson.content}`}>
                                                                                         <FileText className="size-4 text-primary" />
                                                                                         <span className='group-hover:text-primary underline group-hover:underline-primary'>{lesson.title}</span>
@@ -344,9 +344,9 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     :
                                                                                     <>
                                                                                         {
-                                                                                            lesson.content_type === "امتحان" ? (
+                                                                                            lesson.type === "quiz" ? (
                                                                                                 <FileText className="size-4 text-primary" />
-                                                                                            ) : lesson.content_type === "فيديو" ? (
+                                                                                            ) : lesson.type === "video" ? (
                                                                                                 <VideoIcon className="size-4 text-primary" />
                                                                                             ) : (
                                                                                                 <Link2Icon className="size-4 text-primary" />
@@ -366,7 +366,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     title={lesson.title}
                                                                                     content={lesson.content}
                                                                                     description={lesson.description}
-                                                                                    type={lesson.content_type}
+                                                                                    type={lesson.type}
                                                                                     key={lesson.id}
                                                                                     video_url={lesson.video_url}
                                                                                 />

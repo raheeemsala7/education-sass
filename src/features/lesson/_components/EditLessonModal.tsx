@@ -12,12 +12,11 @@ import LinkLesson from './linkLesson'
 // import { EditVideoLesson } from './formEdit/editVideo'
 
 
-const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, content, description, type , video_url ,article_content}: { isEdit: boolean, chapterId: number, courseId: string, lessonId?: number, title?: string, content?: string, description?: string, type?: string, video_url?: string, article_url?: string, article_content?: string }) => {
-
-
-
+const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, content, description, type , video_url ,live_url}: { isEdit: boolean, chapterId: number, courseId: string, lessonId?: number, title?: string, content?: string, description?: string, type?: string, video_url?: string, article_url?: string, live_url?: string }) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [contentType, setContentType] = useState<'video' | 'live | pdf'>("video")
+    const [contentType, setContentType] = useState<'video' | 'live' | 'pdf' | "quiz">("video")
+
+    console.log(contentType)
 
 
     function handleOpenChange(open: boolean) {
@@ -26,8 +25,6 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
         // }
         setIsOpen(open)
     }
-
-
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -65,7 +62,7 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
 
                             <div className='space-y-4'>
                                 <Label htmlFor="lesson-type">نوع الدرس</Label>
-                                <Select onValueChange={(value) => setContentType(value)} defaultValue={contentType}>
+                                <Select onValueChange={(value) => setContentType(value as 'video' | 'live' | 'pdf' | "quiz")} defaultValue={contentType}>
                                     <SelectTrigger id="lesson-type" className='w-full'>
                                         <SelectValue placeholder="Select a lesson type" />
                                     </SelectTrigger>
@@ -82,8 +79,8 @@ const LessonModalComponent = ({ isEdit, chapterId, courseId, lessonId, title, co
 
                             {contentType === "video" ?
                                 <VideoLesson isEdit={false} courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} type={type || "video"} video_url={video_url || ""} title={title ||""} description={description || ""} content={content || ""} />
-                                : type === "live" ?
-                                    <LinkLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId || 1} setIsOpen={setIsOpen} title={title || ""} article_content={article_content || ""} description={description || ""} />
+                                : contentType === "live" ?
+                                    <LinkLesson isEdit={false} type={type || "live"} courseId={courseId} chapterId={chapterId} lessonId={lessonId || 1} setIsOpen={setIsOpen} title={title || ""} live_url={live_url || ""} description={description || ""} />
                                 // : type === "امتحان" ?
                                 //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
                                 : null

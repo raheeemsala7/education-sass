@@ -9,9 +9,9 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
-import { VideoLessonType } from "../types/lesson";
-import { videoLessonSchema } from "../schema/lesson.schema";
-import { useCreateLessonVideoMutation } from "../hooks/lesson.hook";
+import { LinkLessonType, VideoLessonType } from "../types/lesson";
+import { linkLessonSchema, videoLessonSchema } from "../schema/lesson.schema";
+import { useCreateLessonVideoMutation, useCreateLinkLessonMutation } from "../hooks/lesson.hook";
 
 interface IProps {
     isEdit: Boolean;
@@ -20,9 +20,8 @@ interface IProps {
     lessonId: number;
     setIsOpen: (open: boolean) => void;
     title: string;
-    content: string;
     description: string;
-    article_content: string;
+    live_url: string;
     type: string;
 }
 
@@ -33,32 +32,31 @@ const LinkLesson = ({
     lessonId,
     setIsOpen,
     title,
-    content,
     description,
     type,
-    article_content
+    live_url
 }: IProps) => {
     const [isPending, startTransition] = useTransition();
-    const { mutateAsync: createLesson } = useCreateLessonVideoMutation(
-        courseId,
-    );
+    const { mutateAsync: createLesson } = useCreateLinkLessonMutation(courseId);
     // const { mutate: updateLesson } = useUpdateLessonVideoMutation(
     //     courseId,
     //     String(lessonId),
     // );
 
-    const form = useForm<VideoLessonType>({
-        resolver: zodResolver(videoLessonSchema),
+    const form = useForm<LinkLessonType>({
+        resolver: zodResolver(linkLessonSchema),
         defaultValues: {
             title: title || "",
-            content: content || "",
             description: description || "",
-            type: type || "live",
-            article_content: article_content || "",
+            live_url: live_url || "",
+            type: "live",
         },
     });
 
-    function onSubmit(values: VideoLessonType) {
+    console.log(form.formState.errors)
+
+    function onSubmit(values: LinkLessonType) {
+        console.log(values)
         startTransition(async () => {
             try {
                 if (isEdit) {
@@ -75,13 +73,15 @@ const LinkLesson = ({
                     // toast.success("Lesson updated successfully");
                     // form.reset();
                     // setIsOpen(false);
+
+                    console.log("first")
                 } else {
                     const payload = await createLesson({
                         values,
                         chapterId
                     })
                     setIsOpen(false);
-                    toast.success("Lesson created successfully");
+                    // toast.success("Lesson created successfully");
                 }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
@@ -122,7 +122,7 @@ const LinkLesson = ({
                 )}
             />
             <Controller
-                name="article_content"
+                name="live_url"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>

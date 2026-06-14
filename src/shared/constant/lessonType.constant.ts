@@ -1,3 +1,3 @@
 export const typeLesson = [
-  "pdf", "video", "link", "quiz"
+  "pdf", "video", "live", "quiz"
 ] as const;
