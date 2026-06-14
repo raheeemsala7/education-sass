@@ -29,7 +29,7 @@ export const createLessonAction = async ({ chapterId, values }: { chapterId: num
     }
     return data as  IApiResponse<Lesson>
 }
-export const updateLessonAction = async ({ lessonId, values }: { lessonId: number, values: UpdateLessonVideoRequest }) => {
+export const updateLessonAction = async ({ lessonId, values }: { lessonId: string, values: UpdateLessonVideoRequest }) => {
     const token = await getNextAuthToken()
     if (!token?.access_token) return RESPONSES.unauthorized
 

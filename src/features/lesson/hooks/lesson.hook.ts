@@ -15,8 +15,6 @@ export const useCreateLessonVideoMutation = (courseId: string) => {
     })
 }
 export const useUpdateLessonVideoMutation = (courseId: string) => {
-
-    console.log("CourdeID" , courseId)
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: updateLessonAction,
@@ -26,8 +24,6 @@ export const useUpdateLessonVideoMutation = (courseId: string) => {
         }
     })
 }
-
-
 export const useDeleteLessonMutation = (courseId: string) => {
     const queryClient = useQueryClient()
     return useMutation({

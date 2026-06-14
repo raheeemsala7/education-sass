@@ -35,7 +35,6 @@ import {
     VideoIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-// import { useLessonUploadStore } from '@/store/useLessonUploadStore';
 import { cn } from '@/shared/lib/utils';
 import ChapterModal from '@/features/chapter/_components/chapterModal';
 import { Chapter } from '@/features/chapter/types/chapter';
@@ -56,7 +55,6 @@ interface SortableItemProps {
     children: (listeners: any) => ReactNode;
     className?: string;
 }
-
 
 /* ================= SORTABLE ITEM ================= */
 function SortableItem({ id, data, children, className }: SortableItemProps) {
@@ -89,7 +87,6 @@ function SortableItem({ id, data, children, className }: SortableItemProps) {
         </div>
     );
 }
-
 /* ================= MAIN COMPONENT ================= */
 interface IProps {
     id: string;
@@ -113,12 +110,11 @@ export default function CourseStructure({ id, data }: IProps) {
             type: lesson.type,
             content: lesson.content,
             video_url: lesson.video_url,
-            type: lesson.type,
+            live_url: lesson.live_url,
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
     const uploads = useLessonUploadStore((s) => s.uploads);
-
 
     useEffect(() => {
         setItems((prev) => {
@@ -329,13 +325,16 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                         <div className="w-full flex justify-between items-center">
                                                                             <div className="flex items-center gap-2 ">
                                                                                 {uploads[lesson.id]?.status === "uploading" && (
-                                                                                    <Loader2 className="size-4 animate-spin text-primary" />
+                                                                                    <>
+                                                                                        <Loader2 className="size-4 animate-spin transition-all text-primary" />
+                                                                                        <span className="text-xs text-primary font-medium">
+                                                                                            {uploads[lesson.id]?.progress ?? 0}%
+                                                                                        </span>
+                                                                                    </>
                                                                                 )}
-
                                                                                 {uploads[lesson.id]?.status === "processing" && (
-                                                                                    <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                                                                                    <Loader2 className="size-4 animate-spin transition-all text-muted-foreground" />
                                                                                 )}
-
                                                                                 {lesson.type === "quiz" ?
                                                                                     <Link className="flex items-center gap-2  group-hover:underline group-hover:text-primary" href={`/admin/courses/create/exam/${lesson.content}`}>
                                                                                         <FileText className="size-4 text-primary" />
@@ -352,7 +351,6 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                                 <Link2Icon className="size-4 text-primary" />
                                                                                             )
                                                                                         }
-
                                                                                         <span >{lesson.title}</span>
                                                                                     </>
                                                                                 }
@@ -369,6 +367,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     type={lesson.type}
                                                                                     key={lesson.id}
                                                                                     video_url={lesson.video_url}
+                                                                                    live_url={lesson.live_url}
                                                                                 />
                                                                                 <DeleteLessonModal courseId={id} lessonId={lesson.id} disabled={uploads[lesson.id]?.status === "uploading"} />
 
@@ -380,7 +379,7 @@ export default function CourseStructure({ id, data }: IProps) {
                                                         ))}
                                                     </SortableContext>
                                                     <div className="p-2">
-                                                        <LessonModalComponent isEdit={false} chapterId={chapter.id} courseId={id} />
+                                                        <LessonModalComponent isEdit={false} chapterId={chapter.id} courseId={id} type={"video"} />
                                                     </div>
                                                 </div>
                                             </CollapsibleContent>

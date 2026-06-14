@@ -17,6 +17,7 @@ import { uploadVideoLessonSchema, videoLessonSchema } from "../schema/lesson.sch
 import { UpdateVideoLessonType, VideoLessonType } from "../types/lesson";
 import { useCreateLessonVideoMutation, useUpdateLessonVideoMutation } from "../hooks/lesson.hook";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
+import { string } from "zod";
 
 interface IProps {
     courseId: string;
@@ -75,7 +76,7 @@ export const VideoLesson = ({
         setFile(null);
         setPreview(undefined);
 
-        formStep2.setValue("content", "");
+        formStep2.setValue("video_url", "");
     };
 
     const { startUpload, setProgress, setReady } =
@@ -109,6 +110,12 @@ export const VideoLesson = ({
                         setCurrentStep(2)
                         return
                     }
+                    await updateLesson({
+                        lessonId: String(lessonId),
+                        values,
+                    })
+                    setCurrentStep(2)
+                    toast.success("Lesson updated successfully")
                 } else {
                     const payload = await createLesson({
                         values,
@@ -124,14 +131,6 @@ export const VideoLesson = ({
 
 
                 }
-
-                // if (title === values.title && description === values.description) {
-                //     setCurrentStep(2);
-                //     return;
-                // }
-                // toast.success("Lesson created successfully");
-                // formStep1.reset();
-                // setCurrentStep(2);
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
             }
@@ -147,9 +146,26 @@ export const VideoLesson = ({
                         setIsOpen(false);
                         return
                     }
+                    startUpload(String(lessonId));
+                    const videoUrl = await uploadFileToS3(file, (p) => {
+                        setProgress(String(lessonId), p);
+                    });
+                    if (!videoUrl) {
+                        toast.error("Failed to upload video. Please try again.");
+                        return;
+                    }
+
+                    // 2. تحديث الدرس
+                    await updateLesson({
+                        lessonId: String(lessonId),
+                        values: {
+                            video_url: videoUrl,
+                            type: "video"
+                        }
+                    });
+                    setReady(lessonIdFake);
                 } else {
                     startUpload(lessonIdFake);
-
                     // 1. تحميل الفيديو إلى S3
                     const videoUrl = await uploadFileToS3(file, (p) => {
                         setProgress(lessonIdFake, p);
@@ -161,7 +177,7 @@ export const VideoLesson = ({
 
                     // 2. تحديث الدرس
                     await updateLesson({
-                        lessonId: parseInt(lessonIdFake),
+                        lessonId: String(lessonIdFake),
                         values: {
                             video_url: videoUrl,
                             type: "video"

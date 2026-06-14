@@ -43,6 +43,8 @@ const LinkLesson = ({
     //     String(lessonId),
     // );
 
+
+    console.log("live_url :" , live_url)
     const form = useForm<LinkLessonType>({
         resolver: zodResolver(linkLessonSchema),
         defaultValues: {

@@ -22,5 +22,6 @@ export interface Lesson {
     order_index: number,
     is_active: string,
     video_url?: string,
+    live_url?: string,
     type: string,
 }
