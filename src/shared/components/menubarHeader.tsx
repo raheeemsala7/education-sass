@@ -7,6 +7,8 @@ import Link from "next/link"
 import { signOut } from "next-auth/react"
 
 const MenubarHeader = ({ first_name, last_name, role, avatar }: { first_name: string, last_name : string, role: string, avatar: string }) => {
+    console.log("first_name :" + first_name )
+
 
     return (
         <>

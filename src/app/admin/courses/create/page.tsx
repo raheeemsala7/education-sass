@@ -3,7 +3,6 @@ import { buttonVariants } from '@/shared/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
 const CreateCoursePage = () => {
   return (

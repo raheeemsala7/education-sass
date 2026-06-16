@@ -11,6 +11,10 @@ import MenubarHeader from "./menubarHeader";
 export async function Header() {
     const session = await getServerSession(authOptions);
 
+    console.log(session?.user.first_name  )
+    console.log(session?.user.last_name  )
+    
+
     return (
         <header
             className={`sticky top-0 left-0 right-0 z-55 transition-all duration-500 bg-inherit shadow-lg`}
@@ -23,7 +27,7 @@ export async function Header() {
                     <ModeToggle />
                 </div>
                 <nav className="hidden sm:flex items-center gap-6">
-                    {session ? (
+                    {session && session.user ? (
                         <>
                             <MenubarHeader first_name={session?.user.first_name} last_name={session?.user.last_name} role={session?.user.role} avatar={""} />
                         </>

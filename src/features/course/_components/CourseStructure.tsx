@@ -116,7 +116,6 @@ export default function CourseStructure({ id, data }: IProps) {
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
-    console.log(items[0].lessons)
     const uploads = useLessonUploadStore((s) => s.uploads);
 
     useEffect(() => {
