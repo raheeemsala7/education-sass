@@ -39,7 +39,7 @@ import { cn } from '@/shared/lib/utils';
 import ChapterModal from '@/features/chapter/_components/chapterModal';
 import { Chapter } from '@/features/chapter/types/chapter';
 import DeleteChapterModal from '@/features/chapter/_components/DeleteChapterModal';
-import LessonModalComponent from '@/features/lesson/_components/EditLessonModal';
+import LessonModalComponent from '@/features/lesson/_components/lesson-modal';
 import DeleteLessonModal from '@/features/lesson/_components/DeleteLessonModal';
 import { useLessonUploadStore } from '@/store/useLessonUploadStore';
 import { useReorderChaptersMutation } from '@/features/chapter/hooks/chapter.hook';

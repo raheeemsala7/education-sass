@@ -11,7 +11,8 @@ import { Loader2 } from "lucide-react";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { QuizInfoType } from "../types/quiz";
 import { QuizInfoSchema } from "../schema/quiz.schema";
-import { useCreateLinkLessonMutation } from "@/features/lesson/hooks/lesson.hook";
+import { useCreateLinkLessonMutation, useCreateQuizLessonMutation } from "@/features/lesson/hooks/lesson.hook";
+import { useRouter } from "next/navigation";
 
 
 interface IProps {
@@ -34,12 +35,8 @@ const QuizLesson = ({
     description,
 }: IProps) => {
     const [isPending, startTransition] = useTransition();
-    const { mutateAsync: createLesson } = useCreateLinkLessonMutation(courseId);
-    // const { mutate: updateLesson } = useUpdateLessonVideoMutation(
-    //     courseId,
-    //     String(lessonId),
-    // );
-
+    const { mutateAsync: createLesson } = useCreateQuizLessonMutation(courseId);
+    const router = useRouter();
 
     const form = useForm<QuizInfoType>({
         resolver: zodResolver(QuizInfoSchema),
@@ -74,9 +71,11 @@ const QuizLesson = ({
                         values,
                         chapterId
                     })
+                    if (payload.status) {
+                        toast.success("Quiz lesson created successfully");
+                        // router.push(`/course/${courseId}/chapter/${chapterId}`);
+                    }
                     setIsOpen(false);
-
-                    // toast.success("Lesson created successfully");
                 }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
@@ -107,7 +106,6 @@ const QuizLesson = ({
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field>
-
                         <FieldLabel> (اختياري) الوصف </FieldLabel>
                         <Textarea placeholder="وصف الدرس" {...field} />
                         {fieldState.invalid && (
@@ -116,25 +114,9 @@ const QuizLesson = ({
                     </Field>
                 )}
             />
-            <Controller
-                name="live_url"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field>
-
-                        <FieldLabel> اللينك </FieldLabel>
-                        <Input placeholder="اللينك" {...field} />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
-            />
             <Button type="submit" className="mr-auto mt-2" disabled={isPending}>
-
                 {isPending ? (
                     <>
-
                         جاري الحفظ <Loader2 className="size-4 animate-spin" />
                     </>
                 ) : (

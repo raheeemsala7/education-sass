@@ -54,12 +54,10 @@ export const useGetSingleCourse = (courseId: string) => {
         queryKey: ["courseAdmin", courseId],
         queryFn: async () => {
             const res = await fetch(`/api/courses/${courseId}`)
-
             const payload: IApiResponse<ICourse> = await res.json()
             if (!payload.status) {
                 throw new Error(payload.message || "Error")
             }
-
             return payload
         }
     })

@@ -1,7 +1,7 @@
 "use client"
 
 import { toast } from "sonner"
-import { createLessonAction, createLinkLessonAction, deleteLessonAction, reorderLessonsAction, updateLessonAction } from "../apis/lesson.action"
+import { createLessonAction, createLinkLessonAction, createQuizLessonAction, deleteLessonAction, reorderLessonsAction, updateLessonAction } from "../apis/lesson.action"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const useCreateLessonVideoMutation = (courseId: string) => {
@@ -39,6 +39,16 @@ export const useCreateLinkLessonMutation = (courseId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: createLinkLessonAction,
+        onSuccess: (data) => {
+            toast.success(data.message)
+            queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
+        }
+    })
+}
+export const useCreateQuizLessonMutation = (courseId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: createQuizLessonAction,
         onSuccess: (data) => {
             toast.success(data.message)
             queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
