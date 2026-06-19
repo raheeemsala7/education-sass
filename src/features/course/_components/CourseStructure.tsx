@@ -31,7 +31,6 @@ import {
     GripVertical,
     Link2Icon,
     Loader2,
-    Trash2,
     VideoIcon,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -108,11 +107,11 @@ export default function CourseStructure({ id, data }: IProps) {
             title: lesson.title,
             description: lesson.description,
             order: lesson.order_index,
-            type: lesson.type,
+            type: lesson.type as "pdf" | "video" | "live" | "quiz",
             video_url: lesson.video_url,
             live_url: lesson.live_url,
             content: lesson.content,
-            
+            quiz_id: lesson.quiz_id,
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
@@ -130,11 +129,12 @@ export default function CourseStructure({ id, data }: IProps) {
                     id: lesson.id,
                     title: lesson.title,
                     order: lesson.order_index,
-                    type: lesson.type,
+                    type: lesson.type as "pdf" | "video" | "live" | "quiz",
                     content: lesson.content,
                     description: lesson.description,
                     video_url: lesson.video_url,
                     live_url: lesson.live_url,
+                    quiz_id: lesson.quiz_id,
                 }))
             })) || []
             return updateItems
@@ -294,11 +294,8 @@ export default function CourseStructure({ id, data }: IProps) {
                                                 <div className="flex gap-2">
                                                     <DeleteChapterModal courseId={id} chapterId={chapter.id} />
                                                     <ChapterModal isEdit={true} courseId={id} chapterId={chapter.id} title={chapter.title} description={chapter.description} />
-
                                                 </div>
-
                                             </div>
-
                                             <CollapsibleContent>
                                                 <div className="p-1 sm:p-2 space-y-2">
                                                     <SortableContext
@@ -338,16 +335,14 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     <Loader2 className="size-4 animate-spin transition-all text-muted-foreground" />
                                                                                 )}
                                                                                 {lesson.type === "quiz" ?
-                                                                                    <Link className="flex items-center gap-2  group-hover:underline group-hover:text-primary" href={`/admin/courses/create/exam/${lesson.content}`}>
+                                                                                    <Link className="flex items-center gap-2  group-hover:underline group-hover:text-primary" href={`/admin/courses/${id}/quizes/${lesson.quiz_id}`}>
                                                                                         <FileText className="size-4 text-primary" />
                                                                                         <span className='group-hover:text-primary underline group-hover:underline-primary'>{lesson.title}</span>
                                                                                     </Link>
                                                                                     :
                                                                                     <>
                                                                                         {
-                                                                                            lesson.type === "quiz" ? (
-                                                                                                <FileText className="size-4 text-primary" />
-                                                                                            ) : lesson.type === "video" ? (
+                                                                                            lesson.type === "video" ? (
                                                                                                 <VideoIcon className="size-4 text-primary" />
                                                                                             ) : (
                                                                                                 <Link2Icon className="size-4 text-primary" />

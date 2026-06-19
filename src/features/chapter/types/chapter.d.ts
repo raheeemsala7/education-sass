@@ -23,5 +23,5 @@ export interface Lesson {
     is_active: string,
     video_url?: string,
     live_url?: string,
-    type: string,
+    type: "pdf" | "video" | "live" | "quiz",
 }
