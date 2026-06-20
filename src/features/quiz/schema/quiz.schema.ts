@@ -19,8 +19,10 @@ export const questionSchema = z.object({
     text: z.string().min(1, "نص السؤال مطلوب"),
     grade: z.number().min(1),
     correctAnswer: z.string().min(1, "الإجابة الصحيحة مطلوبة"),
-    choices: z
-        .array(z.string())
+    options: z
+        .array(z.object({
+            text: z.string()
+        }))
         .optional(),
     notes: z.string().optional(),
     imageUrl: z.string().optional(),

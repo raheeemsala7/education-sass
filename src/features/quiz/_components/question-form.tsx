@@ -19,8 +19,10 @@ import { Question } from "../types/quiz";
 import { Field, FieldError } from "@/shared/components/ui/field";
 import { QuestionFormType, questionSchema } from "../schema/quiz.schema";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { CheckCircle, Menu, Upload } from "lucide-react";
+import { CheckCircle, Menu, Plus, Trash2, Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 
 type Props = {
     questions: Question[];
@@ -33,7 +35,8 @@ const QuestionForm = ({ questions }: Props) => {
             type: "choice",
             text: "",
             grade: 1,
-            correctAnswer: ""
+            correctAnswer: "",
+            options: [{ text: "" }],
         }
     });
 
@@ -45,8 +48,12 @@ const QuestionForm = ({ questions }: Props) => {
         remove
     } = useFieldArray({
         control: form.control,
-        name: "choices"
+        name: "options"
     });
+
+    const options = form.watch("options");
+
+    console.log(options)
 
     return (
         <div className="grid grid-cols-[260px_1fr] gap-5 w-full">
@@ -252,23 +259,32 @@ const QuestionForm = ({ questions }: Props) => {
                                         <Controller
                                             key={item.id}
                                             control={form.control}
-                                            name={`choices.${index}`}
+                                            name={`options.${index}.text`}
                                             render={({ field }) => (
                                                 <div className="flex gap-3">
+                                                    <Checkbox
+                                                        checked={form.watch("correctAnswer") === field.value as string}
+                                                        onCheckedChange={(checked) => {
+                                                            if (checked) {
+                                                                form.setValue("correctAnswer", field.value as string);
+                                                            }   
+                                                        }}
+                                                    />
                                                     <Input
                                                         placeholder={`الاختيار ${index + 1}`}
                                                         {...field}
                                                     />
-
-                                                    {fields.length && (
-                                                        <Button
-                                                            type="button"
-                                                            variant="destructive"
-                                                            onClick={() => remove(index)}
-                                                        >
-                                                            حذف
-                                                        </Button>
-                                                    )}
+                                                    <Button
+                                                        type="button"
+                                                        size={"icon-lg"}
+                                                        variant="destructive"
+                                                        onClick={() => {
+                                                            remove(index)
+                                                            form.resetField(`options.${index}`)
+                                                        }}
+                                                    >
+                                                        <Trash2 className="size-5" />
+                                                    </Button>
                                                 </div>
                                             )}
                                         />
@@ -281,14 +297,45 @@ const QuestionForm = ({ questions }: Props) => {
                                 <Button
                                     type="button"
                                     variant="outline"
+                                    className={"w-full border-dashed bg-transparent border-2 border-primary text-primary"}
                                     onClick={() => {
                                         console.log("Clicked")
-                                        append("")
+                                        append({ text : "" })
                                     }}
                                 >
-                                    إضافة اختيار
+                                   <span> إضافة اختيار</span>
+                                   <Plus className="size-4" />
                                 </Button>
                             )}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <Controller
+                                    name="correctAnswer"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <Field>
+                                            <label className="block mb-3">الإجابة الصحيحة</label>
+
+                                            <Select
+                                                value={field.value}
+                                                onValueChange={field.onChange}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="اختر الإجابة الصحيحة" />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    {options!.map((opt, index) => (
+                                                        <SelectItem key={index} value={opt.text}>
+                                                            {opt.text}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </Field>
+                                    )}
+                                />
+                            </div>
                         </>
                     )}
 
