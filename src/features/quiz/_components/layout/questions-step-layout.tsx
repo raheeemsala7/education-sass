@@ -1,8 +1,8 @@
 "use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
-import QuizInfoForm from "./quiz-info-form"
-import { useGetQuizDetailsQuery } from "../hooks/quiz.hook"
+import QuizInfoForm from "../quiz-info-form"
+import { useGetQuizDetailsQuery } from "../../hooks/quiz.hook"
 import { Loader2 } from "lucide-react"
 
 const QuestionsStepLayout = ({quizId} : {quizId : string}) => {

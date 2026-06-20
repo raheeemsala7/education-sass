@@ -1,4 +1,4 @@
-import QuestionsStepLayout from '@/features/quiz/_components/questions-step-layout'
+import QuestionsStepLayout from '@/features/quiz/_components/layout/questions-step-layout'
 import { buttonVariants } from '@/shared/components/ui/button'
 import { cn } from '@/shared/lib/utils'
 import {  ChevronRight } from 'lucide-react'

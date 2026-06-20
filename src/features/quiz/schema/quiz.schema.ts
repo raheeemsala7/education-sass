@@ -17,7 +17,7 @@ export const QuizCreateSchema = z.object({
 export const questionSchema = z.object({
     type: z.enum(["multiple_choice", "true_false"]),
     text: z.string().min(1, "نص السؤال مطلوب"),
-    grade: z.number().min(0),
+    grade: z.number().min(1),
     correctAnswer: z.string().min(1, "الإجابة الصحيحة مطلوبة"),
     choices: z
         .array(z.object({ id: z.string(), text: z.string() }))
@@ -25,6 +25,8 @@ export const questionSchema = z.object({
     notes: z.string().optional(),
     imageUrl: z.string().optional(),
 });
+
+export type QuestionFormType = z.infer<typeof questionSchema>;
 
 export const quizInfoSchema = z.object({
     title: z.string().min(1, "عنوان الامتحان مطلوب"),
