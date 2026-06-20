@@ -9,8 +9,8 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
-import { QuizInfoType } from "../types/quiz";
-import { QuizInfoSchema } from "../schema/quiz.schema";
+import { QuizCreateType } from "../types/quiz";
+import { QuizCreateSchema } from "../schema/quiz.schema";
 import { useCreateLinkLessonMutation, useCreateQuizLessonMutation } from "@/features/lesson/hooks/lesson.hook";
 import { useRouter } from "next/navigation";
 
@@ -38,8 +38,8 @@ const QuizLesson = ({
     const { mutateAsync: createLesson } = useCreateQuizLessonMutation(courseId);
     const router = useRouter();
 
-    const form = useForm<QuizInfoType>({
-        resolver: zodResolver(QuizInfoSchema),
+    const form = useForm<QuizCreateType>({
+        resolver: zodResolver(QuizCreateSchema),
         defaultValues: {
             title: title || "",
             description: description || "",
@@ -48,7 +48,7 @@ const QuizLesson = ({
     });
 
 
-    function onSubmit(values: QuizInfoType) {
+    function onSubmit(values: QuizCreateType) {
         startTransition(async () => {
             try {
                 if (isEdit) {
