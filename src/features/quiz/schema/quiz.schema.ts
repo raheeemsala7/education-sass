@@ -15,12 +15,12 @@ export const QuizCreateSchema = z.object({
 
 
 export const questionSchema = z.object({
-    type: z.enum(["multiple_choice", "true_false"]),
+    type: z.enum(["choice", "true_false"]),
     text: z.string().min(1, "نص السؤال مطلوب"),
     grade: z.number().min(1),
     correctAnswer: z.string().min(1, "الإجابة الصحيحة مطلوبة"),
     choices: z
-        .array(z.object({ id: z.string(), text: z.string() }))
+        .array(z.string())
         .optional(),
     notes: z.string().optional(),
     imageUrl: z.string().optional(),

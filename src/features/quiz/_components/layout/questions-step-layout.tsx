@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui
 import QuizInfoForm from "../quiz-info-form"
 import { useGetQuizDetailsQuery } from "../../hooks/quiz.hook"
 import { Loader2 } from "lucide-react"
+import QuestionForm from "../question-form"
 
 const QuestionsStepLayout = ({quizId} : {quizId : string}) => {
 
@@ -44,7 +45,9 @@ if (!payload || !payload.status) {
       <TabsContent value="info" className={"w-full mt-4"}>
         <QuizInfoForm title={title} description={description} duration={duration} total_grade={total_grade} countQuestions={questions.length} />
       </TabsContent>
-      <TabsContent value="questions">Change your password here.</TabsContent>
+      <TabsContent value="questions" className={"w-full mt-4"}>
+        <QuestionForm questions={questions} />
+      </TabsContent>
       <TabsContent value="view">View your questions here.</TabsContent>
     </Tabs>
   )
