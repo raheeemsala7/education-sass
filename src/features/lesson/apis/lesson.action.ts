@@ -80,8 +80,12 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         ...values,
         quiz: {
             deadline: "2026-06-17 12:30:00"
-        }
+        },
+        deadline: "2026-06-17 12:30:00",
+        allow_resume: false
     }
+
+    console.log(payload)
 
     const res = await fetch(`${process.env.API_URL}/lessons/section/${chapterId}`, {
         method: "POST",

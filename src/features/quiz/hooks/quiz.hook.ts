@@ -1,9 +1,10 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getQuizDetailsApi } from "../apis/quiz.api"
 import { IApiResponse } from "@/shared/lib/types/api"
 import { Quiz } from "../types/quiz"
+import { updateQuizAction } from "../apis/quiz.action"
 
 export const useGetQuizDetailsQuery =  (quizId: string) => {
     return useQuery({
@@ -17,5 +18,17 @@ export const useGetQuizDetailsQuery =  (quizId: string) => {
             }
             return data as IApiResponse<Quiz>
         } ,
+    })
+}
+
+export const useUpdateQuizMutation = (quizId : string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: updateQuizAction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey : ["quiz", quizId]
+            })
+        }
     })
 }

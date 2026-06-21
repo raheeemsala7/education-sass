@@ -24,7 +24,7 @@ export const questionSchema = z.object({
             text: z.string()
         }))
         .optional(),
-    notes: z.string().optional(),
+    notes: z.string(),
     imageUrl: z.string().optional(),
 });
 
@@ -35,13 +35,13 @@ export const quizInfoSchema = z.object({
     duration: z.number().min(1, "المدة مطلوبة"),
     description: z.string().max(500).optional(),
 
-    settings: z.object({
-        randomizeQuestions: z.boolean(),
-        randomizeChoices: z.boolean(),
-        showResultImmediately: z.boolean(),
-        allowReview: z.boolean(),
-        maxAttempts: z.string(),
-        startDate: z.string().optional(),
-    }),
+    // settings: z.object({
+    random_questions: z.boolean(),
+    random_choices: z.boolean(),
+    show_result_immediately: z.boolean(),
+    allow_resume: z.boolean(),
+    max_attempts: z.string(),
+    deadline: z.string().optional(),
+    // }),
     // questions: z.array(questionSchema),
 });

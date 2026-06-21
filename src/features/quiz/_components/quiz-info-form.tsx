@@ -11,6 +11,9 @@ import { Textarea } from '@/shared/components/ui/textarea'
 import { Switch } from '@/shared/components/ui/switch'
 import { Button } from '@/shared/components/ui/button'
 import { ArrowLeft, Loader2 } from 'lucide-react'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
+import { useUpdateQuizMutation } from '../hooks/quiz.hook'
+import { toast } from 'sonner'
 
 interface IProps {
     title: string;
@@ -18,29 +21,35 @@ interface IProps {
     duration: number;
     total_grade: number;
     countQuestions: number;
+    quizId: string;
 }
-const QuizInfoForm = ({ title, description, duration, total_grade, countQuestions }: IProps) => {
-    const isPending = false
-
+const QuizInfoForm = ({ title, description, duration, total_grade, countQuestions, quizId }: IProps) => {   
+    const { mutateAsync , isPending } = useUpdateQuizMutation(quizId)
     const form = useForm<QuizInfoType>({
         resolver: zodResolver(quizInfoSchema),
         defaultValues: {
             title,
             description,
             duration: duration ?? 60,
-            settings: {
-                randomizeQuestions: true,
-                randomizeChoices: false,
-                showResultImmediately: false,
-                allowReview: false,
-                maxAttempts: '1',
-                startDate: '',
-            }
+            random_questions: true,
+            random_choices: false,
+            show_result_immediately: false,
+            allow_resume: false,
+            max_attempts: '1',
+            deadline: '2026-06-17 12:30:00',
         }
     })
 
-    const onSubmit = (values: QuizInfoType) => {
-
+    const onSubmit = async(values: QuizInfoType) => {
+        try {
+            await mutateAsync({
+                ...values,
+                quizId
+            })
+            toast.success("Quiz info updated successfully")
+        } catch (error) {
+            toast.error("An unexpected error occurred. Please try again.")
+        }
     }
 
     return (
@@ -152,7 +161,7 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
                 <CardContent className='space-y-4'>
                     <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
                         <Controller
-                            name='settings.randomizeQuestions'
+                            name='random_questions'
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field>
@@ -167,7 +176,7 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
                                         />
                                     </div>
                                     {fieldState.invalid && (
-                                        <FieldError 
+                                        <FieldError
                                             className="text-red-500"
                                             errors={[fieldState.error]}
                                         />
@@ -176,7 +185,7 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
                             )}
                         />
                         <Controller
-                            name='settings.randomizeChoices'
+                            name='random_choices'
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field>
@@ -200,6 +209,95 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
                             )}
                         />
                     </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
+                        <Controller
+                            name='show_result_immediately'
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field>
+                                    <div className='flex justify-between items-center'>
+                                        <div>
+                                            <h6 className='font-bold text-base '>عرض النتائج مريده</h6>
+                                            <p className='text-[#94A3B8]'>عرض النتائج مريده للطالب</p>
+                                        </div>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </div>
+                                    {fieldState.invalid && (
+                                        <FieldError
+                                            className="text-red-500"
+                                            errors={[fieldState.error]}
+                                        />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller
+                            name='allow_resume'
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field>
+                                    <div className='flex justify-between items-center'>
+                                        <div>
+                                            <h6 className='font-bold text-base'>الرجاع للأسئلة بعد الامتحان</h6>
+                                            <p className='text-[#94A3B8]'>الرجاع للأسئلة بعد الامتحان للطالب</p>
+                                        </div>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </div>
+                                    {fieldState.invalid && (
+                                        <FieldError
+                                            className="text-red-500"
+                                            errors={[fieldState.error]}
+                                        />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
+                        <Controller
+                            name='max_attempts'
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field>
+                                    <div className='flex justify-between items-center'>
+                                        <div>
+                                            <h6 className='font-bold text-base'>الرجاع للأسئلة بعد الامتحان</h6>
+                                            <p className='text-[#94A3B8]'>الرجاع للأسئلة بعد الامتحان للطالب</p>
+                                        </div>
+                                        <Select
+                                            value={field.value}
+                                            onValueChange={field.onChange}
+                                        >
+                                            <SelectTrigger className="w-full max-w-36">
+                                                <SelectValue placeholder="Select a fruit" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectItem value="1">محاوله واحده</SelectItem >
+                                                    <SelectItem value="2">محاولتين</SelectItem >
+                                                    <SelectItem value="3">3 محاولات</SelectItem >
+                                                    <SelectItem value="4">4 محاولات</SelectItem >
+                                                    <SelectItem value="5">5 محاولات</SelectItem >
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    {fieldState.invalid && (
+                                        <FieldError
+                                            className="text-red-500"
+                                            errors={[fieldState.error]}
+                                        />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                    </div>
                 </CardContent>
             </Card>
 
@@ -210,9 +308,9 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
                             جاري الحفظ <Loader2 className="size-4 animate-spin" />
                         </>
                     ) : (
-                        <> 
-                        <span>حفظ ومتابعة للأسئلة</span>
-                        <ArrowLeft />
+                        <>
+                            <span>حفظ ومتابعة للأسئلة</span>
+                            <ArrowLeft />
                         </>
                     )}
                 </Button>
