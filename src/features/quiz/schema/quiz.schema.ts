@@ -20,10 +20,16 @@ export const questionSchema = z.object({
     grade: z.number().min(1),
     correctAnswer: z.string().min(1, "الإجابة الصحيحة مطلوبة"),
     options: z
-        .array(z.object({
-            text: z.string()
-        }))
+        .array(z.string())
         .optional(),
+    // options: z
+    //     .array(z.string())
+    //     .default([]),
+    // options: z
+    //     .array(z.object({
+    //         text: z.string()
+    //     }))
+    //     .optional(),
     notes: z.string(),
     imageUrl: z.string().optional(),
 });
