@@ -32,7 +32,7 @@ const ChoiceComponent = () => {
                         <Controller
                             key={item.id}
                             control={form.control}
-                            name={`options.${index}`}
+                            name={`options.${index}.text`}
                             render={({ field }) => (
                                 <div className="flex gap-3">
                                     <Checkbox
@@ -96,8 +96,8 @@ const ChoiceComponent = () => {
 
                                 <SelectContent>
                                     {options!.map((opt, index) => (
-                                        <SelectItem key={index} value={opt}>
-                                            {opt}
+                                        <SelectItem key={index} value={opt.text}>
+                                            {opt.text}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

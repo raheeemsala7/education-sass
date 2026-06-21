@@ -37,15 +37,11 @@ const QuestionForm = ({ questions }: Props) => {
             text: "",
             grade: 1,
             correctAnswer: "",
-            options: ["" ],
+            options: [{text:""}],
         }
     });
 
     const type = form.watch("type");
-
-
-
-  
 
     const onSubmit = async (data: QuestionFormType) => {
         console.log(data);
