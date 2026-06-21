@@ -46,7 +46,7 @@ if (!payload || !payload.status) {
         <QuizInfoForm quizId={quizId} title={title} description={description} duration={duration} total_grade={total_grade} countQuestions={questions.length} />
       </TabsContent>
       <TabsContent value="questions" className={"w-full mt-4"}>
-        <QuestionForm questions={questions} />
+        <QuestionForm quizId={quizId} questions={questions} />
       </TabsContent>
       <TabsContent value="view">View your questions here.</TabsContent>
     </Tabs>

@@ -16,9 +16,9 @@ export const QuizCreateSchema = z.object({
 
 export const questionSchema = z.object({
     type: z.enum(["choice", "true_false"]),
-    text: z.string().min(1, "نص السؤال مطلوب"),
+    question: z.string().min(1, "نص السؤال مطلوب"),
     grade: z.number().min(1),
-    correctAnswer: z.string().min(1, "الإجابة الصحيحة مطلوبة"),
+    correct_answer: z.string().min(1, "الإجابة الصحيحة مطلوبة"),
     options: z
         .array(z.object({
             text: z.string()

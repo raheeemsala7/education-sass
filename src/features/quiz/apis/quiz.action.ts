@@ -5,6 +5,7 @@ import { RESPONSES } from "@/shared/constant/api.responses"
 import { getNextAuthToken } from "@/shared/lib/auth.util"
 import { QuizInfoType } from "../types/quiz"
 import { IApiResponse } from "@/shared/lib/types/api"
+import { QuestionFormType } from "../schema/quiz.schema"
 
 export async function updateQuizAction({ values, quizId }: { values: QuizInfoType, quizId: string }) {
     const token = await getNextAuthToken()
@@ -22,6 +23,34 @@ export async function updateQuizAction({ values, quizId }: { values: QuizInfoTyp
     const data: IApiResponse<QuizInfoType> = await res.json()
     if (!data.status) {
         throw new Error(data.message || "Update quiz failed")
+    }
+    return data
+}
+
+
+export async function postAddQuestionToQuiz({ values, quizId }: { values: QuestionFormType, quizId: string }) {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
+
+    const payload = {
+        ...values,
+        options:values.options?.map((o) => ( o.text ))
+    }
+
+    console.log("PAYLOAD" , payload)
+
+    const res = await fetch(`${process.env.API_URL}/quiz/${quizId}/questions`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+        body: JSON.stringify(payload)
+    })
+    const data: IApiResponse<QuestionFormType> = await res.json()
+    if (!data.status) {
+        throw new Error(data.message || "Add question failed")
     }
     return data
 }

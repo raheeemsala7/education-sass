@@ -36,10 +36,10 @@ const ChoiceComponent = () => {
                             render={({ field }) => (
                                 <div className="flex gap-3">
                                     <Checkbox
-                                        checked={form.watch("correctAnswer") === field.value as string}
+                                        checked={form.watch("correct_answer") === field.value as string}
                                         onCheckedChange={(checked) => {
                                             if (checked) {
-                                                form.setValue("correctAnswer", field.value as string);
+                                                form.setValue("correct_answer", field.value as string);
                                             }
                                         }}
                                     />
@@ -80,7 +80,7 @@ const ChoiceComponent = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Controller
-                    name="correctAnswer"
+                    name="correct_answer"
                     control={form.control}
                     render={({ field }) => (
                         <Field>
