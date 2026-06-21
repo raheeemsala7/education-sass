@@ -6,7 +6,7 @@ import { getNextAuthToken } from "@/shared/lib/auth.util"
 import { QuizInfoType } from "../types/quiz"
 import { IApiResponse } from "@/shared/lib/types/api"
 
-export async function updateQuizAction({ values, quizId }: { values: QuizInfoType, quizId: number }) {
+export async function updateQuizAction({ values, quizId }: { values: QuizInfoType, quizId: string }) {
     const token = await getNextAuthToken()
     if (!token?.access_token) return RESPONSES.unauthorized
 
@@ -20,7 +20,6 @@ export async function updateQuizAction({ values, quizId }: { values: QuizInfoTyp
         body: JSON.stringify(values)
     })
     const data: IApiResponse<QuizInfoType> = await res.json()
-    console.log(data)
     if (!data.status) {
         throw new Error(data.message || "Update quiz failed")
     }

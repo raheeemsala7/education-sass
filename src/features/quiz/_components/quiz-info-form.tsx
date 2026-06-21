@@ -43,7 +43,7 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
     const onSubmit = async(values: QuizInfoType) => {
         try {
             await mutateAsync({
-                ...values,
+                values,
                 quizId
             })
             toast.success("Quiz info updated successfully")
