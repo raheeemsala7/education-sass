@@ -38,13 +38,10 @@ export const quizInfoSchema = z.object({
     duration: z.number().min(1, "المدة مطلوبة"),
     description: z.string().max(500).optional(),
 
-    // settings: z.object({
     random_questions: z.boolean(),
-    random_choices: z.boolean(),
+    random_options: z.boolean(),
     show_result_immediately: z.boolean(),
     allow_resume: z.boolean(),
     max_attempts: z.string(),
     deadline: z.string().optional(),
-    // }),
-    // questions: z.array(questionSchema),
 });

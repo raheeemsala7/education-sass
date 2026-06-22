@@ -1,12 +1,11 @@
 "use client"
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { getQuizDetailsApi } from "../apis/quiz.api"
 import { IApiResponse } from "@/shared/lib/types/api"
 import { Quiz } from "../types/quiz"
 import { postAddQuestionToQuiz, updateQuizAction } from "../apis/quiz.action"
 
-export const useGetQuizDetailsQuery =  (quizId: string) => {
+export const useGetQuizDetailsQuery = (quizId: string) => {
     return useQuery({
         queryKey: ["quiz", quizId],
         queryFn: async () => {
@@ -17,30 +16,34 @@ export const useGetQuizDetailsQuery =  (quizId: string) => {
                 throw new Error(data.message || "Get quiz details failed")
             }
             return data as IApiResponse<Quiz>
-        } ,
+        },
     })
 }
 
-export const useUpdateQuizMutation = (quizId : string) => {
+export const useUpdateQuizMutation = ({ quizId, courseId }: { quizId: string, courseId: string }) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: updateQuizAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey : ["quiz", quizId]
-            })
+                queryKey: ["quiz", quizId]
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["courseAdmin", courseId]
+            });
         }
     })
 }
 
-export const useAddQuestionToQuizMutation = (quizId : string) => {
+export const useAddQuestionToQuizMutation = (quizId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: postAddQuestionToQuiz,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey : ["quiz", quizId]
+                queryKey: ["quiz", quizId]
             })
+
         }
     })
 }

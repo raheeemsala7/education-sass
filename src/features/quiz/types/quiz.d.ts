@@ -25,6 +25,11 @@ export interface Quiz {
     deadline: string;
     total_grade: number;
     submitted: boolean;
+    max_attempts: number;
+    allow_resume: boolean;
+    random_questions: boolean;
+    random_options: boolean;
+    show_result_immediately: boolean;
     questions: Question[];
 }
 

@@ -25,7 +25,7 @@ const page = async ({ params }: IProps) => {
           <span>العوده</span>
         </Link>
       </div>
-      <QuestionsStepLayout quizId={quizId} />
+      <QuestionsStepLayout quizId={quizId} courseId={id} />
     </div>
   )
 }

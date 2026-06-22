@@ -22,9 +22,15 @@ interface IProps {
     total_grade: number;
     countQuestions: number;
     quizId: string;
+    courseId: string;
+    max_attempts: number;
+    allow_resume: boolean;
+    random_questions: boolean;
+    random_options: boolean;
+    show_result_immediately: boolean;
 }
-const QuizInfoForm = ({ title, description, duration, total_grade, countQuestions, quizId }: IProps) => {   
-    const { mutateAsync , isPending } = useUpdateQuizMutation(quizId)
+const QuizInfoForm = ({ title, description, duration, total_grade, countQuestions, quizId, courseId, max_attempts, allow_resume, random_questions, random_options, show_result_immediately }: IProps) => {
+    const { mutateAsync, isPending } = useUpdateQuizMutation({ quizId, courseId })
     const form = useForm<QuizInfoType>({
         resolver: zodResolver(quizInfoSchema),
         defaultValues: {
@@ -32,15 +38,15 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
             description,
             duration: duration ?? 60,
             random_questions: true,
-            random_choices: false,
+            random_options: false,
             show_result_immediately: false,
-            allow_resume: false,
-            max_attempts: '1',
+            allow_resume: Boolean(allow_resume),
+            max_attempts: String(max_attempts),
             deadline: '2026-06-17 12:30:00',
         }
     })
 
-    const onSubmit = async(values: QuizInfoType) => {
+    const onSubmit = async (values: QuizInfoType) => {
         try {
             await mutateAsync({
                 values,
@@ -185,7 +191,7 @@ const QuizInfoForm = ({ title, description, duration, total_grade, countQuestion
                             )}
                         />
                         <Controller
-                            name='random_choices'
+                            name='random_options'
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field>

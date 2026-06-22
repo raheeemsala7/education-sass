@@ -12,7 +12,6 @@ import { Button } from "@/shared/components/ui/button";
 import {
     Controller,
     FormProvider,
-    useFieldArray,
     useForm
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,8 +21,6 @@ import { QuestionFormType, questionSchema } from "../schema/quiz.schema";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { CheckCircle, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import ChoiceComponent from "./choice-component";
 import { useAddQuestionToQuizMutation } from "../hooks/quiz.hook";
 import { toast } from "sonner";
