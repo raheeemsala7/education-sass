@@ -17,7 +17,7 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Question } from "../types/quiz";
-import { Field, FieldError } from "@/shared/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { QuestionFormType, questionSchema } from "../schema/quiz.schema";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { CheckCircle, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
@@ -27,6 +27,9 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import ChoiceComponent from "./choice-component";
 import { useAddQuestionToQuizMutation } from "../hooks/quiz.hook";
 import { toast } from "sonner";
+import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-image";
+import { useState } from "react";
+import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
 
 type Props = {
     questions: Question[];
@@ -46,11 +49,40 @@ const QuestionForm = ({ questions, quizId }: Props) => {
             options: [{ text: "" }],
         }
     });
-
     const type = form.watch("type");
+    const [fileImageQuestion, setFileImageQuestion] = useState<File | null>(null);
+    const [questionImagePreviewUrl, setQuestionImagePreviewUrl] = useState<string | undefined>();
+    const [fileImageSolveQuestion, setFileImageSolveQuestion] = useState<File | null>(null);
+    const [solveQuestionImagePreviewUrl, setSolveQuestionImagePreviewUrl] = useState<string | undefined>();
+
+    const handleSelectQuestionImage = (file: File) => {
+        setFileImageQuestion(file);
+        setQuestionImagePreviewUrl(URL.createObjectURL(file));
+        form.setValue("imageUrl", file, { shouldValidate: true });
+    };
+
+    const handleRemoveQuestionImage = () => {
+        setFileImageQuestion(null);
+        setQuestionImagePreviewUrl(undefined);
+        form.setValue("imageUrl", "");
+    };
+    const handleSelectSolveQuestionImage = (file: File) => {
+        setFileImageSolveQuestion(file);
+        setSolveQuestionImagePreviewUrl(URL.createObjectURL(file));
+        form.setValue("imageUrl", file, { shouldValidate: true });
+    };
+
+    const handleRemoveSolveQuestionImage = () => {
+        setFileImageSolveQuestion(null);
+        setSolveQuestionImagePreviewUrl(undefined);
+        form.setValue("imageUrl", "");
+    };
+
 
     const onSubmit = async (values: QuestionFormType) => {
         try {
+            const imageUrl = await uploadFileToS3(fileImageQuestion as File);
+            values.imageUrl = imageUrl;
             await addQuestion({
                 values,
                 quizId
@@ -195,23 +227,23 @@ const QuestionForm = ({ questions, quizId }: Props) => {
 
                             {/* grade */}
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <Controller
-                                    name="grade"
-                                    control={form.control}
-                                    render={({ field }) => (
-                                        <Field>
-                                            <div>
-                                                <label className="block mb-3">
-                                                    الدرجة
-                                                </label>
+                            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
+                            <Controller
+                                name="grade"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Field>
+                                        <div>
+                                            <label className="block mb-3">
+                                                الدرجة
+                                            </label>
 
-                                                <Input type="number" {...field} />
-                                            </div>
-                                        </Field>
-                                    )}
-                                />
-                                <Controller
+                                            <Input type="number" {...field} />
+                                        </div>
+                                    </Field>
+                                )}
+                            />
+                            {/* <Controller
                                     name="imageUrl"
                                     control={form.control}
                                     render={({ fieldState }) => (
@@ -253,8 +285,28 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                             </div>
                                         </Field>
                                     )}
-                                />
-                            </div>
+                                /> */}
+
+                            <Controller
+                                name="imageUrl"
+                                control={form.control}
+                                render={({ fieldState }) => (
+                                    <Field>
+                                        <FieldLabel> صورة السؤال </FieldLabel>
+                                        <UploadCreateMedia
+                                        height="h-42"
+                                            mediaType="image"
+                                            previewUrl={questionImagePreviewUrl}
+                                            onSelect={handleSelectQuestionImage}
+                                            onRemove={handleRemoveQuestionImage}
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+                                    </Field>
+                                )}
+                            />
+                            {/* </div> */}
 
                             {/* options */}
 
@@ -263,26 +315,47 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                             )}
 
                             {type === "true_false" && (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <>
                                     <Controller
                                         name="correct_answer"
                                         control={form.control}
-                                        render={({ field , fieldState}) => (
+                                        render={({ field, fieldState }) => (
                                             <div>
+                                                <label className="block mb-3 font-semibold">
+                                                    الخيارات
+                                                </label>
                                                 <RadioGroup
                                                     value={field.value}
                                                     onValueChange={field.onChange}
-                                                    className="flex gap-5"
+                                                    className="grid grid-cols-2 gap-4 mt-0"
                                                 >
-                                                    <div className="flex gap-2 items-center">
+                                                    <div
+                                                        onClick={() => field.onChange("true")}
+                                                        className={cn(
+                                                            "flex items-center gap-3 rounded-xl border p-4 cursor-pointer transition",
+                                                            field.value === "true"
+                                                                ? "border-primary bg-primary/5"
+                                                                : "border-border"
+                                                        )}
+                                                    >
                                                         <RadioGroupItem value="true" />
-                                                        صح
+                                                        <span>صح</span>
                                                     </div>
-                                                    <div className="flex gap-2 items-center">
+
+                                                    <div
+                                                        onClick={() => field.onChange("false")}
+                                                        className={cn(
+                                                            "flex items-center gap-3 rounded-xl border p-4 cursor-pointer transition",
+                                                            field.value === "false"
+                                                                ? "border-primary bg-primary/5"
+                                                                : "border-border"
+                                                        )}
+                                                    >
                                                         <RadioGroupItem value="false" />
-                                                        خطأ
+                                                        <span>خطأ</span>
                                                     </div>
                                                 </RadioGroup>
+
                                                 {fieldState.invalid && (
                                                     <FieldError errors={[fieldState.error]} />
                                                 )}
@@ -290,29 +363,51 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                         )}
                                     />
 
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                                    <Controller
-                                        name="notes"
-                                        control={form.control}
-                                        render={({ field, fieldState }) => (
-                                            <Field>
-                                                <div>
-                                                    <label className="block mb-3">
-                                                        ملاحظات إضافية حول هذا السؤال...
-                                                    </label>
-                                                    <Input
-                                                        {...field} />
-                                                </div>
-                                                {fieldState.invalid && (
-                                                    <FieldError errors={[fieldState.error]} />
-                                                )}
+                                        <Controller
+                                            name="notes"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field>
+                                                    <div>
+                                                        <label className="block mb-3">
+                                                            ملاحظات إضافية حول هذا السؤال...
+                                                        </label>
+                                                        <Input
+                                                            {...field} />
+                                                    </div>
+                                                    {fieldState.invalid && (
+                                                        <FieldError errors={[fieldState.error]} />
+                                                    )}
 
-                                            </Field>
-                                        )}
-                                    />
+                                                </Field>
+                                            )}
+                                        />
 
-                                </div>
+                                    </div>
+                                </>
                             )}
+
+                            <Controller
+                                name=""
+                                control={form.control}
+                                render={({ fieldState }) => (
+                                    <Field>
+                                        <FieldLabel> صورة لحل السؤال </FieldLabel>
+                                        <UploadCreateMedia
+                                        height="h-42"
+                                            mediaType="image"
+                                            previewUrl={solveQuestionImagePreviewUrl}
+                                            onSelect={handleSelectSolveQuestionImage}
+                                            onRemove={handleRemoveSolveQuestionImage}
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+                                    </Field>
+                                )}
+                            />
                             <div className="mr-auto w-fit space-x-3">
                                 <Button variant={"secondary"}>
                                     الغاء

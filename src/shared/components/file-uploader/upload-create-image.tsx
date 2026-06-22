@@ -9,13 +9,15 @@ interface Props {
     onSelect: (file: File) => void;
     onRemove: () => void;
     mediaType?: MediaType;
+    height?: string;
 }
 
 export default function UploadCreateMedia({
     previewUrl,
     onSelect,
     onRemove,
-    mediaType = "image"
+    mediaType = "image",
+    height = "h-56"
 }: Props) {
     const [isDragging, setIsDragging] = useState(false);
     const [fileType, setFileType] = useState<"image" | "video" | null>();
@@ -113,7 +115,7 @@ export default function UploadCreateMedia({
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
             onDrop={onDrop}
-            className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer h-56 flex justify-center items-center transition-colors ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+            className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer ${height} flex justify-center items-center transition-colors ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
                 }`}
         >
             <input

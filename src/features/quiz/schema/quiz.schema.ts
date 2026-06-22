@@ -25,7 +25,10 @@ export const questionSchema = z.object({
         }))
         .optional(),
     notes: z.string(),
-    imageUrl: z.string().optional(),
+    imageUrl: z.union([
+        z.instanceof(File, { message: "مطلوب صورة سؤال" }),
+        z.string().min(1, { message: "مطلوب صورة URL" }),
+    ]),
 });
 
 export type QuestionFormType = z.infer<typeof questionSchema>;

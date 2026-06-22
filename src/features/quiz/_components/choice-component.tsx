@@ -84,7 +84,7 @@ const ChoiceComponent = () => {
                     control={form.control}
                     render={({ field }) => (
                         <Field>
-                            <label className="block mb-3">الإجابة الصحيحة</label>
+                            <label className="block font-semibold">الإجابة الصحيحة</label>
 
                             <Select
                                 value={field.value}
