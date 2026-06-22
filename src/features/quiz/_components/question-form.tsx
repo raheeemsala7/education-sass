@@ -95,7 +95,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                 quizId
             })
             toast.success("Question added successfully");
-            form.reset();
+            // form.reset();
         } catch (error) {
             toast.error("An unexpected error occurred. Please try again.");
         }

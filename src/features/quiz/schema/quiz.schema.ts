@@ -27,13 +27,15 @@ export const questionSchema = z.object({
     notes: z.string().optional(),
     question_image: z.union([
         z.instanceof(File, { message: "مطلوب صورة سؤال" }),
-        z.string().min(1, { message: "مطلوب صورة URL" }),
+        z.string().url(),
+        z.literal("")
     ]).optional(),
     answer_image: z.union([
         z.instanceof(File, { message: "مطلوب صورة الإجابة" }),
-        z.string().min(1, { message: "مطلوب صورة URL" }),
+        z.string().url(),
+        z.literal("")
     ]).optional(),
-    explanation : z.string().optional(),
+    explanation: z.string().optional(),
 });
 
 export type QuestionFormType = z.infer<typeof questionSchema>;
