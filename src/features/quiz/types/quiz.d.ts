@@ -13,8 +13,13 @@ export interface Question {
     question: string;
     type: QuestionType;
     options: string[];
-    grade: string;
+    grade: number;
     correct_answer: string;
+    explanation: string;
+    question_image: string;
+    answer_image: string;
+    notes: string;
+    order_index:number
 }
 
 export interface Quiz {

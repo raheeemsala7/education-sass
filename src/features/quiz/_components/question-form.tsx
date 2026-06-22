@@ -19,14 +19,15 @@ import { Question } from "../types/quiz";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { QuestionFormType, questionSchema } from "../schema/quiz.schema";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { CheckCircle, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
+import { CheckCircle, Edit2, GripVertical, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import ChoiceComponent from "./choice-component";
-import { useAddQuestionToQuizMutation } from "../hooks/quiz.hook";
+import { useAddQuestionToQuizMutation, useUpdateQuestionMutation } from "../hooks/quiz.hook";
 import { toast } from "sonner";
 import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-image";
 import { useState } from "react";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
+import { Badge } from "@/shared/components/ui/badge";
 
 type Props = {
     questions: Question[];
@@ -34,8 +35,11 @@ type Props = {
 };
 
 const QuestionForm = ({ questions, quizId }: Props) => {
+    console.log(questions)
 
-    const { mutate: addQuestion } = useAddQuestionToQuizMutation(quizId)
+    const { mutateAsync: addQuestion } = useAddQuestionToQuizMutation(quizId)
+    const { mutateAsync: updateQuestion } = useUpdateQuestionMutation(quizId)
+
     const form = useForm<QuestionFormType>({
         resolver: zodResolver(questionSchema),
         defaultValues: {
@@ -55,6 +59,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
     const [questionImagePreviewUrl, setQuestionImagePreviewUrl] = useState<string | undefined>();
     const [fileImageSolveQuestion, setFileImageSolveQuestion] = useState<File | null>(null);
     const [solveQuestionImagePreviewUrl, setSolveQuestionImagePreviewUrl] = useState<string | undefined>();
+    const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
 
     const handleSelectQuestionImage = (file: File) => {
         setFileImageQuestion(file);
@@ -81,35 +86,92 @@ const QuestionForm = ({ questions, quizId }: Props) => {
 
 
     const onSubmit = async (values: QuestionFormType) => {
-        try {
-            if (fileImageQuestion) {
-                const imageUrl = await uploadFileToS3(fileImageQuestion as File);
-                values.question_image = imageUrl;
+        if (fileImageQuestion) {
+            const imageUrl = await uploadFileToS3(fileImageQuestion as File);
+            values.question_image = imageUrl;
+        }
+        if (fileImageSolveQuestion) {
+            const solveImageUrl = await uploadFileToS3(fileImageSolveQuestion as File);
+            values.answer_image = solveImageUrl;
+        }
+        if (editingQuestionId) {
+            try {
+                const data = await updateQuestion({
+                    questionId: editingQuestionId,
+                    values,
+                })
+                console.log("FFF", data)
+                if (data.status) {
+                    toast.success("Question updated successfully");
+                    form.reset({
+                        type: "choice",
+                        question: "",
+                        grade: 1,
+                        correct_answer: "",
+                        options: [{ text: "" }],
+                        notes: "",
+                        question_image: "",
+                        answer_image: "",
+                        explanation: "",
+                    });
+                    setEditingQuestionId(null);
+                    console.log("TTTTTTTTTT")
+                }
+            } catch (error) {
+                toast.error("An unexpected error occurred. Please try again.");
             }
-            if (fileImageSolveQuestion) {
-                const solveImageUrl = await uploadFileToS3(fileImageSolveQuestion as File);
-                values.answer_image = solveImageUrl;
+        } else {
+            try {
+                const data = await addQuestion({
+                    values,
+                    quizId
+                })
+                if (data.status) {
+                    toast.success("Question added successfully");
+                    form.reset({
+                        type: "choice",
+                        question: "",
+                        grade: 1,
+                        correct_answer: "",
+                        options: [{ text: "" }],
+                        notes: "",
+                        question_image: "",
+                        answer_image: "",
+                        explanation: "",
+                    });
+
+                }
+            } catch (error) {
+                toast.error("An unexpected error occurred. Please try again.");
             }
-            await addQuestion({
-                values,
-                quizId
-            })
-            toast.success("Question added successfully");
-            // form.reset();
-        } catch (error) {
-            toast.error("An unexpected error occurred. Please try again.");
         }
     };
 
-    console.log(form.formState.errors)
-
     return (
-        <div className="grid grid-cols-[260px_1fr] gap-5 w-full">
+        <div className="grid  grid-cols-1 sm:grid-cols-[290px_1fr] gap-5 w-full">
 
             {/* sidebar */}
             <Card className="sm:h-80 overflow-y-auto">
                 <CardHeader>
                     <CardTitle>قائمة الأسئلة</CardTitle>
+                    <Button onClick={() => {
+                        form.reset({
+                            type: "choice",
+                            question: "",
+                            grade: 1,
+                            correct_answer: "",
+                            options: [{ text: "" }],
+                            notes: "",
+                            question_image: "",
+                            answer_image: "",
+                            explanation: "",
+                        });
+                        setFileImageSolveQuestion(null);
+                        setSolveQuestionImagePreviewUrl(undefined);
+                        setFileImageQuestion(null);
+                        setQuestionImagePreviewUrl(undefined);
+                        setEditingQuestionId(null);
+                    }}>إضافة سؤال جديد</Button>
                 </CardHeader>
 
                 <CardContent className="space-y-3 ">
@@ -117,15 +179,48 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                     {questions.map((q, index) => (
                         <div
                             key={q.id}
-                            className="rounded-md border p-3 cursor-pointer hover:bg-muted"
+                            className="rounded-md border p-2 cursor-pointer hover:bg-muted"
                         >
-                            <p className="font-medium">
-                                السؤال {index + 1}
-                            </p>
+                            <div className="flex gap-1.5 items-start">
+                                <GripVertical className="size-4 " />
 
-                            <p className="text-sm text-muted-foreground truncate">
-                                {q.question}
-                            </p>
+                                <span className="bg-primary size-5 text-xs flex justify-center items-center rounded-full text-white">
+                                    {index + 1}
+                                </span>
+
+                                <div className="space-y-2">
+                                    <p className="text-sm text-muted-foreground truncate">
+                                        {q.question}
+                                    </p>
+
+                                    <div className="flex  gap-1.5">
+                                        <Badge className="text-xs">{q.type === "choice" ? "اختيار من متعدد" : "صح وخطأ"}</Badge>
+                                        <Badge className="text-xs bg-green-100 text-green-600" variant={"secondary"}>{q.grade} درجة</Badge>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-1.5 items-center mt-4">
+                                <Button size={"icon"} variant={"destructive"}>
+                                    <Trash2 className="size-4" />
+                                </Button>
+                                <Button size={"icon"} variant={"ghost"} onClick={() => {
+                                    setEditingQuestionId(q.id.toString());
+                                    form.reset({
+                                        type: q.type,
+                                        question: q.question,
+                                        question_image: q.question_image ?? "",
+                                        answer_image: q.answer_image ?? "",
+                                        correct_answer: q.correct_answer,
+                                        grade: Number(q.grade),
+                                        explanation: q.explanation,
+                                        notes: q.notes,
+                                        options: q.options.map((opt) => ({ text: opt })),
+                                    })
+                                }}>
+                                    <Edit2 className="size-4" />
+                                </Button>
+                            </div>
                         </div>
                     ))}
                 </CardContent>

@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { IApiResponse } from "@/shared/lib/types/api"
 import { Quiz } from "../types/quiz"
-import { postAddQuestionToQuiz, updateQuizAction } from "../apis/quiz.action"
+import { postAddQuestionToQuizAction, updateQuestionAction, updateQuizAction } from "../apis/quiz.action"
 
 export const useGetQuizDetailsQuery = (quizId: string) => {
     return useQuery({
@@ -38,7 +38,19 @@ export const useUpdateQuizMutation = ({ quizId, courseId }: { quizId: string, co
 export const useAddQuestionToQuizMutation = (quizId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: postAddQuestionToQuiz,
+        mutationFn: postAddQuestionToQuizAction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["quiz", quizId]
+            })
+
+        }
+    })
+}
+export const useUpdateQuestionMutation = (quizId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: updateQuestionAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["quiz", quizId]

@@ -28,19 +28,37 @@ export async function updateQuizAction({ values, quizId }: { values: QuizInfoTyp
 }
 
 
-export async function postAddQuestionToQuiz({ values, quizId }: { values: QuestionFormType, quizId: string }) {
+export async function postAddQuestionToQuizAction({ values, quizId }: { values: QuestionFormType, quizId: string }) {
     const token = await getNextAuthToken()
     if (!token?.access_token) return RESPONSES.unauthorized
-
     const payload = {
         ...values,
         options:values.options?.map((o) => ( o.text ))
     }
-
-    console.log("PAYLOAD" , payload)
-
     const res = await fetch(`${process.env.API_URL}/quiz/${quizId}/questions`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+        body: JSON.stringify(payload)
+    })
+    const data: IApiResponse<QuestionFormType> = await res.json()
+    if (!data.status) {
+        throw new Error(data.message || "Add question failed")
+    }
+    return data
+}
+export async function updateQuestionAction({ values, questionId }: { values: QuestionFormType, questionId: string }) {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
+    const payload = {
+        ...values,
+        options:values.options?.map((o) => ( o.text ))
+    }
+    const res = await fetch(`${process.env.API_URL}/quiz/questions/${questionId}`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
