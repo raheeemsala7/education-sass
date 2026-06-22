@@ -8,9 +8,7 @@ import { getCoursesListApi } from '../../apis/courses.api'
 
 
 const CarouselCourses = async () => {
-
     const courses = await getCoursesListApi()
-
 
     if (!courses || !courses.status || !courses.data) {
         return (
@@ -23,7 +21,6 @@ const CarouselCourses = async () => {
             </div>
         )
     }
-
     if ( courses.data.length === 0) {
         return <p>لا يوجد كورسات حاليا</p>
     }

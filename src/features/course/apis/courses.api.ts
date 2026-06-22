@@ -8,11 +8,7 @@ import { getToken } from "next-auth/jwt"
 
 
 export const getCoursesListApi = async () => {
-
     const token = await getNextAuthToken()
-
-
-
     let res = await fetch(`${process.env.API_URL}/courses`, {
         headers: token?.access_token
             ? {
@@ -23,9 +19,9 @@ export const getCoursesListApi = async () => {
 
 
     // لو التوكين expired
-    if (res.status === 401) {
-        res = await fetch(`${process.env.API_URL}/courses`)
-    }
+    // if (res.status === 401) {
+    //     res = await fetch(`${process.env.API_URL}/courses`)
+    // }
     const payload: IApiResponse<ICourse[]> = await res.json()
 
     if (!payload.status) {

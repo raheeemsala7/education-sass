@@ -2,7 +2,6 @@ import { authOptions } from "@/auth";
 import { buttonVariants } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import CustomIllustration from "../../../public/icons/rr";
