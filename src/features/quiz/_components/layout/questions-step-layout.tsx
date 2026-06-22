@@ -8,7 +8,7 @@ import QuestionForm from "../question-form"
 
 const QuestionsStepLayout = ({quizId, courseId} : {quizId : string, courseId : string}) => {
 
-  const { data: payload, isLoading, isError } = useGetQuizDetailsQuery(quizId)
+  const { data: payload, isLoading } = useGetQuizDetailsQuery(quizId)
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-[400px]">
@@ -21,9 +21,6 @@ if (!payload || !payload.status) {
       <p>لا يوجد بيانات لعرضها</p>
     )
   }
-
-  console.log(payload)
-
   const {title , description ,duration, total_grade , questions , allow_resume , max_attempts , random_questions , random_options , show_result_immediately} = payload.data
 
   return (

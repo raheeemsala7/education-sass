@@ -70,7 +70,6 @@ const ChoiceComponent = () => {
                     variant="outline"
                     className={"w-full border-dashed bg-transparent border-2 border-primary text-primary"}
                     onClick={() => {
-                        console.log("Clicked")
                         append({ text: "" })
                     }}
                 >

@@ -35,8 +35,6 @@ type Props = {
 };
 
 const QuestionForm = ({ questions, quizId }: Props) => {
-    console.log(questions)
-
     const { mutateAsync: addQuestion } = useAddQuestionToQuizMutation(quizId)
     const { mutateAsync: updateQuestion } = useUpdateQuestionMutation(quizId)
 
@@ -100,7 +98,6 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                     questionId: editingQuestionId,
                     values,
                 })
-                console.log("FFF", data)
                 if (data.status) {
                     toast.success("Question updated successfully");
                     form.reset({
@@ -115,7 +112,6 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                         explanation: "",
                     });
                     setEditingQuestionId(null);
-                    console.log("TTTTTTTTTT")
                 }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");

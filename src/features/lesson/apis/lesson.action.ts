@@ -85,7 +85,6 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         allow_resume: false
     }
 
-    console.log(payload)
 
     const res = await fetch(`${process.env.API_URL}/lessons/section/${chapterId}`, {
         method: "POST",

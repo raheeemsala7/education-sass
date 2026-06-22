@@ -17,7 +17,6 @@ export const getQuizDetailsApi = async ({ req, quizId }: { req: NextRequest, qui
             ...HEADERS.authorize(token.access_token),
         },
     })
-    console.log("RES :" , res)
     const data = await res.json()
     
     if (!data.status) {

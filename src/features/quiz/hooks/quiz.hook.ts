@@ -11,7 +11,6 @@ export const useGetQuizDetailsQuery = (quizId: string) => {
         queryFn: async () => {
             const res = await fetch(`/api/quiz/${quizId}`)
             const data = await res.json()
-            // console.log(data)
             if (!data.status) {
                 throw new Error(data.message || "Get quiz details failed")
             }
