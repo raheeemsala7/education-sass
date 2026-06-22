@@ -105,25 +105,7 @@ const ChoiceComponent = () => {
                         </Field>
                     )}
                 />
-                <Controller
-                    name="notes"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field>
-                            <div>
-                                <label className="block mb-3">
-                                    ملاحظات إضافية حول هذا السؤال...
-                                </label>
-                                <Input
-                                    {...field} />
-                            </div>
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-
-                        </Field>
-                    )}
-                />
+                
             </div>
         </>
     )

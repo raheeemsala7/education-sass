@@ -43,7 +43,7 @@ if (!payload || !payload.status) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="info" className={"w-full mt-4"}>
-        <QuizInfoForm  courseId={courseId} quizId={quizId} title={title} description={description} duration={duration} total_grade={total_grade} countQuestions={questions.length} max_attempts={max_attempts} allow_resume={allow_resume} />
+        <QuizInfoForm  courseId={courseId} quizId={quizId} title={title} description={description} duration={duration} total_grade={total_grade} countQuestions={questions.length} max_attempts={max_attempts} allow_resume={allow_resume} random_questions={random_questions} random_options={random_options} show_result_immediately={show_result_immediately}  />
       </TabsContent>
       <TabsContent value="questions" className={"w-full mt-4"}>
         <QuestionForm quizId={quizId} questions={questions} />

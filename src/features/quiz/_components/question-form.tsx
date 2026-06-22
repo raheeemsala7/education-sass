@@ -44,6 +44,10 @@ const QuestionForm = ({ questions, quizId }: Props) => {
             grade: 1,
             correct_answer: "",
             options: [{ text: "" }],
+            notes: "",
+            question_image: "",
+            answer_image: "",
+            explanation: "",
         }
     });
     const type = form.watch("type");
@@ -55,31 +59,37 @@ const QuestionForm = ({ questions, quizId }: Props) => {
     const handleSelectQuestionImage = (file: File) => {
         setFileImageQuestion(file);
         setQuestionImagePreviewUrl(URL.createObjectURL(file));
-        form.setValue("imageUrl", file, { shouldValidate: true });
+        form.setValue("question_image", file, { shouldValidate: true });
     };
 
     const handleRemoveQuestionImage = () => {
         setFileImageQuestion(null);
         setQuestionImagePreviewUrl(undefined);
-        form.setValue("imageUrl", "");
+        form.setValue("question_image", "");
     };
     const handleSelectSolveQuestionImage = (file: File) => {
         setFileImageSolveQuestion(file);
         setSolveQuestionImagePreviewUrl(URL.createObjectURL(file));
-        form.setValue("imageUrl", file, { shouldValidate: true });
+        form.setValue("answer_image", file, { shouldValidate: true });
     };
 
     const handleRemoveSolveQuestionImage = () => {
         setFileImageSolveQuestion(null);
         setSolveQuestionImagePreviewUrl(undefined);
-        form.setValue("imageUrl", "");
+        form.setValue("answer_image", "");
     };
 
 
     const onSubmit = async (values: QuestionFormType) => {
         try {
-            const imageUrl = await uploadFileToS3(fileImageQuestion as File);
-            values.imageUrl = imageUrl;
+            if (fileImageQuestion) {
+                const imageUrl = await uploadFileToS3(fileImageQuestion as File);
+                values.question_image = imageUrl;
+            }
+            if (fileImageSolveQuestion) {
+                const solveImageUrl = await uploadFileToS3(fileImageSolveQuestion as File);
+                values.answer_image = solveImageUrl;
+            }
             await addQuestion({
                 values,
                 quizId
@@ -221,77 +231,53 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                     </Field>
                                 )}
                             />
-
-                            {/* grade */}
-
-                            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-                            <Controller
-                                name="grade"
-                                control={form.control}
-                                render={({ field }) => (
-                                    <Field>
-                                        <div>
-                                            <label className="block mb-3">
-                                                الدرجة
-                                            </label>
-
-                                            <Input type="number" {...field} />
-                                        </div>
-                                    </Field>
-                                )}
-                            />
-                            {/* <Controller
-                                    name="imageUrl"
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* grade */}
+                                <Controller
+                                    name="grade"
                                     control={form.control}
-                                    render={({ fieldState }) => (
+                                    render={({ field }) => (
                                         <Field>
                                             <div>
                                                 <label className="block mb-3">
-                                                    إضافة صورة للسؤال (اختياري)
+                                                    الدرجة
                                                 </label>
 
-                                                <label
-                                                    htmlFor="question-image"
-                                                    className="flex items-center justify-center gap-2 h-10 rounded-xl border border-dashed border-[#CBD5E1] bg-[#F8FAFC] cursor-pointer hover:bg-slate-50 transition"
-                                                >
-                                                    <div className="size-6 rounded-full bg-slate-100 flex items-center justify-center">
-                                                        <Upload className="size-3 text-slate-500" />
-                                                    </div>
-
-                                                    <div className="text-center">
-                                                        <p className="font-medium text-sm">
-                                                            اضغط لرفع صورة
-                                                        </p>
-                                                    </div>
-                                                </label>
-
-                                                <Input
-                                                    id="question-image"
-                                                    type="file"
-                                                    className="hidden"
-                                                    accept="image/*"
-                                                    onChange={(e) => {
-                                                        const file = e.target.files?.[0];
-                                                        // هنا ترفع الصورة أو تخزنها في state
-                                                    }}
-                                                />
-
-                                                {fieldState.invalid && (
-                                                    <FieldError errors={[fieldState.error]} />
-                                                )}
+                                                <Input type="number" {...field} />
                                             </div>
                                         </Field>
                                     )}
-                                /> */}
+                                />
+                                {/* Notes */}
+                                <Controller
+                                    name="notes"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field>
+                                            <div>
+                                                <label className="block mb-3">
+                                                    ملاحظات إضافية حول هذا السؤال...
+                                                </label>
+                                                <Input
+                                                    {...field} />
+                                            </div>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+
+                                        </Field>
+                                    )}
+                                />
+                            </div>
 
                             <Controller
-                                name="imageUrl"
+                                name="question_image"
                                 control={form.control}
                                 render={({ fieldState }) => (
                                     <Field>
                                         <FieldLabel> صورة السؤال </FieldLabel>
                                         <UploadCreateMedia
-                                        height="h-42"
+                                            height="h-42"
                                             mediaType="image"
                                             previewUrl={questionImagePreviewUrl}
                                             onSelect={handleSelectQuestionImage}
@@ -303,10 +289,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                     </Field>
                                 )}
                             />
-                            {/* </div> */}
-
                             {/* options */}
-
                             {type === "choice" && (
                                 <ChoiceComponent />
                             )}
@@ -387,13 +370,13 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                             )}
 
                             <Controller
-                                name=""
+                                name="answer_image"
                                 control={form.control}
                                 render={({ fieldState }) => (
                                     <Field>
                                         <FieldLabel> صورة لحل السؤال </FieldLabel>
                                         <UploadCreateMedia
-                                        height="h-42"
+                                            height="h-42"
                                             mediaType="image"
                                             previewUrl={solveQuestionImagePreviewUrl}
                                             onSelect={handleSelectSolveQuestionImage}
