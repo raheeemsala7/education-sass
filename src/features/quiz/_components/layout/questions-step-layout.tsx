@@ -5,6 +5,7 @@ import QuizInfoForm from "../quiz-info-form"
 import { useGetQuizDetailsQuery } from "../../hooks/quiz.hook"
 import { Loader2 } from "lucide-react"
 import QuestionForm from "../question-form"
+import QuizResult from "../quiz-result"
 
 const QuestionsStepLayout = ({quizId, courseId} : {quizId : string, courseId : string}) => {
 
@@ -23,6 +24,7 @@ if (!payload || !payload.status) {
   }
   const {title , description ,duration, total_grade , questions , allow_resume , max_attempts , random_questions , random_options , show_result_immediately} = payload.data
 
+  console.log(payload.data)
   return (
     <Tabs defaultValue="info" className="flex justify-center items-center">
       <TabsList className={"w-full max-w-3xl rounded-sm p-0"}>
@@ -45,7 +47,9 @@ if (!payload || !payload.status) {
       <TabsContent value="questions" className={"w-full mt-4"}>
         <QuestionForm quizId={quizId} questions={questions} />
       </TabsContent>
-      <TabsContent value="view">View your questions here.</TabsContent>
+      <TabsContent value="view" className={"w-full mt-4"}>
+        <QuizResult questions={questions} total_grade={total_grade} duration={duration}/>
+      </TabsContent>
     </Tabs>
   )
 }
