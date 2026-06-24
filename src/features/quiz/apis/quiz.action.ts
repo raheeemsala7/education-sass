@@ -72,3 +72,21 @@ export async function updateQuestionAction({ values, questionId }: { values: Que
     }
     return data
 }
+export async function deleteQuestionAction({ questionId }: {  questionId: string }) {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
+
+    const res = await fetch(`${process.env.API_URL}/quiz/questions/${questionId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+    })
+    const data: IApiResponse<QuestionFormType> = await res.json()
+    if (!data.status) {
+        throw new Error(data.message || "Add question failed")
+    }
+    return data
+}

@@ -19,7 +19,7 @@ import { Question } from "../types/quiz";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { QuestionFormType, questionSchema } from "../schema/quiz.schema";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { CheckCircle, Edit2, GripVertical, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
+import { CheckCircle, Edit2, GripVertical, Loader2, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import ChoiceComponent from "./choice-component";
 import { useAddQuestionToQuizMutation, useUpdateQuestionMutation } from "../hooks/quiz.hook";
@@ -28,6 +28,7 @@ import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-i
 import { useState } from "react";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
 import { Badge } from "@/shared/components/ui/badge";
+import DeleteLessonModal from "./delete-question-modal";
 
 type Props = {
     questions: Question[];
@@ -35,8 +36,8 @@ type Props = {
 };
 
 const QuestionForm = ({ questions, quizId }: Props) => {
-    const { mutateAsync: addQuestion } = useAddQuestionToQuizMutation(quizId)
-    const { mutateAsync: updateQuestion } = useUpdateQuestionMutation(quizId)
+    const { mutateAsync: addQuestion, isPending: isPendingCreate } = useAddQuestionToQuizMutation(quizId)
+    const { mutateAsync: updateQuestion, isPending: isPendingEdit } = useUpdateQuestionMutation(quizId)
 
     const form = useForm<QuestionFormType>({
         resolver: zodResolver(questionSchema),
@@ -112,6 +113,10 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                         explanation: "",
                     });
                     setEditingQuestionId(null);
+                    setFileImageSolveQuestion(null)
+                    setFileImageQuestion(null)
+                    setQuestionImagePreviewUrl("")
+                    setSolveQuestionImagePreviewUrl("")
                 }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
@@ -135,7 +140,10 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                         answer_image: "",
                         explanation: "",
                     });
-
+                    setFileImageSolveQuestion(null)
+                    setFileImageQuestion(null)
+                    setQuestionImagePreviewUrl("")
+                    setSolveQuestionImagePreviewUrl("")
                 }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
@@ -197,9 +205,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                             </div>
 
                             <div className="flex justify-end gap-1.5 items-center mt-4">
-                                <Button size={"icon"} variant={"destructive"}>
-                                    <Trash2 className="size-4" />
-                                </Button>
+                                <DeleteLessonModal quizId={quizId} questionId={q.id.toString() } />
                                 <Button size={"icon"} variant={"ghost"} onClick={() => {
                                     setEditingQuestionId(q.id.toString());
                                     form.reset({
@@ -483,10 +489,19 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                 <Button variant={"secondary"}>
                                     الغاء
                                 </Button>
-                                <Button type="submit">
-                                    <span>
-                                        حفظ السؤال
-                                    </span>
+                                <Button type="submit" disabled={!editingQuestionId ? isPendingEdit : isPendingCreate}>
+                                    {isPendingCreate || isPendingEdit ?
+                                        <>
+                                            <Loader2 className="size-4 animate-spin" />
+                                            <span>
+                                                حفظ السؤال
+                                            </span>
+                                        </>
+                                        :
+                                        <span>
+                                            حفظ السؤال
+                                        </span>
+                                    }
                                     <SaveIcon />
                                 </Button>
                             </div>
