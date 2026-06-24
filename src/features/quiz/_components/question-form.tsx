@@ -220,6 +220,8 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                         notes: q.notes,
                                         options: q.options.map((opt) => ({ text: opt })),
                                     })
+                                    setSolveQuestionImagePreviewUrl(q.answer_image);
+                                    setQuestionImagePreviewUrl(q.question_image);
                                 }}>
                                     <Edit2 className="size-4" />
                                 </Button>
@@ -477,8 +479,8 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                                 شرح حل هذا السؤال
                                             </label>
                                             <Textarea
-                                            placeholder="اكتب حل هذا السؤال"
-                                            rows={6}
+                                                placeholder="اكتب حل هذا السؤال"
+                                                rows={6}
                                                 {...field} />
                                         </div>
                                         {fieldState.invalid && (
