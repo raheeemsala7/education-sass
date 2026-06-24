@@ -26,7 +26,7 @@ if (!payload || !payload.status) {
 
   console.log(payload.data)
   return (
-    <Tabs defaultValue="info" className="flex justify-center items-center">
+    <Tabs defaultValue="view" className="flex justify-center items-center">
       <TabsList className={"w-full max-w-3xl rounded-sm p-0"}>
         <TabsTrigger className={`p-4 rounded-sm data-active:bg-[#EFFFF8] data-active:text-[#126870] border-[#E2E8F0] flex items-center gap-2 group`} value="info">
           <span className="group-data-active:bg-[#126870] bg-[#E2E8F0] text-[#64748B] group-data-active:text-white font-semibold size-6 rounded-full text-xs flex justify-center items-center">1</span>

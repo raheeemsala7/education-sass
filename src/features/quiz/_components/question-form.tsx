@@ -29,6 +29,7 @@ import { useState } from "react";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
 import { Badge } from "@/shared/components/ui/badge";
 import DeleteLessonModal from "./delete-question-modal";
+import { Textarea } from "@/shared/components/ui/textarea";
 
 type Props = {
     questions: Question[];
@@ -205,7 +206,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                             </div>
 
                             <div className="flex justify-end gap-1.5 items-center mt-4">
-                                <DeleteLessonModal quizId={quizId} questionId={q.id.toString() } />
+                                <DeleteLessonModal quizId={quizId} questionId={q.id.toString()} />
                                 <Button size={"icon"} variant={"ghost"} onClick={() => {
                                     setEditingQuestionId(q.id.toString());
                                     form.reset({
@@ -465,6 +466,28 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                     </div>
                                 </>
                             )}
+                            {/* Explanation */}
+                            <Controller
+                                name="explanation"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field>
+                                        <div>
+                                            <label className="block font-medium mb-3">
+                                                شرح حل هذا السؤال
+                                            </label>
+                                            <Textarea
+                                            placeholder="اكتب حل هذا السؤال"
+                                            rows={6}
+                                                {...field} />
+                                        </div>
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+
+                                    </Field>
+                                )}
+                            />
 
                             <Controller
                                 name="answer_image"
