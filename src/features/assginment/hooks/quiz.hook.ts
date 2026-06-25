@@ -1,0 +1,70 @@
+"use client"
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { IApiResponse } from "@/shared/lib/types/api"
+import { Quiz } from "../types/quiz"
+// import { deleteQuestionAction, postAddQuestionToQuizAction, updateQuestionAction, updateQuizAction } from "../apis/quiz.action"
+
+export const useGetAssginmentDetailsQuery = (assginmentId: string) => {
+    return useQuery({
+        queryKey: ["quiz", assginmentId],
+        queryFn: async () => {
+            const res = await fetch(`/api/assginment/${assginmentId}`)
+            const data = await res.json()
+            if (!data.status) {
+                throw new Error(data.message || "Get quiz details failed")
+            }
+            return data as IApiResponse<Quiz>
+        },
+    })
+}
+
+// export const useUpdateQuizMutation = ({ quizId, courseId }: { quizId: string, courseId: string }) => {
+//     const queryClient = useQueryClient()
+//     return useMutation({
+//         mutationFn: updateQuizAction,
+//         onSuccess: () => {
+//             queryClient.invalidateQueries({
+//                 queryKey: ["quiz", quizId]
+//             });
+//             queryClient.invalidateQueries({
+//                 queryKey: ["courseAdmin", courseId]
+//             });
+//         }
+//     })
+// }
+
+// export const useAddQuestionToQuizMutation = (quizId: string) => {
+//     const queryClient = useQueryClient()
+//     return useMutation({
+//         mutationFn: postAddQuestionToQuizAction,
+//         onSuccess: () => {
+//             queryClient.invalidateQueries({
+//                 queryKey: ["quiz", quizId]
+//             })
+
+//         }
+//     })
+// }
+// export const useUpdateQuestionMutation = (quizId: string) => {
+//     const queryClient = useQueryClient()
+//     return useMutation({
+//         mutationFn: updateQuestionAction,
+//         onSuccess: () => {
+//             queryClient.invalidateQueries({
+//                 queryKey: ["quiz", quizId]
+//             })
+//         }
+//     })
+// }
+// export const useDeleteQuestionMutation = (quizId: string) => {
+//     const queryClient = useQueryClient()
+//     return useMutation({
+//         mutationFn: deleteQuestionAction,
+//         onSuccess: () => {
+//             queryClient.invalidateQueries({
+//                 queryKey: ["quiz", quizId]
+//             })
+//         }
+//     })
+// }

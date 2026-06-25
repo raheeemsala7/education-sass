@@ -15,6 +15,7 @@ import {
     DialogTrigger,
 } from "@/shared/components/ui/dialog"
 import { IAdminCourse, ICourse } from '../types/course'
+import { buildUrl } from '@/shared/lib/utils'
 // import ListStudents from './list-students'
 
 
@@ -62,7 +63,7 @@ const AdminCourseCard = ({ data }: IProps) => {
                 </Badge>
             </div>
             <div className='h-80 relative'>
-                {/* <Image src={`${data.thumbnail}`}
+                {/* <Image src={buildUrl(data.thumbnail)}
                 alt={data.title}
                 height={320}
                 width={400}

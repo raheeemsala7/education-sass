@@ -81,6 +81,9 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         quiz: {
             deadline: "2026-06-17 12:30:00"
         },
+        assignment: {
+            deadline: "2026-06-17 12:30:00"
+        },
         deadline: "2026-06-17 12:30:00",
         allow_resume: false
     }
@@ -108,6 +111,7 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         quiz_id: number
     }>
 }
+
 
 export const deleteLessonAction = async (lessonId: number) => {
     const token = await getNextAuthToken()

@@ -55,6 +55,16 @@ export const useCreateQuizLessonMutation = (courseId: string) => {
         }
     })
 }
+export const useCreateAssginmentLessonMutation = (courseId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: createQuizLessonAction,
+        onSuccess: (data) => {
+            toast.success(data.message)
+            queryClient.invalidateQueries({ queryKey: ["courseAdmin", courseId] })
+        }
+    })
+}
 
 
 export const useReorderLessonsMutation = (courseId: string) => {

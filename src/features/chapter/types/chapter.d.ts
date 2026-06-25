@@ -19,9 +19,10 @@ export interface Lesson {
     content: string,
     content_type: string,
     quiz_id: string,
+    assignment_id: string,
     order_index: number,
     is_active: string,
     video_url?: string,
     live_url?: string,
-    type: "pdf" | "video" | "live" | "quiz",
+    type: "pdf" | "video" | "live" | "quiz" | "assignment",
 }

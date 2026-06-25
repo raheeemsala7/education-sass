@@ -23,6 +23,7 @@ import { useState } from "react";
 import { VideoLesson } from "./videoLesson";
 import LinkLesson from "./linkLesson";
 import QuizLesson from "@/features/quiz/_components/quiz-lesson";
+import AssginmentLesson from "@/features/assginment/_components/assginment-lesson";
 
 interface IProps {
     isEdit: boolean;
@@ -32,7 +33,7 @@ interface IProps {
     title?: string;
     content?: string;
     description?: string;
-    type: "pdf" | "video" | "live" | "quiz";
+    type: "pdf" | "video" | "live" | "quiz" | "assignment";
     video_url?: string;
     article_url?: string;
     live_url?: string;
@@ -52,7 +53,7 @@ const LessonModalComponent = ({
 }: IProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [contentType, setContentType] = useState<
-        "video" | "live" | "pdf" | "quiz"
+        "video" | "live" | "pdf" | "quiz" | "assignment"
     >(type || "video");
     function handleOpenChange(open: boolean) {
         // if (!open) {
@@ -123,7 +124,7 @@ const LessonModalComponent = ({
                             <Label htmlFor="lesson-type">نوع الدرس</Label>
                             <Select
                                 onValueChange={(value) =>
-                                    setContentType(value as "video" | "live" | "pdf" | "quiz")
+                                    setContentType(value as "video" | "live" | "pdf" | "quiz" | "assignment")
                                 }
                                 defaultValue={contentType}
                             >
@@ -136,6 +137,7 @@ const LessonModalComponent = ({
                                         <SelectItem value="quiz">امتحان</SelectItem>
                                         <SelectItem value="video">فيديو</SelectItem>
                                         <SelectItem value="live">لينك</SelectItem>
+                                        <SelectItem value="assignment">واجب</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
@@ -168,7 +170,10 @@ const LessonModalComponent = ({
                             />
                         ) : contentType === "quiz" ?
                             <QuizLesson isEdit={false} title={title || ""} description={description || ""} lessonId={lessonId || 1} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
-                            : null}
+                            : contentType === "assignment" ?
+                                <AssginmentLesson isEdit={false} title={title || ""} description={description || ""} lessonId={lessonId || 1} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                                : null
+                        }
                     </>
                 )}
 

@@ -27,6 +27,7 @@ import {
 import {
     ChevronDown,
     ChevronRight,
+    FileEdit,
     FileText,
     GripVertical,
     Link2Icon,
@@ -107,11 +108,12 @@ export default function CourseStructure({ id, data }: IProps) {
             title: lesson.title,
             description: lesson.description,
             order: lesson.order_index,
-            type: lesson.type as "pdf" | "video" | "live" | "quiz",
+            type: lesson.type as "pdf" | "video" | "live" | "quiz" | "assignment",
             video_url: lesson.video_url,
             live_url: lesson.live_url,
             content: lesson.content,
             quiz_id: lesson.quiz_id,
+            assignment_id: lesson.assignment_id,
         }))
     })) || []
     const [items, setItems] = useState(initalItems)
@@ -129,12 +131,13 @@ export default function CourseStructure({ id, data }: IProps) {
                     id: lesson.id,
                     title: lesson.title,
                     order: lesson.order_index,
-                    type: lesson.type as "pdf" | "video" | "live" | "quiz",
+                    type: lesson.type as "pdf" | "video" | "live" | "quiz" | "assignment",
                     content: lesson.content,
                     description: lesson.description,
                     video_url: lesson.video_url,
                     live_url: lesson.live_url,
                     quiz_id: lesson.quiz_id,
+                    assignment_id: lesson.assignment_id,
                 }))
             })) || []
             return updateItems
@@ -339,7 +342,11 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                         <FileText className="size-4 text-primary" />
                                                                                         <span className='group-hover:text-primary underline group-hover:underline-primary'>{lesson.title}</span>
                                                                                     </Link>
-                                                                                    :
+                                                                                    : lesson.type === "assignment" ? 
+                                                                                      <Link className="flex items-center gap-2  group-hover:underline group-hover:text-primary" href={`/admin/courses/${id}/assignments/${lesson.assignment_id}`}>
+                                                                                        <FileEdit className="size-4 text-primary" />
+                                                                                        <span className='group-hover:text-primary underline group-hover:underline-primary'>{lesson.title}</span>
+                                                                                    </Link> : 
                                                                                     <>
                                                                                         {
                                                                                             lesson.type === "video" ? (

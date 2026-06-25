@@ -4,3 +4,10 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+
+export const buildUrl = (path: string) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+
+  return `${baseUrl}/storage/app/${path}`;
+};
