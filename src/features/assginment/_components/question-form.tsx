@@ -22,7 +22,6 @@ import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { CheckCircle, Edit2, GripVertical, Loader2, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import ChoiceComponent from "./choice-component";
-import { useAddQuestionToQuizMutation, useUpdateQuestionMutation } from "../hooks/quiz.hook";
 import { toast } from "sonner";
 import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-image";
 import { useState } from "react";
