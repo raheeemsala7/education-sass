@@ -1,7 +1,6 @@
 "use client"
 import { Card, CardContent, CardHeader } from '@/shared/components/ui/card'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { quizInfoSchema } from '../schema/assginment.schema'
 import { Field, FieldError } from '@/shared/components/ui/field'
@@ -9,9 +8,7 @@ import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Switch } from '@/shared/components/ui/switch'
 import { Button } from '@/shared/components/ui/button'
-import { ArrowLeft, Loader2 } from 'lucide-react'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
-import { useUpdateQuizMutation } from '../hooks/quiz.hook'
 import { toast } from 'sonner'
 
 interface IProps {

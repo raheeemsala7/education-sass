@@ -34,14 +34,30 @@ export interface ICourse {
     updated_at: string;
 }
 
-export interface IAdminCourse extends ICourse {
-    is_active: boolean;
-    enrollments_count: number;
+export interface IAdminCourse {
+    id: number,
+    title: string,
+    thumbnail: string,
+    price: number,
+    is_free: boolean,
+    students_count: number,
+    lessons_count: number,
+    quizzes_count: number,
+    status: "published" | "draft"
 }
 
-export interface ICourseResponse {
-    status: "success" | "error";
-    data: ICourse;
+export interface ICoursesOverviewResponse {
+    courses: IAdminCourse[]
+    pagination: {
+        current_page: number
+        page_size: number
+        total_items: number
+        total_pages: number
+    }
+    metadata: {
+        totalStudents: number
+        totalEnrolledStudents: number
+    }
 }
 
 

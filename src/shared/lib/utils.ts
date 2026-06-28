@@ -9,5 +9,5 @@ export function cn(...inputs: ClassValue[]) {
 export const buildUrl = (path: string) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
-  return `${baseUrl}/storage/app/${path}`;
+  return `${baseUrl}/storage/${path}`;
 };

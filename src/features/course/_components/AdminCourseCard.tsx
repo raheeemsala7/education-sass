@@ -24,83 +24,66 @@ interface IProps {
 }
 
 const AdminCourseCard = ({ data }: IProps) => {
+    console.log(buildUrl(data.thumbnail))
     return (
         <Card className='group relative py-0 gap-0'>
-            <div className='absolute top-2 left-2 z-10'>
-                <DropdownMenu>
-                    <DropdownMenuTrigger >
-                        <Button variant={"secondary"} size={"icon"} className='bg-card'>
-                            <MoreVertical className='size-4' />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className='w-48 bg-card' >
-                        <DropdownMenuItem >
-                            <Link href={`/admin/courses/${data.id}/edit`}>
-                                <Pencil className='size-4 me-2' />
-                                تعديل الكورس
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem >
-                            <Link href={`/admin/courses/${data.id}`}>
-                                <Eye className='size-4 me-2' />
-                                عرض الكورس
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem >
-                            <Link href={`/admin/courses/${data.id}/delete`}>
-                                <Trash2 className='size-4 me-2 text-destructive' />
-                                حذف الكورس
-                            </Link>
-                        </DropdownMenuItem>
-
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
             <div className='absolute top-2 right-2 z-10'>
-                <Badge variant={data.is_active ? "default" : "destructive"}>
-                    {data.is_active ? "مفعل" : "غير مفعل"}
+                <Badge variant={data.status === "published" ? "default" : "destructive"}>
+                    {data.status === "published" ? "مفعل" : "غير مفعل"}
                 </Badge>
             </div>
             <div className='h-80 relative'>
-                {/* <Image src={buildUrl(data.thumbnail)}
-                alt={data.title}
-                height={320}
-                width={400}
-                className='w-full rounded-t-lg  h-full object-fill'
-            /> */}
+                <Image src={buildUrl(data.thumbnail)}
+                    alt={data.title}
+                    height={320}
+                    width={400}
+                    className='w-full rounded-t-lg  h-full object-fill'
+                    unoptimized
+                />
             </div>
 
             <CardContent className='flex flex-col gap-3 py-4'>
                 <Link href={`/admin/courses/${data.id}`}
                     className='font-medium text-lg line-clamp-2 hover:underline 
-                    group-hover:text-primary transition-colors'>
+                    group-hover:text-primary transition-colors text-center'>
                     {data.title}
                 </Link>
-                <div className="line-clamp-2 text-sm text-muted-foreground leading-tight ">
-                    {/* <RenderDescription  description={data.description} /> */}
-                </div>
-                <div className='mt-4 flex items-center gap-x-4'>
-                    <div className='flex items-center gap-2'>
-                        <Euro className='size-6 p-1 rounded-md text-primary bg-primary/10' />
-                        <p className='text-sm text-nowrap'>{data.price} جنيهًا</p>
+                <div className='grid grid-cols-3 gap-0.5'>
+                    <div className='space-y-2 text-center'>
+                        <p className='font-semibold'>{data.students_count}</p>
+                        <span className='text-[#64748B]'>طالب</span>
                     </div>
-                    <div className='flex items-center gap-2'>
-                        <School className='size-6 p-1 rounded-md text-primary bg-primary/10' />
-                        <p className='flex items-center gap-1 text-sm'>
-                            <span className='font-semibold'>{data.enrollments_count || 0}</span>
-                            <span className='text-nowrap'> عدد الطلاب المشتركين</span>
-                        </p>
+                    <div className='space-y-2 text-center'>
+                        <p className='font-semibold'>{data.lessons_count}</p>
+                        <span className='text-[#64748B]'>الدرس</span>
+                    </div>
+                    <div className='space-y-2 text-center'>
+                        <p className='font-semibold'>{data.quizzes_count}</p>
+                        <span className='text-[#64748B]'>اختبار</span>
                     </div>
                 </div>
-                <div className="flex gap-4 mt-3">
-                    <Link href={`/admin/courses/${data.id}/edit`} className={buttonVariants({ className: "w-full flex-1" })}>
-                        تعديل الكورس <ArrowRight className='size-4' />
+
+                <div className="flex justify-between items-center">
+                    <p>{data.price}ج.م</p>
+                    <Badge className='bg-[#F3E8FF] text-[#7E22CE]'>{data.is_free ? "مجاني" : "مدفوعه"}</Badge>
+                </div>
+
+                <div className='flex justify-center gap-4 items-center'>
+                    <Link href={`/admin/courses/${data.id}/edit`}>
+                        <Pencil className='size-5 me-2' />
                     </Link>
+                    <Link href={`/admin/courses/${data.id}`}>
+                        <Eye className='size-5 me-2' />
+                    </Link>
+                    <Link href={`/admin/courses/${data.id}/delete`}>
+                        <Trash2 className='size-5 me-2 text-destructive' />
+                    </Link>
+                </div>
+
 
                     <Dialog>
                         <DialogTrigger >
-                            <Button className='flex-1 w-full' variant="outline">Open Dialog</Button>
+                            <Button className='flex-1 w-full' variant="outline">أضافة طلاب لكورس</Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-sm">
                             <DialogHeader>
@@ -112,9 +95,8 @@ const AdminCourseCard = ({ data }: IProps) => {
                             {/* <ListStudents title={data.title} courseId={data.id} /> */}
                         </DialogContent>
                     </Dialog>
-                </div>
             </CardContent>
-        </Card>
+        </Card >
 
     )
 }
