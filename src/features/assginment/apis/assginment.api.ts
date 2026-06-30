@@ -1,9 +1,9 @@
 import { HEADERS } from "@/shared/constant/api.constant"
 import { RESPONSES } from "@/shared/constant/api.responses"
 import { IApiResponse } from "@/shared/lib/types/api"
-import { Quiz } from "../types/quiz"
 import { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt"
+import { Assginment } from "../types/assginment"
 
 export const getAssginmentDetailsApi = async ({ req, quizId }: { req: NextRequest, quizId: string }) => {
     const token = await getToken({ req })
@@ -18,9 +18,9 @@ export const getAssginmentDetailsApi = async ({ req, quizId }: { req: NextReques
         },
     })
     const data = await res.json()
-    
+
     if (!data.status) {
         throw new Error(data.message || "Get quiz details failed")
     }
-    return data as IApiResponse<Quiz>
-   }
+    return data as IApiResponse<Assginment>
+}

@@ -1,4 +1,4 @@
-import { getAssginmentDetailsApi } from "@/features/assginment/apis/quiz.api";
+import { getAssginmentDetailsApi } from "@/features/assginment/apis/assginment.api";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(

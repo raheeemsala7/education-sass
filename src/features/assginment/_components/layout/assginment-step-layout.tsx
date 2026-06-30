@@ -1,11 +1,9 @@
 "use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
-import QuizInfoForm from "../assginment-info-form"
-import { useGetAssginmentDetailsQuery } from "../../hooks/quiz.hook"
+import { useGetAssginmentDetailsQuery } from "../../hooks/assginment.hook"
 import { Loader2 } from "lucide-react"
 import QuestionForm from "../question-form"
-import QuizResult from "../quiz-result"
 import AssginmentInfoForm from "../assginment-info-form"
 
 const AssginmentStepLayout = ({assginmentId, courseId} : {assginmentId : string, courseId : string}) => {
@@ -46,7 +44,7 @@ if (!payload || !payload.status) {
         <AssginmentInfoForm  courseId={courseId} assginmentId={assginmentId} title={title} description={description} duration={duration} total_grade={total_grade} countQuestions={questions.length} max_attempts={max_attempts} allow_resume={allow_resume} random_questions={random_questions} random_options={random_options} show_result_immediately={show_result_immediately}  />
       </TabsContent>
       <TabsContent value="questions" className={"w-full mt-4"}>
-        <QuestionForm quizId={assginmentId} questions={questions} />
+        {/* <QuestionForm quizId={assginmentId} questions={questions} /> */}
       </TabsContent>
       <TabsContent value="view" className={"w-full mt-4"}>
         {/* <QuizResult questions={questions} total_grade={total_grade} duration={duration}/> */}

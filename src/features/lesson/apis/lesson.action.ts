@@ -79,14 +79,17 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
     const payload = {
         ...values,
         quiz: {
-            deadline: "2026-06-17 12:30:00"
+            deadline: "2026-06-17 12:30:00",
+            is_scheduled:false
         },
         assignment: {
             deadline: "2026-06-17 12:30:00"
         },
         deadline: "2026-06-17 12:30:00",
-        allow_resume: false
+        allow_resume: false,
     }
+
+
 
 
     const res = await fetch(`${process.env.API_URL}/lessons/section/${chapterId}`, {
@@ -98,6 +101,7 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         },
         body: JSON.stringify(payload)
     })
+    console.log(res)
     const data: IApiResponse<{
         id: number,
         quiz_id: number

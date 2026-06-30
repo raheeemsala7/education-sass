@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader } from '@/shared/components/ui/card'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { quizInfoSchema } from '../schema/assginment.schema'
+import { assginmentInfoSchema } from '../schema/assginment.schema'
 import { Field, FieldError } from '@/shared/components/ui/field'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -10,6 +10,7 @@ import { Switch } from '@/shared/components/ui/switch'
 import { Button } from '@/shared/components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
 import { toast } from 'sonner'
+import { AssginmentInfoType } from '../types/assginment'
 
 interface IProps {
     title: string;
@@ -25,24 +26,17 @@ interface IProps {
     random_options: boolean;
     show_result_immediately: boolean;
 }
-const AssginmentInfoForm = ({ title, description, duration, total_grade, countQuestions, assginmentId, courseId, max_attempts, allow_resume, random_questions, random_options, show_result_immediately }: IProps) => {
+const AssginmentInfoForm = ({ title, description, duration, total_grade, countQuestions, assginmentId, courseId, }: IProps) => {
     // const { mutateAsync, isPending } = useUpdateQuizMutation({ assginmentId, courseId })
-    const form = useForm<QuizInfoType>({
-        resolver: zodResolver(quizInfoSchema),
+    const form = useForm<AssginmentInfoType>({
+        resolver: zodResolver(assginmentInfoSchema),
         defaultValues: {
             title,
             description,
-            duration: duration ?? 60,
-            random_questions: true,
-            random_options: false,
-            show_result_immediately: false,
-            allow_resume: Boolean(allow_resume),
-            max_attempts: String(max_attempts),
-            deadline: '2026-06-17 12:30:00',
         }
     })
 
-    const onSubmit = async (values: QuizInfoType) => {
+    const onSubmit = async (values: AssginmentInfoType) => {
         try {
             // await mutateAsync({
             //     values,
@@ -153,152 +147,6 @@ const AssginmentInfoForm = ({ title, description, duration, total_grade, countQu
                         </div>
 
 
-                    </div>
-                </CardContent>
-            </Card>
-            <Card className="w-full mt-6">
-                <CardHeader className='text-center text-base font-semibold'>
-                    إعدادات الامتحان
-                </CardHeader>
-                <CardContent className='space-y-4'>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
-                        <Controller
-                            name='random_questions'
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field>
-                                    <div className='flex justify-between items-center'>
-                                        <div>
-                                            <h6 className='font-bold text-base '>عشوائية ترتيب الأسئلة</h6>
-                                            <p className='text-[#94A3B8]'>عرض الأسئلة بترتيب عشوائي لكل طالب</p>
-                                        </div>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError
-                                            className="text-red-500"
-                                            errors={[fieldState.error]}
-                                        />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name='random_options'
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field>
-                                    <div className='flex justify-between items-center'>
-                                        <div>
-                                            <h6 className='font-bold text-base'>عشوائية ترتيب الأسئلة</h6>
-                                            <p className='text-[#94A3B8]'>عرض الأسئلة بترتيب عشوائي لكل طالب</p>
-                                        </div>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError
-                                            className="text-red-500"
-                                            errors={[fieldState.error]}
-                                        />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
-                        <Controller
-                            name='show_result_immediately'
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field>
-                                    <div className='flex justify-between items-center'>
-                                        <div>
-                                            <h6 className='font-bold text-base '>عرض النتائج مريده</h6>
-                                            <p className='text-[#94A3B8]'>عرض النتائج مريده للطالب</p>
-                                        </div>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError
-                                            className="text-red-500"
-                                            errors={[fieldState.error]}
-                                        />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name='allow_resume'
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field>
-                                    <div className='flex justify-between items-center'>
-                                        <div>
-                                            <h6 className='font-bold text-base'>الرجاع للأسئلة بعد الامتحان</h6>
-                                            <p className='text-[#94A3B8]'>الرجاع للأسئلة بعد الامتحان للطالب</p>
-                                        </div>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError
-                                            className="text-red-500"
-                                            errors={[fieldState.error]}
-                                        />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
-                        <Controller
-                            name='max_attempts'
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field>
-                                    <div className='flex justify-between items-center'>
-                                        <div>
-                                            <h6 className='font-bold text-base'>الرجاع للأسئلة بعد الامتحان</h6>
-                                            <p className='text-[#94A3B8]'>الرجاع للأسئلة بعد الامتحان للطالب</p>
-                                        </div>
-                                        <Select
-                                            value={field.value}
-                                            onValueChange={field.onChange}
-                                        >
-                                            <SelectTrigger className="w-full max-w-36">
-                                                <SelectValue placeholder="Select a fruit" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectItem value="1">محاوله واحده</SelectItem >
-                                                    <SelectItem value="2">محاولتين</SelectItem >
-                                                    <SelectItem value="3">3 محاولات</SelectItem >
-                                                    <SelectItem value="4">4 محاولات</SelectItem >
-                                                    <SelectItem value="5">5 محاولات</SelectItem >
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError
-                                            className="text-red-500"
-                                            errors={[fieldState.error]}
-                                        />
-                                    )}
-                                </Field>
-                            )}
-                        />
                     </div>
                 </CardContent>
             </Card>
