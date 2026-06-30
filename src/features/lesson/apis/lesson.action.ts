@@ -6,7 +6,7 @@ import { getNextAuthToken } from "@/shared/lib/auth.util"
 import { LessonVideoRequest, LinkLessonType, UpdateLessonVideoRequest } from "../types/lesson"
 import { Lesson } from "@/features/chapter/types/chapter"
 import { IApiResponse } from "@/shared/lib/types/api"
-import { QuizInfoType } from "@/features/quiz/types/quiz"
+import { QuizCreateType, QuizInfoType } from "@/features/quiz/types/quiz"
 
 
 export const createLessonAction = async ({ chapterId, values }: { chapterId: number, values: LessonVideoRequest }) => {
@@ -80,7 +80,7 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         ...values,
         quiz: {
             deadline: "2026-06-17 12:30:00",
-            is_scheduled:false
+            is_scheduled: false
         },
         assignment: {
             deadline: "2026-06-17 12:30:00"
@@ -88,10 +88,6 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         deadline: "2026-06-17 12:30:00",
         allow_resume: false,
     }
-
-
-
-
     const res = await fetch(`${process.env.API_URL}/lessons/section/${chapterId}`, {
         method: "POST",
         headers: {
@@ -101,7 +97,6 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
         },
         body: JSON.stringify(payload)
     })
-    console.log(res)
     const data: IApiResponse<{
         id: number,
         quiz_id: number
@@ -116,6 +111,33 @@ export const createQuizLessonAction = async ({ chapterId, values }: { chapterId:
     }>
 }
 
+export const updateQuizLessonAction = async ({ values, quiz_id }: { values: QuizCreateType, quiz_id: string }) => {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
+
+    const res = await fetch(`${process.env.API_URL}/quiz/edit/${quiz_id}}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+        body: JSON.stringify(values)
+    })
+    const data: IApiResponse<{
+        id: number,
+        quiz_id: number
+    }> = await res.json()
+    console.log(data)
+
+    if (!data.status) {
+        throw new Error(data.message || "Create lesson failed")
+    }
+    return data as IApiResponse<{
+        id: number,
+        quiz_id: number
+    }>
+}
 
 export const deleteLessonAction = async (lessonId: number) => {
     const token = await getNextAuthToken()

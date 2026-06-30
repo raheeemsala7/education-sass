@@ -95,6 +95,7 @@ interface IProps {
 export default function CourseStructure({ id, data }: IProps) {
     const { mutateAsync: reorderChapters } = useReorderChaptersMutation(id)
     const { mutateAsync: reorderLessons } = useReorderLessonsMutation(id)
+    console.log(data)
 
 
     const initalItems = data.map((chapter) => ({
@@ -240,6 +241,7 @@ export default function CourseStructure({ id, data }: IProps) {
             );
         }
     }
+    console.log(initalItems)
 
     return (
         <DndContext
@@ -372,6 +374,8 @@ export default function CourseStructure({ id, data }: IProps) {
                                                                                     key={lesson.id}
                                                                                     video_url={lesson.video_url}
                                                                                     live_url={lesson.live_url}
+                                                                                    quiz_id={lesson.quiz_id}
+                                                                                    // assignment_id={lesson.assignment_id}
                                                                                 />
                                                                                 <DeleteLessonModal courseId={id} lessonId={lesson.id} disabled={uploads[lesson.id]?.status === "uploading"} />
 

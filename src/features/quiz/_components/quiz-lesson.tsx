@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { QuizCreateType } from "../types/quiz";
 import { QuizCreateSchema } from "../schema/quiz.schema";
-import { useCreateLinkLessonMutation, useCreateQuizLessonMutation } from "@/features/lesson/hooks/lesson.hook";
+import { useCreateLinkLessonMutation, useCreateQuizLessonMutation, useUpdateQuizLessonMutation } from "@/features/lesson/hooks/lesson.hook";
 import { useRouter } from "next/navigation";
 
 
@@ -19,7 +19,7 @@ interface IProps {
     isEdit: Boolean;
     courseId: string;
     chapterId: number;
-    lessonId: number;
+    quiz_id: string;
     setIsOpen: (open: boolean) => void;
     title: string;
     description: string;
@@ -29,42 +29,45 @@ const QuizLesson = ({
     isEdit = false,
     courseId,
     chapterId,
-    lessonId,
+    quiz_id,
     setIsOpen,
     title,
     description,
 }: IProps) => {
     const [isPending, startTransition] = useTransition();
     const { mutateAsync: createLesson } = useCreateQuizLessonMutation(courseId);
-    const router = useRouter();
+    const { mutateAsync: updateLesson } = useUpdateQuizLessonMutation(courseId);
 
     const form = useForm<QuizCreateType>({
         resolver: zodResolver(QuizCreateSchema),
-        defaultValues: {
+        defaultValues: {           
             title: title || "",
             description: description || "",
             type: "quiz",
         },
     });
 
+    console.log(quiz_id)
 
     function onSubmit(values: QuizCreateType) {
         startTransition(async () => {
             try {
                 if (isEdit) {
-                    // if (
-                    //     title === values.title &&
-                    //     description === values.description &&
-                    //     content === values.content
-                    // ) {
-                    //     setIsOpen(false);
-                    //     return;
-                    // }
+                    if (
+                        title === values.title &&
+                        description === values.description 
+                    ) {
+                        setIsOpen(false);
+                        return;
+                    }
 
-                    // await updateLesson(values);
-                    // toast.success("Lesson updated successfully");
-                    // form.reset();
-                    // setIsOpen(false);
+                    await updateLesson({
+                        quiz_id,
+                        values
+                    });
+                    toast.success("Lesson updated successfully");
+                    form.reset();
+                    setIsOpen(false);
 
                 } else {
                     const payload = await createLesson({

@@ -37,6 +37,8 @@ interface IProps {
     video_url?: string;
     article_url?: string;
     live_url?: string;
+    quiz_id?: string;
+    assginment_id?: string;
 }
 
 const LessonModalComponent = ({
@@ -50,6 +52,9 @@ const LessonModalComponent = ({
     type,
     video_url,
     live_url,
+    quiz_id,
+    assginment_id
+
 }: IProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [contentType, setContentType] = useState<
@@ -95,9 +100,9 @@ const LessonModalComponent = ({
                                 type={type || "video"}
                                 video_url={video_url || ""}
                             />
-                        ) : // : type === "امتحان" ?
-                            //     <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
-                            type === "live" ? (
+                        ) : type === "quiz" ?
+                            <QuizLesson isEdit={true} title={title!} description={description || ""} quiz_id={quiz_id!} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                            : type === "live" ? (
                                 <LinkLesson
                                     isEdit={true}
                                     courseId={courseId}
@@ -169,22 +174,14 @@ const LessonModalComponent = ({
                                 description={description || ""}
                             />
                         ) : contentType === "quiz" ?
-                            <QuizLesson isEdit={false} title={title || ""} description={description || ""} lessonId={lessonId || 1} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                            <QuizLesson isEdit={false} title={title || ""} description={description || ""}  courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} quiz_id=""/>
                             : contentType === "assignment" ?
                                 <AssginmentLesson isEdit={false} title={title || ""} description={description || ""} lessonId={lessonId || 1} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
                                 : null
                         }
                     </>
                 )}
-
-                {/* {type === "فيديو" ?
-                    <EditVideoLesson courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={handleOpenChange} title={title} description={description} content={content} />
-                    : type === "امتحان" ?
-                        <CreateLessonExam courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
-                        : type === "لينك" ?
-                            <EditLessonLink courseId={courseId} chapterId={chapterId} lessonId={lessonId} setIsOpen={setIsOpen} title={title} content={content} description={description} />
-                            : null
-                } */}
+ 
             </DialogContent>
         </Dialog>
     );
