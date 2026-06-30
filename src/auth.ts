@@ -49,7 +49,6 @@ export const authOptions: NextAuthOptions = {
                     id: String(loginData.user.id),
                     user: loginData.user,
                     access_token: loginData.access_token,
-                    // role: loginData.role
                 }
             }
         }),

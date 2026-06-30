@@ -13,3 +13,4 @@ export const HEADERS = {
 
 export const DEFAULT_LIMIT_COURSES_ADMIN = 9
 export const DEFAULT_LIMIT_DIPLOMA_ADMIN = 12
+export const DEFAULT_LIMIT_USERS= 12
