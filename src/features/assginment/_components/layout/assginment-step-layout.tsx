@@ -10,6 +10,8 @@ const AssginmentStepLayout = ({assginmentId, courseId} : {assginmentId : string,
 
   const { data: payload, isLoading } = useGetAssginmentDetailsQuery(assginmentId)
 
+  console.log("assginmentId :" , assginmentId)
+
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-[400px]">
       <Loader2 className="size-8 animate-spin text-primary" />
@@ -21,9 +23,7 @@ if (!payload || !payload.status) {
       <p>لا يوجد بيانات لعرضها</p>
     )
   }
-  const {title , description ,duration, total_grade , questions , allow_resume , max_attempts , random_questions , random_options , show_result_immediately} = payload.data
-
-  console.log(payload.data)
+  const {title , description , total_grade , questions} = payload.data
   return (
     <Tabs defaultValue="view" className="flex justify-center items-center">
       <TabsList className={"w-full max-w-3xl rounded-sm p-0"}>
@@ -41,10 +41,10 @@ if (!payload || !payload.status) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="info" className={"w-full mt-4"}>
-        <AssginmentInfoForm  courseId={courseId} assginmentId={assginmentId} title={title} description={description} duration={duration} total_grade={total_grade} countQuestions={questions.length} max_attempts={max_attempts} allow_resume={allow_resume} random_questions={random_questions} random_options={random_options} show_result_immediately={show_result_immediately}  />
+        <AssginmentInfoForm  courseId={courseId}  assginmentId={assginmentId} title={title} description={description}  total_grade={total_grade} countQuestions={questions.length} />
       </TabsContent>
       <TabsContent value="questions" className={"w-full mt-4"}>
-        {/* <QuestionForm quizId={assginmentId} questions={questions} /> */}
+        <QuestionForm assginmentId={assginmentId} questions={questions} />
       </TabsContent>
       <TabsContent value="view" className={"w-full mt-4"}>
         {/* <QuizResult questions={questions} total_grade={total_grade} duration={duration}/> */}

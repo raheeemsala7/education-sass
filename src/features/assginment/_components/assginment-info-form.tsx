@@ -15,18 +15,12 @@ import { AssginmentInfoType } from '../types/assginment'
 interface IProps {
     title: string;
     description: string;
-    duration: number;
     total_grade: number;
     countQuestions: number;
     assginmentId: string;
     courseId: string;
-    max_attempts: number;
-    allow_resume: boolean;
-    random_questions: boolean;
-    random_options: boolean;
-    show_result_immediately: boolean;
 }
-const AssginmentInfoForm = ({ title, description, duration, total_grade, countQuestions, assginmentId, courseId, }: IProps) => {
+const AssginmentInfoForm = ({ title, description, total_grade, countQuestions, assginmentId, courseId, }: IProps) => {
     // const { mutateAsync, isPending } = useUpdateQuizMutation({ assginmentId, courseId })
     const form = useForm<AssginmentInfoType>({
         resolver: zodResolver(assginmentInfoSchema),

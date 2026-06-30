@@ -15,29 +15,29 @@ import {
     useForm
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Question } from "../types/quiz";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
-import { QuestionFormType, questionSchema } from "../schema/assginment.schema";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { CheckCircle, Edit2, GripVertical, Loader2, Menu, Plus, SaveIcon, Trash2, Upload } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import ChoiceComponent from "./choice-component";
 import { toast } from "sonner";
 import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-image";
 import { useState } from "react";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
 import { Badge } from "@/shared/components/ui/badge";
-import DeleteLessonModal from "./delete-question-modal";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { Question } from "@/features/quiz/types/quiz";
+import { QuestionFormType, questionSchema } from "@/features/quiz/schema/quiz.schema";
+import ChoiceComponent from "@/features/quiz/_components/choice-component";
+import { useAddQuestionToAssginmentMutation } from "../hooks/assginment.hook";
 
 type Props = {
     questions: Question[];
-    quizId: string;
+    assginmentId: string;
 };
 
-const QuestionForm = ({ questions, quizId }: Props) => {
-    const { mutateAsync: addQuestion, isPending: isPendingCreate } = useAddQuestionToQuizMutation(quizId)
-    const { mutateAsync: updateQuestion, isPending: isPendingEdit } = useUpdateQuestionMutation(quizId)
+const QuestionForm = ({ questions, assginmentId }: Props) => {
+    const { mutateAsync: addQuestion, isPending: isPendingCreate } = useAddQuestionToAssginmentMutation(assginmentId)
+    // const { mutateAsync: updateQuestion, isPending: isPendingEdit } = useUpdateQuestionMutation(assginmentId)
 
     const form = useForm<QuestionFormType>({
         resolver: zodResolver(questionSchema),
@@ -95,29 +95,29 @@ const QuestionForm = ({ questions, quizId }: Props) => {
         }
         if (editingQuestionId) {
             try {
-                const data = await updateQuestion({
-                    questionId: editingQuestionId,
-                    values,
-                })
-                if (data.status) {
-                    toast.success("Question updated successfully");
-                    form.reset({
-                        type: "choice",
-                        question: "",
-                        grade: 1,
-                        correct_answer: "",
-                        options: [{ text: "" }],
-                        notes: "",
-                        question_image: "",
-                        answer_image: "",
-                        explanation: "",
-                    });
-                    setEditingQuestionId(null);
-                    setFileImageSolveQuestion(null)
-                    setFileImageQuestion(null)
-                    setQuestionImagePreviewUrl("")
-                    setSolveQuestionImagePreviewUrl("")
-                }
+                // const data = await updateQuestion({
+                //     questionId: editingQuestionId,
+                //     values,
+                // })
+                // if (data.status) {
+                //     toast.success("Question updated successfully");
+                //     form.reset({
+                //         type: "choice",
+                //         question: "",
+                //         grade: 1,
+                //         correct_answer: "",
+                //         options: [{ text: "" }],
+                //         notes: "",
+                //         question_image: "",
+                //         answer_image: "",
+                //         explanation: "",
+                //     });
+                //     setEditingQuestionId(null);
+                //     setFileImageSolveQuestion(null)
+                //     setFileImageQuestion(null)
+                //     setQuestionImagePreviewUrl("")
+                //     setSolveQuestionImagePreviewUrl("")
+                // }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
             }
@@ -125,7 +125,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
             try {
                 const data = await addQuestion({
                     values,
-                    quizId
+                    assginmentId
                 })
                 if (data.status) {
                     toast.success("Question added successfully");
@@ -205,7 +205,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                             </div>
 
                             <div className="flex justify-end gap-1.5 items-center mt-4">
-                                <DeleteLessonModal quizId={quizId} questionId={q.id.toString()} />
+                                {/* <DeleteLessonModal quizId={quizId} questionId={q.id.toString()} /> */}
                                 <Button size={"icon"} variant={"ghost"} onClick={() => {
                                     setEditingQuestionId(q.id.toString());
                                     form.reset({
@@ -513,8 +513,10 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                                 <Button variant={"secondary"}>
                                     الغاء
                                 </Button>
-                                <Button type="submit" disabled={!editingQuestionId ? isPendingEdit : isPendingCreate}>
-                                    {isPendingCreate || isPendingEdit ?
+                                <Button type="submit"
+                                //  disabled={!editingQuestionId ? isPendingEdit : isPendingCreate}
+                                 >
+                                    {isPendingCreate  ?
                                         <>
                                             <Loader2 className="size-4 animate-spin" />
                                             <span>
