@@ -95,8 +95,6 @@ interface IProps {
 export default function CourseStructure({ id, data }: IProps) {
     const { mutateAsync: reorderChapters } = useReorderChaptersMutation(id)
     const { mutateAsync: reorderLessons } = useReorderLessonsMutation(id)
-    console.log(data)
-
 
     const initalItems = data.map((chapter) => ({
         id: chapter.id,
@@ -241,7 +239,6 @@ export default function CourseStructure({ id, data }: IProps) {
             );
         }
     }
-    console.log(initalItems)
 
     return (
         <DndContext

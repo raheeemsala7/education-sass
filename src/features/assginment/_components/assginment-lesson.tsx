@@ -19,7 +19,7 @@ interface IProps {
     isEdit: Boolean;
     courseId: string;
     chapterId: number;
-    lessonId: number;
+    assginment_id: string;
     setIsOpen: (open: boolean) => void;
     title: string;
     description: string;
@@ -29,7 +29,7 @@ const AssginmentLesson = ({
     isEdit = false,
     courseId,
     chapterId,
-    lessonId,
+    assginment_id,
     setIsOpen,
     title,
     description,

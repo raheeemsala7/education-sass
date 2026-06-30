@@ -114,7 +114,10 @@ const LessonModalComponent = ({
                                     live_url={live_url || ""}
                                     type={type || "live"}
                                 />
-                            ) : null}
+                            ) :
+                                type === "assignment" ?
+                                    <AssginmentLesson isEdit={true} title={title || ""} description={description || ""} assginment_id={assginment_id || "1"} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                                    : null}
                     </>
                 ) : (
                     <>
@@ -174,14 +177,14 @@ const LessonModalComponent = ({
                                 description={description || ""}
                             />
                         ) : contentType === "quiz" ?
-                            <QuizLesson isEdit={false} title={title || ""} description={description || ""}  courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} quiz_id=""/>
+                            <QuizLesson isEdit={false} title={title || ""} description={description || ""} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} quiz_id="" />
                             : contentType === "assignment" ?
-                                <AssginmentLesson isEdit={false} title={title || ""} description={description || ""} lessonId={lessonId || 1} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
+                                <AssginmentLesson isEdit={false} title={title || ""} description={description || ""} assginment_id={assginment_id || "1"} courseId={courseId} chapterId={chapterId} setIsOpen={setIsOpen} />
                                 : null
                         }
                     </>
                 )}
- 
+
             </DialogContent>
         </Dialog>
     );
