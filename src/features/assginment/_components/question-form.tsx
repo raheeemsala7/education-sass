@@ -28,7 +28,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Question } from "@/features/quiz/types/quiz";
 import { QuestionFormType, questionSchema } from "@/features/quiz/schema/quiz.schema";
 import ChoiceComponent from "@/features/quiz/_components/choice-component";
-import { useAddQuestionToAssginmentMutation } from "../hooks/assginment.hook";
+import { useAddQuestionToAssginmentMutation, useUpdateQuestionMutation } from "../hooks/assginment.hook";
 
 type Props = {
     questions: Question[];
@@ -37,7 +37,7 @@ type Props = {
 
 const QuestionForm = ({ questions, assginmentId }: Props) => {
     const { mutateAsync: addQuestion, isPending: isPendingCreate } = useAddQuestionToAssginmentMutation(assginmentId)
-    // const { mutateAsync: updateQuestion, isPending: isPendingEdit } = useUpdateQuestionMutation(assginmentId)
+    const { mutateAsync: updateQuestion, isPending: isPendingEdit } = useUpdateQuestionMutation(assginmentId)
 
     const form = useForm<QuestionFormType>({
         resolver: zodResolver(questionSchema),

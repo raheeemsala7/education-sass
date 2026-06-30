@@ -5,6 +5,7 @@ import { useGetAssginmentDetailsQuery } from "../../hooks/assginment.hook"
 import { Loader2 } from "lucide-react"
 import QuestionForm from "../question-form"
 import AssginmentInfoForm from "../assginment-info-form"
+import QuizResult from "@/features/quiz/_components/quiz-result"
 
 const AssginmentStepLayout = ({assginmentId, courseId} : {assginmentId : string, courseId : string}) => {
 
@@ -47,7 +48,7 @@ if (!payload || !payload.status) {
         <QuestionForm assginmentId={assginmentId} questions={questions} />
       </TabsContent>
       <TabsContent value="view" className={"w-full mt-4"}>
-        {/* <QuizResult questions={questions} total_grade={total_grade} duration={duration}/> */}
+        <QuizResult questions={questions} total_grade={total_grade} duration={60}/>
       </TabsContent>
     </Tabs>
   )

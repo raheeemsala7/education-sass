@@ -56,28 +56,28 @@ export async function postAddQuestionToAssginmentAction({ values, assginmentId }
     }
     return data
 }
-// export async function updateQuestionAction({ values, questionId }: { values: QuestionFormType, questionId: string }) {
-//     const token = await getNextAuthToken()
-//     if (!token?.access_token) return RESPONSES.unauthorized
-//     const payload = {
-//         ...values,
-//         options:values.options?.map((o) => ( o.text ))
-//     }
-//     const res = await fetch(`${process.env.API_URL}/quiz/questions/${questionId}`, {
-//         method: "PUT",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json",
-//             ...HEADERS.authorize(token.access_token),
-//         },
-//         body: JSON.stringify(payload)
-//     })
-//     const data: IApiResponse<QuestionFormType> = await res.json()
-//     if (!data.status) {
-//         throw new Error(data.message || "Add question failed")
-//     }
-//     return data
-// }
+export async function updateQuestionAction({ values, assginmentId }: { values: QuestionFormType, assginmentId: string }) {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
+    const payload = {
+        ...values,
+        options:values.options?.map((o) => ( o.text ))
+    }
+    const res = await fetch(`${process.env.API_URL}/quiz/questions/${assginmentId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+        body: JSON.stringify(payload)
+    })
+    const data: IApiResponse<QuestionFormType> = await res.json()
+    if (!data.status) {
+        throw new Error(data.message || "Add question failed")
+    }
+    return data
+}
 // export async function deleteQuestionAction({ questionId }: {  questionId: string }) {
 //     const token = await getNextAuthToken()
 //     if (!token?.access_token) return RESPONSES.unauthorized
