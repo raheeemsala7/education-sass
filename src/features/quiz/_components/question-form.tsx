@@ -28,8 +28,8 @@ import UploadCreateMedia from "@/shared/components/file-uploader/upload-create-i
 import { useState } from "react";
 import { uploadFileToS3 } from "@/shared/lib/uploadToS3";
 import { Badge } from "@/shared/components/ui/badge";
-import DeleteLessonModal from "./delete-question-modal";
 import { Textarea } from "@/shared/components/ui/textarea";
+import DeleteQuestionModal from "./delete-question-modal";
 
 type Props = {
     questions: Question[];
@@ -206,7 +206,7 @@ const QuestionForm = ({ questions, quizId }: Props) => {
                             </div>
 
                             <div className="flex justify-end gap-1.5 items-center mt-4">
-                                <DeleteLessonModal quizId={quizId} questionId={q.id.toString()} />
+                                <DeleteQuestionModal quizId={quizId} questionId={q.id.toString()} />
                                 <Button size={"icon"} variant={"ghost"} onClick={() => {
                                     setEditingQuestionId(q.id.toString());
                                     form.reset({

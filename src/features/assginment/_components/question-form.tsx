@@ -29,6 +29,7 @@ import { Question } from "@/features/quiz/types/quiz";
 import { QuestionFormType, questionSchema } from "@/features/quiz/schema/quiz.schema";
 import ChoiceComponent from "@/features/quiz/_components/choice-component";
 import { useAddQuestionToAssginmentMutation, useUpdateQuestionMutation } from "../hooks/assginment.hook";
+import DeleteQuestionModal from "./delete-question-modal";
 
 type Props = {
     questions: Question[];
@@ -205,7 +206,7 @@ const QuestionForm = ({ questions, assginmentId }: Props) => {
                             </div>
 
                             <div className="flex justify-end gap-1.5 items-center mt-4">
-                                {/* <DeleteLessonModal quizId={quizId} questionId={q.id.toString()} /> */}
+                                <DeleteQuestionModal assginmentId={assginmentId} questionId={q.id.toString()} />
                                 <Button size={"icon"} variant={"ghost"} onClick={() => {
                                     setEditingQuestionId(q.id.toString());
                                     form.reset({

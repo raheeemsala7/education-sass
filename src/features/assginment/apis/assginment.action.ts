@@ -78,11 +78,11 @@ export async function updateQuestionAction({ values, assginmentId }: { values: Q
     }
     return data
 }
-export async function deleteQuestionAction({ assginmentId }: {  assginmentId: string }) {
+export async function deleteQuestionAction({ questionId }: {  questionId: string }) {
     const token = await getNextAuthToken()
     if (!token?.access_token) return RESPONSES.unauthorized
 
-    const res = await fetch(`${process.env.API_URL}/homework/questions/${assginmentId}`, {
+    const res = await fetch(`${process.env.API_URL}/homework/questions/${questionId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

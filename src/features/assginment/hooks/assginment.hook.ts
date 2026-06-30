@@ -57,13 +57,13 @@ export const useUpdateQuestionMutation = (assginmentId: string) => {
         }
     })
 }
-export const useDeleteQuestionMutation = (quizId: string) => {
+export const useDeleteQuestionMutation = (assginmentId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: deleteQuestionAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["quiz", quizId]
+                queryKey: ["assginment", assginmentId]
             })
         }
     })

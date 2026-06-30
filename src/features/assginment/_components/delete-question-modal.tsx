@@ -13,12 +13,12 @@ import { Button } from "@/shared/components/ui/button"
 import { Loader2, Trash2 } from "lucide-react"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
-import { useDeleteQuestionMutation } from "../hooks/quiz.hook"
+import { useDeleteQuestionMutation } from "../hooks/assginment.hook"
 
-const DeleteQuestionModal = ({  questionId , quizId}: { questionId: string; quizId:string }) => {
+const DeleteQuestionModal = ({  questionId , assginmentId}: { questionId: string; assginmentId:string }) => {
     const [open, setOpen] = useState(false)
     const [pending, startTransition] = useTransition()
-    const { mutate: deleteLesson } = useDeleteQuestionMutation(quizId)
+    const { mutate: deleteLesson } = useDeleteQuestionMutation(assginmentId)
 
 
     async function onSubmit() {
