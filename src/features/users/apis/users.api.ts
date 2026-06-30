@@ -1,10 +1,9 @@
 import { DEFAULT_LIMIT_USERS, HEADERS } from "@/shared/constant/api.constant"
 import { RESPONSES } from "@/shared/constant/api.responses"
-import { getNextAuthToken } from "@/shared/lib/auth.util"
-import { IApiResponse } from "@/shared/lib/types/api"
+import { IApiResponse, IPaginatedResponse } from "@/shared/lib/types/api"
 import { getToken } from "next-auth/jwt"
 import { NextRequest } from "next/server"
-import { StudentsResponse } from "../types/users"
+import { Student, StudentsResponse } from "../types/users"
 
 
 
@@ -21,7 +20,7 @@ export const getAllUsersApi = async (req: NextRequest) => {
     const search = req.nextUrl.searchParams.get("search") ?? "";
 
     const res = await fetch(
-        `${process.env.API_URL}/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(
+        `${process.env.API_URL}/admin/students?page=${page}&limit=${limit}&search=${encodeURIComponent(
             search
         )}`,
         {
@@ -30,8 +29,8 @@ export const getAllUsersApi = async (req: NextRequest) => {
             },
         }
     );
-
-    const payload: IApiResponse<StudentsResponse> = await res.json()
+    console.log(res)
+    const payload: IApiResponse<Student[]> = await res.json()
 
     if (!payload.status) {
         throw new Error(payload.message || "Failed to fetch admin courses list")

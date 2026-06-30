@@ -3,7 +3,9 @@
 declare type SuccessResponse<T> = {
     status: true
     message?: string
-    data: T
+    data: T;
+    meta?: IPagination;
+
 }
 declare type IErrorResponse = {
     status: false
@@ -19,9 +21,9 @@ declare type IApiResponse<T> = SuccessResponse<T> | IErrorResponse
 
 export interface IPagination {
     current_page: number;
-    last_page: number;
     per_page: number;
     total: number;
+    last_page: number;
 }
 
 export interface IPaginatedResponse<T> {
@@ -35,5 +37,5 @@ export interface ITimeStamp {
 }
 
 export interface IResponseMessage {
-    message:string
+    message: string
 }

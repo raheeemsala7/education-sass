@@ -30,7 +30,8 @@ const TableUsers = () => {
     if (!data?.status) {
         return <h4>not Found</h4>
     }
-    const users = data.data.data
+    console.log("DATA" , data.data)
+    const users = data.data
     const filteredUsers = users.filter(
         (user) =>
             user.first_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -58,7 +59,7 @@ const TableUsers = () => {
                 <div className="flex gap-3">
                     <div className="rounded-lg bg-card px-4 py-2 shadow-card">
                         <p className="text-xs text-muted-foreground">إجمالي المستخدمين</p>
-                        <p className="text-xl font-bold text-foreground">{data?.data.meta.total}</p>
+                        <p className="text-xl font-bold text-foreground">{data?.meta?.total}</p>
                     </div>
                     <div className="rounded-lg bg-card px-4 py-2 shadow-card">
                         <p className="text-xs text-muted-foreground">المدراء</p>
@@ -163,7 +164,7 @@ const TableUsers = () => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                disabled={page === 1 || !data?.data.meta.last_page}
+                                disabled={page === 1 || !data?.meta?.last_page}
                                 onClick={() => setPage((p) => p - 1)}
                                 className="gap-1"
                             >
@@ -180,7 +181,7 @@ const TableUsers = () => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                disabled={page === data?.data.meta.last_page}
+                                disabled={page === data?.meta?.last_page}
                                 onClick={() => setPage((p) => p + 1)}
                                 className="gap-1"
                             >

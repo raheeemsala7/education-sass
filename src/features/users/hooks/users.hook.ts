@@ -1,7 +1,7 @@
 "use client"
 import { useQuery } from "@tanstack/react-query"
-import { StudentsResponse } from "../types/users"
-import { IApiResponse } from "@/shared/lib/types/api"
+import { Student, StudentsResponse } from "../types/users"
+import { IApiResponse, IPaginatedResponse } from "@/shared/lib/types/api"
 
 export const useGetAllStudentsQuery = (search: string,
     page: number) => {
@@ -13,7 +13,7 @@ export const useGetAllStudentsQuery = (search: string,
                 search,
             })
             const res = await fetch(`/api/users?${params}`);
-            const payload: IApiResponse<StudentsResponse> = await res.json()
+            const payload:IApiResponse<Student[]>= await res.json()
 
             return payload
         }

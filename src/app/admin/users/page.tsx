@@ -1,8 +1,8 @@
-import React from 'react'
+import TableUsers from '@/features/users/_components/tabel-users'
 
 const page = () => {
   return (
-    <div>page</div>
+    <TableUsers />
   )
 }
 
