@@ -29,7 +29,6 @@ export const getAllUsersApi = async (req: NextRequest) => {
             },
         }
     );
-    console.log(res)
     const payload: IApiResponse<Student[]> = await res.json()
 
     if (!payload.status) {

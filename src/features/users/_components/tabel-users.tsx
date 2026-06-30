@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ChevronLeft, ChevronRight, Search, Trash2, Users } from "lucide-react"
 import { useGetAllStudentsQuery } from "../hooks/users.hook"
 import { useState } from "react"
+import Link from "next/link"
 
 const TableUsers = () => {
         const [search, setSearch] = useState("");
@@ -122,18 +123,20 @@ const TableUsers = () => {
                                             className="animate-slide-up transition-colors hover:bg-table-hover"
                                             style={{ animationDelay: `${index * 50}ms` }}
                                         >
-                                            <TableCell className="font-medium">{user.first_name} {user.last_name}</TableCell>
+                                            <TableCell className="font-medium">
+                                                <Link className="hover:underline transition-all" href={`/admin/users/${user.id}`}>{user.first_name} {user.last_name}</Link>
+                                                </TableCell>
                                             <TableCell className="text-muted-foreground">
                                                 {user.phone}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                {/* {user.father_phone} */}
+                                                {user.student_profile?.father_phone}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                {/* {user.city} */}
+                                                {user.student_profile?.city}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                {/* {user.grade} */}
+                                                {user.student_profile?.grade}
                                             </TableCell>
 
                                             <TableCell className="text-center">
