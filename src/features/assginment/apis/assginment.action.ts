@@ -63,7 +63,7 @@ export async function updateQuestionAction({ values, assginmentId }: { values: Q
         ...values,
         options:values.options?.map((o) => ( o.text ))
     }
-    const res = await fetch(`${process.env.API_URL}/quiz/questions/${assginmentId}`, {
+    const res = await fetch(`${process.env.API_URL}/homework/questions/${assginmentId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -78,21 +78,21 @@ export async function updateQuestionAction({ values, assginmentId }: { values: Q
     }
     return data
 }
-// export async function deleteQuestionAction({ questionId }: {  questionId: string }) {
-//     const token = await getNextAuthToken()
-//     if (!token?.access_token) return RESPONSES.unauthorized
+export async function deleteQuestionAction({ assginmentId }: {  assginmentId: string }) {
+    const token = await getNextAuthToken()
+    if (!token?.access_token) return RESPONSES.unauthorized
 
-//     const res = await fetch(`${process.env.API_URL}/quiz/questions/${questionId}`, {
-//         method: "DELETE",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json",
-//             ...HEADERS.authorize(token.access_token),
-//         },
-//     })
-//     const data: IApiResponse<QuestionFormType> = await res.json()
-//     if (!data.status) {
-//         throw new Error(data.message || "Add question failed")
-//     }
-//     return data
-// }
+    const res = await fetch(`${process.env.API_URL}/homework/questions/${assginmentId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            ...HEADERS.authorize(token.access_token),
+        },
+    })
+    const data: IApiResponse<QuestionFormType> = await res.json()
+    if (!data.status) {
+        throw new Error(data.message || "Add question failed")
+    }
+    return data
+}

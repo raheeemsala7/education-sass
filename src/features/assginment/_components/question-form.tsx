@@ -95,29 +95,29 @@ const QuestionForm = ({ questions, assginmentId }: Props) => {
         }
         if (editingQuestionId) {
             try {
-                // const data = await updateQuestion({
-                //     questionId: editingQuestionId,
-                //     values,
-                // })
-                // if (data.status) {
-                //     toast.success("Question updated successfully");
-                //     form.reset({
-                //         type: "choice",
-                //         question: "",
-                //         grade: 1,
-                //         correct_answer: "",
-                //         options: [{ text: "" }],
-                //         notes: "",
-                //         question_image: "",
-                //         answer_image: "",
-                //         explanation: "",
-                //     });
-                //     setEditingQuestionId(null);
-                //     setFileImageSolveQuestion(null)
-                //     setFileImageQuestion(null)
-                //     setQuestionImagePreviewUrl("")
-                //     setSolveQuestionImagePreviewUrl("")
-                // }
+                const data = await updateQuestion({
+                    assginmentId: editingQuestionId,
+                    values,
+                })
+                if (data.status) {
+                    toast.success("Question updated successfully");
+                    form.reset({
+                        type: "choice",
+                        question: "",
+                        grade: 1,
+                        correct_answer: "",
+                        options: [{ text: "" }],
+                        notes: "",
+                        question_image: "",
+                        answer_image: "",
+                        explanation: "",
+                    });
+                    setEditingQuestionId(null);
+                    setFileImageSolveQuestion(null)
+                    setFileImageQuestion(null)
+                    setQuestionImagePreviewUrl("")
+                    setSolveQuestionImagePreviewUrl("")
+                }
             } catch (error) {
                 toast.error("An unexpected error occurred. Please try again.");
             }
@@ -513,10 +513,8 @@ const QuestionForm = ({ questions, assginmentId }: Props) => {
                                 <Button variant={"secondary"}>
                                     الغاء
                                 </Button>
-                                <Button type="submit"
-                                //  disabled={!editingQuestionId ? isPendingEdit : isPendingCreate}
-                                 >
-                                    {isPendingCreate  ?
+                                <Button type="submit" disabled={!editingQuestionId ? isPendingEdit : isPendingCreate}>
+                                    {isPendingCreate || isPendingEdit  ?
                                         <>
                                             <Loader2 className="size-4 animate-spin" />
                                             <span>

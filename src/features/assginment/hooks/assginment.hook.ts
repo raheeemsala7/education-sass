@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { IApiResponse } from "@/shared/lib/types/api"
 import { Assginment } from "../types/assginment"
-import { postAddQuestionToAssginmentAction, updateQuestionAction } from "../apis/assginment.action"
+import { deleteQuestionAction, postAddQuestionToAssginmentAction, updateQuestionAction } from "../apis/assginment.action"
 
 export const useGetAssginmentDetailsQuery = (assginmentId: string) => {
     return useQuery({
@@ -46,10 +46,21 @@ export const useAddQuestionToAssginmentMutation = (assginmentId: string) => {
         }
     })
 }
-export const useUpdateQuestionMutation = (quizId: string) => {
+export const useUpdateQuestionMutation = (assginmentId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: updateQuestionAction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["assginment", assginmentId]
+            })
+        }
+    })
+}
+export const useDeleteQuestionMutation = (quizId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: deleteQuestionAction,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["quiz", quizId]
@@ -57,14 +68,3 @@ export const useUpdateQuestionMutation = (quizId: string) => {
         }
     })
 }
-// export const useDeleteQuestionMutation = (quizId: string) => {
-//     const queryClient = useQueryClient()
-//     return useMutation({
-//         mutationFn: deleteQuestionAction,
-//         onSuccess: () => {
-//             queryClient.invalidateQueries({
-//                 queryKey: ["quiz", quizId]
-//             })
-//         }
-//     })
-// }
